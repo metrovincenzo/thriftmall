@@ -3,22 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ThriftMall | Vintage Thrift Pieces</title>
-  <meta name="description" content="ThriftMall is a premium vintage thrift marketplace for curated pieces, cultural events, and local seller discovery." />
+  <title>Thriftmall</title>
+  <meta name="description" content="Thriftmall is a premium vintage thrift marketplace for curated pieces, cultural events, and local seller discovery." />
   <style>
     :root {
-      --ivory: #f6f1ea;
-      --paper: #fbf8f4;
-      --sand: #e9dcc6;
-      --gold: #c79d69;
-      --bronze: #7b5d3b;
-      --terracotta: #b75d3c;
-      --forest: #213b34;
-      --olive: #5a6d5d;
-      --ink: #201915;
-      --muted: #655c57;
-      --line: rgba(32,25,21,0.08);
-      --shadow: 0 18px 38px rgba(32,25,21,0.12);
+      --ivory: #faf7f2;
+      --paper: #fcfbf9;
+      --sand: #e8dcc0;
+      --warm-beige: #d4c5b3;
+      --gold: #b8956f;
+      --copper: #a0673a;
+      --bronze: #6b4d3d;
+      --terracotta: #a84a3d;
+      --rust: #8b3a2e;
+      --forest: #2d3d38;
+      --olive: #556557;
+      --charcoal: #3a3530;
+      --ink: #1a1410;
+      --muted: #6d5f56;
+      --line: rgba(26,20,16,0.08);
+      --shadow: 0 18px 38px rgba(26,20,16,0.12);
+      --shadow-lg: 0 24px 48px rgba(26,20,16,0.16);
       --radius: 18px;
       --radius-sm: 12px;
     }
@@ -45,8 +50,8 @@
       position: sticky;
       top: 0;
       z-index: 50;
-      background: rgba(251,248,244,0.92);
-      backdrop-filter: blur(10px);
+      background: rgba(252,251,249,0.94);
+      backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--line);
     }
 
@@ -83,8 +88,8 @@
       transition: 0.2s ease;
     }
     .nav-btn:hover {
-      background: rgba(199,157,105,0.1);
-      border-color: rgba(199,157,105,0.18);
+      background: rgba(176,103,58,0.1);
+      border-color: rgba(176,103,58,0.18);
     }
     .nav-btn.cart { position: relative; }
     .cart-badge {
@@ -106,7 +111,7 @@
 
     .ticker {
       overflow: hidden;
-      background: var(--forest);
+      background: linear-gradient(135deg, #3a3530 0%, #4a4540 100%);
       color: white;
       border-bottom: 2px solid var(--terracotta);
     }
@@ -125,7 +130,7 @@
     .ticker-pill {
       display: inline-block;
       padding: 6px 10px;
-      background: rgba(183,93,60,0.9);
+      background: rgba(160,103,58,0.85);
       color: white;
       border-radius: 999px;
       font-size: 0.68rem;
@@ -137,17 +142,27 @@
     .ticker-item {
       font-size: 0.9rem;
       letter-spacing: 0.02em;
-      opacity: 0.92;
+      opacity: 0.88;
     }
     .ticker-dot { color: var(--sand); margin: 0 8px; }
 
     .hero {
       position: relative;
       overflow: hidden;
-      padding: 72px 0 56px;
+      padding: 88px 0 68px;
       background:
-        radial-gradient(circle at top right, rgba(199,157,105,0.18), transparent 40%),
-        linear-gradient(180deg, rgba(233,220,198,0.2), rgba(251,248,244,0));
+        radial-gradient(ellipse 800px 600px at center 20%, rgba(184,149,111,0.25), transparent 60%),
+        linear-gradient(180deg, rgba(232,220,192,0.35), rgba(252,251,249,0));
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 15% 45%, rgba(160,103,58,0.08), transparent 30%),
+        radial-gradient(circle at 85% 35%, rgba(168,74,61,0.06), transparent 35%);
+      z-index: 0;
     }
 
     .hero-inner {
@@ -160,9 +175,9 @@
       display: inline-block;
       padding: 8px 16px;
       border-radius: 999px;
-      background: rgba(199,157,105,0.15);
-      color: var(--bronze);
-      border: 1px solid rgba(123,93,59,0.14);
+      background: rgba(184,149,111,0.18);
+      color: var(--copper);
+      border: 1px solid rgba(160,103,58,0.22);
       font-size: 0.72rem;
       font-weight: 800;
       letter-spacing: 0.18em;
@@ -170,7 +185,7 @@
     }
 
     .hero h1 {
-      margin-top: 18px;
+      margin-top: 22px;
       font-size: clamp(2.5rem, 6vw, 5.2rem);
       line-height: 0.96;
       letter-spacing: -0.08em;
@@ -188,7 +203,7 @@
     }
 
     .hero-actions {
-      margin-top: 28px;
+      margin-top: 32px;
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
@@ -198,7 +213,7 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 14px 24px;
+      padding: 14px 28px;
       border-radius: 999px;
       border: 1px solid var(--ink);
       font-size: 0.94rem;
@@ -215,10 +230,10 @@
       background: transparent;
       color: var(--ink);
     }
-    .btn-secondary:hover { background: rgba(199,157,105,0.08); }
+    .btn-secondary:hover { background: rgba(184,149,111,0.12); }
 
     .section {
-      padding: 70px 0;
+      padding: 76px 0;
     }
 
     .section-label {
@@ -234,65 +249,49 @@
       font-size: clamp(2rem, 3.5vw, 3rem);
       letter-spacing: -0.05em;
       line-height: 1.05;
-      margin-bottom: 18px;
+      margin-bottom: 20px;
       max-width: 700px;
-    }
-
-    .intro-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 20px;
-      margin-top: 34px;
-    }
-
-    .feature-card {
-      background: white;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 24px 20px;
-      box-shadow: 0 8px 24px rgba(32,25,21,0.05);
-    }
-    .feature-icon {
-      width: 52px;
-      height: 52px;
-      border-radius: 16px;
-      background: rgba(199,157,105,0.12);
-      display: grid;
-      place-items: center;
-      font-size: 1.5rem;
-      margin-bottom: 16px;
-    }
-    .feature-card h3 {
-      font-size: 1.15rem;
-      margin-bottom: 8px;
-    }
-    .feature-card p {
-      color: var(--muted);
-      font-size: 0.96rem;
     }
 
     .events-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 22px;
-      margin-top: 34px;
+      gap: 28px;
+      margin-top: 40px;
     }
     .event-card {
       background: white;
       border: 1px solid var(--line);
       border-radius: var(--radius);
       overflow: hidden;
-      box-shadow: 0 12px 28px rgba(32,25,21,0.06);
+      box-shadow: 0 12px 28px rgba(26,20,16,0.06);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .event-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
     }
     .event-image {
-      height: 205px;
+      height: 240px;
       display: grid;
       place-items: center;
-      font-size: 2.8rem;
-      background: linear-gradient(135deg, rgba(233,220,198,0.8), rgba(251,248,244,1));
+      font-size: 3.2rem;
+      background: linear-gradient(135deg, rgba(232,220,192,0.9), rgba(252,251,249,0.8));
+      position: relative;
+      overflow: hidden;
     }
+    .event-image::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 30% 50%, rgba(184,149,111,0.1), transparent 40%),
+        radial-gradient(circle at 70% 40%, rgba(168,74,61,0.08), transparent 45%);
+      z-index: 0;
+    }
+    .event-image > * { position: relative; z-index: 1; }
     .event-body {
-      padding: 20px 18px 22px;
+      padding: 24px 22px 26px;
     }
     .event-date {
       color: var(--terracotta);
@@ -303,41 +302,86 @@
       margin-bottom: 10px;
     }
     .event-card h3 {
-      font-size: 1.18rem;
-      margin-bottom: 8px;
+      font-size: 1.22rem;
+      margin-bottom: 10px;
+      font-weight: 700;
     }
     .event-card p {
       color: var(--muted);
       font-size: 0.96rem;
+      line-height: 1.55;
+    }
+
+    .categories-section {
+      background: linear-gradient(135deg, rgba(232,220,192,0.15), rgba(212,197,179,0.1));
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 22px;
+      margin-top: 36px;
+    }
+    .category-link {
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 32px 24px;
+      background: white;
+      border: 1px solid rgba(26,20,16,0.08);
+      border-radius: var(--radius);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .category-link:hover {
+      background: rgba(184,149,111,0.06);
+      border-color: rgba(184,149,111,0.25);
+      transform: translateY(-2px);
+    }
+    .category-icon {
+      font-size: 2.6rem;
+      margin-bottom: 12px;
+    }
+    .category-link h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .category-link p {
+      font-size: 0.85rem;
+      color: var(--muted);
     }
 
     .journey {
-      background: linear-gradient(180deg, rgba(233,220,198,0.18), rgba(251,248,244,0));
+      background: linear-gradient(180deg, rgba(232,220,192,0.12), rgba(252,251,249,0));
     }
     .steps {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 18px;
-      margin-top: 28px;
+      gap: 20px;
+      margin-top: 32px;
     }
     .step {
       background: white;
       border: 1px solid var(--line);
       border-radius: var(--radius);
-      padding: 22px 18px;
+      padding: 26px 22px;
     }
     .step-number {
-      width: 42px;
-      height: 42px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
-      background: rgba(183,93,60,0.12);
+      background: rgba(168,74,61,0.14);
       color: var(--terracotta);
       display: grid;
       place-items: center;
       font-weight: 800;
-      margin-bottom: 12px;
+      font-size: 1.2rem;
+      margin-bottom: 14px;
     }
-    .step h3 { font-size: 1.1rem; margin-bottom: 8px; }
+    .step h3 { font-size: 1.1rem; margin-bottom: 8px; font-weight: 700; }
     .step p { color: var(--muted); font-size: 0.94rem; }
 
     .browse-shell {
@@ -345,27 +389,27 @@
       background: white;
       border-radius: var(--radius);
       padding: clamp(22px, 2vw, 28px);
-      box-shadow: 0 12px 28px rgba(32,25,21,0.04);
+      box-shadow: 0 12px 28px rgba(26,20,16,0.04);
     }
     .browse-empty {
       display: grid;
       place-items: center;
       text-align: center;
-      min-height: 270px;
-      background: linear-gradient(180deg, rgba(233,220,198,0.16), rgba(251,248,244,0));
-      border: 1px dashed rgba(123,93,59,0.3);
+      min-height: 280px;
+      background: linear-gradient(180deg, rgba(232,220,192,0.14), rgba(252,251,249,0));
+      border: 1px dashed rgba(107,77,61,0.25);
       border-radius: var(--radius-sm);
-      padding: 24px;
+      padding: 28px;
     }
     .browse-empty .icon {
-      width: 74px;
-      height: 74px;
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
-      background: rgba(199,157,105,0.12);
+      background: rgba(184,149,111,0.14);
       display: grid;
       place-items: center;
       margin: 0 auto 18px;
-      font-size: 2rem;
+      font-size: 2.2rem;
     }
     .browse-empty h3 {
       font-size: clamp(1.4rem, 3vw, 2rem);
@@ -379,11 +423,24 @@
     }
 
     .seller-strip {
-      background: linear-gradient(135deg, #2f2a26, #564636 55%, #7d5a3b);
+      background: linear-gradient(135deg, #3a3530 0%, #4d423b 50%, #5a4d42 100%);
       color: white;
-      padding: 76px 0;
+      padding: 84px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .seller-strip::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 10% 40%, rgba(184,149,111,0.1), transparent 40%),
+        radial-gradient(circle at 90% 60%, rgba(168,74,61,0.08), transparent 50%);
+      z-index: 0;
     }
     .seller-inner {
+      position: relative;
+      z-index: 1;
       text-align: center;
     }
     .seller-inner h2 {
@@ -394,39 +451,41 @@
     }
     .seller-inner p {
       max-width: 760px;
-      margin: 0 auto 20px;
+      margin: 0 auto 24px;
       color: rgba(255,255,255,0.82);
       font-size: 1.04rem;
+      line-height: 1.6;
     }
     .seller-row {
       display: flex;
       justify-content: center;
       gap: 12px;
       flex-wrap: wrap;
-      margin-top: 22px;
     }
 
     .footer {
-      background: #1b1a1a;
+      background: #2a2520;
       color: rgba(255,255,255,0.74);
-      padding: 52px 0 24px;
+      padding: 56px 0 28px;
     }
     .footer-grid {
       display: grid;
       grid-template-columns: 1.7fr 1fr 1fr 1fr;
-      gap: 28px;
-      margin-bottom: 20px;
+      gap: 32px;
+      margin-bottom: 24px;
     }
     .footer h4 {
       color: white;
       font-size: 1rem;
       margin-bottom: 14px;
+      font-weight: 700;
     }
     .footer p, .footer a {
       display: block;
       margin-bottom: 8px;
       font-size: 0.96rem;
       color: rgba(255,255,255,0.72);
+      line-height: 1.5;
     }
     .footer a:hover { color: white; }
     .footer-bottom {
@@ -454,8 +513,8 @@
       border-radius: 18px;
       max-width: 520px;
       width: 100%;
-      padding: 28px 24px;
-      box-shadow: var(--shadow);
+      padding: 32px 28px;
+      box-shadow: var(--shadow-lg);
     }
     .modal h2 {
       font-size: clamp(1.8rem, 3vw, 2.5rem);
@@ -463,32 +522,32 @@
       line-height: 1.1;
       margin-bottom: 8px;
     }
-    .modal-desc { color: var(--muted); margin-bottom: 18px; }
-    .field { margin-bottom: 15px; }
+    .modal-desc { color: var(--muted); margin-bottom: 20px; }
+    .field { margin-bottom: 16px; }
     .field label {
       display: block;
       font-size: 0.9rem;
       font-weight: 700;
-      margin-bottom: 7px;
+      margin-bottom: 8px;
     }
     .field input {
       width: 100%;
-      padding: 11px 12px;
+      padding: 12px 14px;
       border-radius: 10px;
-      border: 1px solid rgba(32,25,21,0.12);
+      border: 1px solid rgba(26,20,16,0.12);
       background: white;
       color: var(--ink);
     }
-    .field input:focus { outline: none; border-color: rgba(183,93,60,0.7); }
+    .field input:focus { outline: none; border-color: rgba(168,74,61,0.7); }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .error {
       display: none;
-      background: rgba(183,93,60,0.08);
-      color: #9d3a23;
-      border: 1px solid rgba(183,93,60,0.2);
+      background: rgba(168,74,61,0.1);
+      color: #8b3a2e;
+      border: 1px solid rgba(168,74,61,0.25);
       border-radius: 10px;
-      padding: 10px 12px;
-      margin-bottom: 14px;
+      padding: 11px 14px;
+      margin-bottom: 16px;
       font-size: 0.9rem;
     }
 
@@ -508,7 +567,7 @@
       width: min(420px, 100vw);
       height: 100vh;
       background: white;
-      box-shadow: -18px 0 40px rgba(32,25,21,0.14);
+      box-shadow: -18px 0 40px rgba(26,20,16,0.14);
       transform: translateX(110%);
       transition: transform 0.3s ease;
       z-index: 100;
@@ -545,7 +604,7 @@
       width: 62px;
       height: 78px;
       border-radius: 10px;
-      background: linear-gradient(135deg, rgba(233,220,198,0.8), rgba(251,248,244,1));
+      background: linear-gradient(135deg, rgba(232,220,192,0.8), rgba(252,251,249,1));
       overflow: hidden;
       flex-shrink: 0;
       display: grid;
@@ -601,16 +660,16 @@
     .toast.show { transform: translateX(-50%) translateY(0); }
 
     @media (max-width: 980px) {
-      .intro-grid, .events-grid, .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .events-grid, .steps, .category-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .footer-grid { grid-template-columns: 1fr 1fr; }
     }
 
     @media (max-width: 640px) {
-      .intro-grid, .events-grid, .steps, .footer-grid, .form-row { grid-template-columns: 1fr; }
+      .events-grid, .steps, .category-grid, .footer-grid, .form-row { grid-template-columns: 1fr; }
       .nav { height: auto; padding: 12px 0; flex-wrap: wrap; }
       .nav-links { width: 100%; justify-content: center; }
       .brand { width: 100%; text-align: center; }
-      .hero { padding-top: 52px; }
+      .hero { padding-top: 62px; }
       .hero-tagline { letter-spacing: 0.08em; }
     }
   </style>
@@ -657,25 +716,30 @@
       </div>
     </section>
 
-    <section class="section">
+    <section class="section categories-section">
       <div class="container">
-        <div class="section-label">Why ThriftMall</div>
-        <h2 class="section-title">Designed like a beautiful vintage mall, not a generic marketplace.</h2>
-        <div class="intro-grid">
-          <div class="feature-card">
-            <div class="feature-icon">👜</div>
-            <h3>Curated pieces</h3>
-            <p>Find rare vintage clothing, bags, homeware, and accessories sourced with care.</p>
+        <div class="section-label">Shop by category</div>
+        <h2 class="section-title">Explore curated collections</h2>
+        <div class="category-grid">
+          <div class="category-link">
+            <div class="category-icon">👜</div>
+            <h3>Accessories</h3>
+            <p>Bags, belts & jewelry</p>
           </div>
-          <div class="feature-card">
-            <div class="feature-icon">🎵</div>
-            <h3>Real experiences</h3>
-            <p>Discover music nights, pop-ups, exhibitions, and local cultural events hosted by the community.</p>
+          <div class="category-link">
+            <div class="category-icon">👗</div>
+            <h3>Clothing</h3>
+            <p>Dresses, tops & more</p>
           </div>
-          <div class="feature-card">
-            <div class="feature-icon">🏪</div>
-            <h3>Studio sellers</h3>
-            <p>Support independent sellers and boutique curators with an easy direct-buy experience.</p>
+          <div class="category-link">
+            <div class="category-icon">🏠</div>
+            <h3>Home</h3>
+            <p>Decor & furnishings</p>
+          </div>
+          <div class="category-link">
+            <div class="category-icon">✨</div>
+            <h3>Rare Finds</h3>
+            <p>Limited edition pieces</p>
           </div>
         </div>
       </div>
@@ -687,7 +751,9 @@
         <h2 class="section-title">Culture, music, and vintage moments</h2>
         <div class="events-grid">
           <article class="event-card">
-            <div class="event-image">🎧</div>
+            <div class="event-image">
+              <span>🎧</span>
+            </div>
             <div class="event-body">
               <div class="event-date">25 Oct</div>
               <h3>Vinyl & Vintage Night</h3>
@@ -695,7 +761,9 @@
             </div>
           </article>
           <article class="event-card">
-            <div class="event-image">🛍️</div>
+            <div class="event-image">
+              <span>🛍️</span>
+            </div>
             <div class="event-body">
               <div class="event-date">01 Nov</div>
               <h3>Collector Market Weekend</h3>
@@ -703,7 +771,9 @@
             </div>
           </article>
           <article class="event-card">
-            <div class="event-image">🎨</div>
+            <div class="event-image">
+              <span>🎨</span>
+            </div>
             <div class="event-body">
               <div class="event-date">12 Nov</div>
               <h3>Exhibition & Pop-Up</h3>
@@ -737,7 +807,7 @@
           <div class="step">
             <div class="step-number">4</div>
             <h3>Checkout</h3>
-            <p>Proceed to the seller’s WhatsApp to confirm the order.</p>
+            <p>Proceed to the seller's WhatsApp to confirm the order.</p>
           </div>
         </div>
       </div>
@@ -763,7 +833,7 @@
       <div class="container seller-inner">
         <div class="section-label" style="color: rgba(255,255,255,0.7);">For sellers</div>
         <h2>Sell your vintage finds with us.</h2>
-        <p>Join ThriftMall to list your curated items, promote your boutique, and connect directly with shoppers through WhatsApp.</p>
+        <p>Join Thriftmall to list your curated items, promote your boutique, and connect directly with shoppers through WhatsApp.</p>
         <div class="seller-row">
           <button class="btn btn-primary" onclick="document.getElementById('sellerModal').classList.add('show')">Apply as a seller</button>
         </div>
@@ -774,7 +844,7 @@
       <div class="container">
         <div class="footer-grid">
           <div>
-            <h4>ThriftMall</h4>
+            <h4>Thriftmall</h4>
             <p>A premium vintage marketplace for authentic style, local stories, and live community culture.</p>
           </div>
           <div>
@@ -796,7 +866,7 @@
             <a href="#">FAQs</a>
           </div>
         </div>
-        <div class="footer-bottom">© 2025 ThriftMall — vintage pieces, live culture, and curated finds.</div>
+        <div class="footer-bottom">© 2025 Thriftmall — vintage pieces, live culture, and curated finds.</div>
       </div>
     </footer>
   </div>
@@ -811,7 +881,7 @@
             <div>
               <div class="icon">🧺</div>
               <h3>No listings yet</h3>
-              <p>Seller inventory will appear here when products are added. Buyers can then select items, add to cart, and continue to checkout through the seller’s WhatsApp.</p>
+              <p>Seller inventory will appear here when products are added. Buyers can then select items, add to cart, and continue to checkout through the seller's WhatsApp.</p>
             </div>
           </div>
         </div>
@@ -977,7 +1047,7 @@
       checkoutButtons.innerHTML = Object.values(grouped).map(group => {
         const groupTotal = group.items.reduce((sum, item) => sum + Number(item.price || 0), 0);
         const msg = encodeURIComponent(
-          `Hi ${group.sellerName}! I want to order:\n\n${group.items.map(item => `• ${item.name} (${item.size || 'One size'}) — ${formatMoney(item.price)}`).join('\n')}\n\nTotal: ${formatMoney(groupTotal)}\nPlease confirm availability and arrange delivery.`
+          `Hi ${group.sellerName}! I want to order:\n\n${group.items.map(item => `• ${item.name} (${item.size || 'One size'}) — ${formatMoney(item.price)}`).join('\n')}\n\nTotal: ${formatMoney(groupTotal)}`
         );
         return `<button class="checkout-btn" onclick="window.open('https://wa.me/${(group.wa || ADMIN_WA).replace(/\D/g, '')}?text=${msg}', '_blank')">Checkout with ${group.sellerName}</button>`;
       }).join('');
@@ -998,42 +1068,47 @@
       const email = document.getElementById('sellerEmail').value.trim();
       const pass = document.getElementById('sellerPassword').value.trim();
       const wa = document.getElementById('sellerWa').value.trim();
-      const err = document.getElementById('signupError');
 
-      err.style.display = 'none';
+      const errorEl = document.getElementById('signupError');
+      errorEl.style.display = 'none';
+
       if (!shopName || !ownerName || !ownerLast || !email || !pass || !wa) {
-        err.textContent = 'Please fill in all fields.';
-        err.style.display = 'block';
+        errorEl.textContent = 'All fields are required.';
+        errorEl.style.display = 'block';
         return;
       }
+
       if (pass.length < 6) {
-        err.textContent = 'Password must be at least 6 characters.';
-        err.style.display = 'block';
+        errorEl.textContent = 'Password must be at least 6 characters.';
+        errorEl.style.display = 'block';
         return;
       }
 
       const sellers = loadSellers();
-      if (sellers.some(s => s.email.toLowerCase() === email.toLowerCase())) {
-        err.textContent = 'That email is already registered.';
-        err.style.display = 'block';
+      if (sellers.some(s => s.email === email)) {
+        errorEl.textContent = 'This email is already registered.';
+        errorEl.style.display = 'block';
         return;
       }
 
       sellers.push({
         id: 'seller_' + Date.now(),
-        shopName,
-        ownerName: ownerName + ' ' + ownerLast,
-        email: email.toLowerCase(),
-        pass,
-        whatsapp: wa,
-        status: 'active',
-        products: [],
-        createdAt: Date.now()
+        shopName, ownerName, ownerLast, email,
+        password: btoa(pass),
+        wa,
+        createdAt: new Date().toISOString()
       });
-
       saveSellers(sellers);
+
+      document.getElementById('shopName').value = '';
+      document.getElementById('ownerName').value = '';
+      document.getElementById('ownerLast').value = '';
+      document.getElementById('sellerEmail').value = '';
+      document.getElementById('sellerPassword').value = '';
+      document.getElementById('sellerWa').value = '';
       document.getElementById('sellerModal').classList.remove('show');
-      toast('Seller application sent');
+
+      toast(`Welcome, ${shopName}! Check your email for next steps.`);
     }
 
     updateCartBadge();
