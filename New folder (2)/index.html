@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thriftmall | Zimbabwe's Thrift Mall</title>
+<meta name="description" content="Walk into Zimbabwe's thrift mall: vintage and thrifted shops, community news, events and vlogs in one place.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Work+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bone:#efe9da;--tile:#e3dbc6;--teal:#24605b;--deep:#15302d;--mustard:#e0a82e;--plum:#6b2d4f;--ink:#1c1a17;--mute:#5d574b;--line:#c9bfa5}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Work Sans',system-ui,sans-serif;background:var(--bone);color:var(--ink);line-height:1.55}
+h1,h2,h3,.sign{font-family:'Bowlby One','Arial Black',sans-serif;font-weight:400;line-height:1.05}
+a{color:inherit}button,input,select,textarea{font:inherit}button{cursor:pointer}
+:focus-visible{outline:3px solid var(--mustard);outline-offset:2px}
+.wrap{width:min(1180px,calc(100% - 28px));margin:0 auto}
+header{position:sticky;top:0;z-index:40;background:var(--deep);color:var(--bone);border-bottom:4px solid var(--mustard)}
+.nav{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:10px 0}
+.logo{font-family:'Bowlby One',sans-serif;font-size:1.6rem;color:var(--mustard);text-decoration:none;margin-right:auto}
+.nav a.l,.nav button{color:var(--bone);text-decoration:none;font-weight:600;font-size:.92rem;padding:8px 12px;border-radius:6px;background:none;border:0}
+.nav a.l:hover,.nav button:hover{background:rgba(255,255,255,.12)}
+.nav .pill{background:var(--mustard);color:var(--ink);font-weight:700}
+.nav .pill:hover{background:#f0bc48}
+.hero{background:var(--teal);color:var(--bone);padding:56px 0 0;position:relative;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:36px;align-items:end}
+.hero h1{font-size:clamp(2.6rem,7vw,5.4rem);color:var(--bone);margin-bottom:16px}
+.hero p{max-width:480px;font-size:1.08rem;margin-bottom:24px}
+.btn{display:inline-block;padding:13px 22px;border-radius:6px;border:2px solid var(--ink);background:var(--mustard);color:var(--ink);font-weight:700;text-decoration:none}
+.btn:hover{background:#f0bc48}.btn.alt{background:transparent;color:var(--bone);border-color:var(--bone)}
+.btn.dark{background:var(--ink);color:var(--bone)}.btn.full{width:100%;text-align:center}
+.dir{background:var(--bone);color:var(--ink);border:5px solid var(--deep);border-bottom:0;border-radius:14px 14px 0 0;padding:20px}
+.dir h2{font-size:1.1rem;margin-bottom:12px;color:var(--plum)}
+.dir a{display:flex;justify-content:space-between;gap:10px;padding:11px 4px;border-top:1px dashed var(--line);text-decoration:none;font-weight:600}
+.dir a:hover{color:var(--teal);padding-left:10px}
+.dir small{color:var(--mute);font-weight:400}
+.floor{height:26px;background:repeating-conic-gradient(var(--tile) 0 25%,var(--bone) 0 50%) 0 0/52px 52px;border-top:3px solid var(--deep)}
+/* PHOTO SLOTS: save your photos in an "images" folder next to index.html, then replace none with e.g. url(images/hero.jpg) */
+:root{--photo-hero:url(images/hero.jpg);--photo-park:none}
+.hero>.wrap{position:relative;z-index:2}
+.atrium{position:absolute;inset:0;z-index:0}.atrium svg{width:100%;height:100%;display:block}
+.ph-layer{position:absolute;inset:0;z-index:1;background-image:var(--photo-hero);background-size:cover;background-position:center}
+.ph-layer::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(21,48,45,.82),rgba(21,48,45,.45))}
+.bbs{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;padding:44px 0 56px}
+.bb{position:relative;display:flex;flex-direction:column;justify-content:flex-end;text-decoration:none;color:#fff;min-height:210px;padding:22px;border:7px solid var(--deep);border-radius:6px;background:var(--plum) center/cover}
+.bb:nth-child(2){background-color:var(--teal)}.bb:nth-child(3){background-color:#a8741b}
+.bb::before{content:'';position:absolute;left:0;right:0;top:-19px;height:10px;background:radial-gradient(circle,var(--mustard) 3px,transparent 4px) 0 0/22px 10px}
+.bb::after{content:'';position:absolute;left:50%;bottom:-48px;width:14px;height:41px;background:var(--deep)}
+.bb b{font-family:'Bowlby One';font-weight:400;font-size:1.6rem;line-height:1.05;text-shadow:0 2px 0 rgba(0,0,0,.35)}
+.bb span{font-weight:600;margin-top:6px;text-shadow:0 1px 0 rgba(0,0,0,.4)}
+.esc{height:92px;display:grid;place-items:center;background:repeating-linear-gradient(115deg,#1f3f3b 0 16px,#2e5c56 16px 32px);border-top:8px solid var(--mustard);border-bottom:8px solid var(--mustard)}
+.esc span{background:var(--deep);color:var(--mustard);padding:8px 18px;border-radius:4px;font-family:'Bowlby One';font-size:.95rem}
+section.s.park{position:relative;overflow:hidden;padding:64px 0 160px;background:linear-gradient(180deg,#d6ebcf,#a9d3a0)}
+.park::before{content:'';position:absolute;inset:0;background-image:var(--photo-park);background-size:cover;background-position:center}
+.park>.wrap{position:relative;z-index:2}.park .head h2{color:#17402a}.park .head p{color:#2c4a35}
+.trees{position:absolute;left:0;right:0;bottom:0;width:100%;height:150px;z-index:1}
+@media(max-width:820px){.bbs{grid-template-columns:1fr}}
+section.s{padding:64px 0}
+.head{margin-bottom:26px}
+.head h2{font-size:clamp(1.8rem,4vw,2.8rem);color:var(--deep)}
+.head p{color:var(--mute);max-width:560px;margin-top:8px}
+.shops{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px}
+.store{border:3px solid var(--deep);border-radius:4px 4px 10px 10px;background:#fff;text-align:center;cursor:pointer;overflow:hidden;padding:0 0 14px;font:inherit;width:100%}
+.store .awn{height:26px;background:repeating-linear-gradient(90deg,var(--plum) 0 22px,var(--mustard) 22px 44px);border-bottom:3px solid var(--deep)}
+.store .lg{width:76px;height:76px;border-radius:50%;margin:16px auto 8px;background:var(--tile) center/cover;display:grid;place-items:center;font-family:'Bowlby One';font-size:1.6rem;color:var(--teal);border:3px solid var(--deep)}
+.store b{display:block;font-size:1.05rem}.store span{color:var(--mute);font-size:.88rem}
+.store.on{background:var(--mustard)}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin:26px 0 20px}
+.filters input,.filters select{padding:10px 12px;border:2px solid var(--deep);border-radius:6px;background:#fff;min-width:150px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px}
+.card{background:#fff;border:2px solid var(--deep);border-radius:10px;overflow:hidden;display:flex;flex-direction:column}
+.card .ph{aspect-ratio:4/5;background:var(--tile) center/cover}
+.card .b{padding:14px;display:flex;flex-direction:column;gap:6px;flex:1}
+.card h3{font-family:'Work Sans';font-weight:700;font-size:1.05rem}
+.meta{display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:.74rem;font-weight:700;padding:3px 9px;border-radius:99px;background:var(--tile)}
+.tag.c{background:var(--plum);color:#fff}
+.by{font-size:.85rem;color:var(--mute)}
+.row{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:8px}
+.price{font-family:'Bowlby One';font-size:1.25rem;color:var(--teal)}
+.mini{border:2px solid var(--ink);background:var(--mustard);padding:8px 14px;border-radius:6px;font-weight:700}
+.mini.in{background:var(--ink);color:var(--bone)}
+.empty{grid-column:1/-1;padding:36px;text-align:center;border:2px dashed var(--line);border-radius:10px;color:var(--mute)}
+.board{background:var(--deep);color:var(--bone)}
+.board .head h2{color:var(--mustard)}.board .head p{color:#cfd6cc}
+.notes{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px}
+.note{background:var(--bone);color:var(--ink);padding:20px;border-radius:3px;box-shadow:0 6px 0 rgba(0,0,0,.25)}
+.note:nth-child(even){background:#f4dc9d}
+.note .d{font-size:.78rem;font-weight:700;color:var(--plum)}
+.note h3{font-family:'Work Sans';font-weight:700;font-size:1.15rem;margin:6px 0}
+.note p{font-size:.94rem}
+.ev{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:20px}
+.ticket{display:flex;background:#fff;border:2px solid var(--deep);border-radius:10px;overflow:hidden}
+.ticket .dt{background:var(--plum);color:#fff;padding:16px 14px;text-align:center;min-width:84px;display:grid;align-content:center}
+.ticket .dt b{font-family:'Bowlby One';font-size:1.9rem;font-weight:400}
+.ticket .tx{padding:16px}.ticket h3{font-family:'Work Sans';font-weight:700;font-size:1.1rem}
+.ticket p{font-size:.92rem;color:var(--mute)}
+.vl{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px}
+.vlog{text-decoration:none;border:2px solid var(--deep);border-radius:10px;overflow:hidden;background:#fff;display:block}
+.vlog .th{aspect-ratio:16/9;background:var(--teal);display:grid;place-items:center;color:var(--bone);font-size:2.4rem}
+.vlog div.t{padding:14px}.vlog b{display:block}.vlog span{font-size:.88rem;color:var(--mute)}
+.sell{background:var(--mustard);border-top:4px solid var(--deep);border-bottom:4px solid var(--deep)}
+.sell .wrap{display:flex;gap:20px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.sell h2{font-size:clamp(1.6rem,3.5vw,2.4rem)}
+footer{background:var(--deep);color:#cfd6cc;padding:36px 0;font-size:.92rem}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+footer .logo{font-size:1.4rem}
+.modal{position:fixed;inset:0;background:rgba(10,18,16,.65);z-index:100;display:none;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto}
+.modal.show{display:flex}
+.box{background:var(--bone);border:3px solid var(--deep);border-radius:12px;padding:26px;width:min(560px,100%);position:relative;margin:auto}
+.box h2{font-size:1.6rem;color:var(--deep);margin-bottom:14px}
+.x{position:absolute;top:10px;right:14px;font-size:1.8rem;background:none;border:0;line-height:1}
+.f{margin-bottom:13px}.f label{display:block;font-weight:700;font-size:.88rem;margin-bottom:4px}
+.f input,.f select,.f textarea{width:100%;padding:11px 12px;border:2px solid var(--deep);border-radius:6px;background:#fff}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.seg button{padding:11px;border:2px solid var(--deep);background:#fff;border-radius:6px;font-weight:700}
+.seg button.on{background:var(--deep);color:var(--mustard)}
+.drop{border:2px dashed var(--teal);border-radius:10px;padding:22px;text-align:center;background:rgba(36,96,91,.07);cursor:pointer}
+.drop.over{background:rgba(224,168,46,.3)}
+.prev{width:100%;max-height:200px;object-fit:cover;border-radius:8px;margin-top:10px}
+.sw{display:flex;gap:14px;align-items:center;margin-bottom:16px}
+.sw .lg{width:64px;height:64px;border-radius:50%;background:var(--tile) center/cover;border:3px solid var(--deep);flex:none}
+.link{background:none;border:0;color:var(--plum);font-weight:700;text-decoration:underline;padding:0}
+.mine{display:flex;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}
+.mine i{width:44px;height:44px;border-radius:6px;background:var(--tile) center/cover;flex:none}
+.mine span{flex:1;font-size:.92rem}
+.cg{border:2px solid var(--deep);border-radius:8px;padding:12px;margin-bottom:14px;background:#fff}
+.cg h3{font-family:'Work Sans';font-weight:700;margin-bottom:6px}
+.ci{display:flex;justify-content:space-between;gap:10px;padding:6px 0;font-size:.92rem}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bone);padding:12px 20px;border-radius:8px;z-index:200;display:none;max-width:90%}
+.badge{background:var(--plum);color:#fff;border-radius:99px;padding:1px 8px;font-size:.75rem;margin-left:4px}
+@media(max-width:820px){.hero-grid{grid-template-columns:1fr}.two{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header><div class="wrap nav">
+  <a class="logo" href="#top">Thriftmall</a>
+  <a class="l" href="#shops">Shops</a><a class="l" href="#news">Notice board</a><a class="l" href="#events">Events</a><a class="l" href="#vlogs">Vlogs</a>
+  <button id="accBtn" class="pill">Account</button>
+  <button id="cartBtn">Cart<span class="badge" id="cnt">0</span></button>
+</div></header>
+
+<main id="top">
+<div class="hero"><div class="atrium" aria-hidden="true"><svg viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice"><rect width="1200" height="600" fill="#24605b"/><g stroke="#3b8179" stroke-width="3" fill="#2d6f68"><path d="M0 0H1200V70L1000 150H200L0 70Z"/><path d="M300 0L400 150M600 0V150M900 0L800 150M0 70H1200" fill="none"/></g><g fill="#1c4b47"><rect x="120" y="150" width="34" height="450"/><rect x="1046" y="150" width="34" height="450"/></g><g fill="#1a4440"><path d="M0 600V470L520 240V330L170 600Z"/><path d="M1200 600V470L680 240V330L1030 600Z"/></g><g stroke="#3b8179" stroke-width="3" stroke-dasharray="10 14" fill="none"><path d="M0 478L520 248M1200 478L680 248"/></g><g fill="#e0a82e"><rect x="240" y="175" width="90" height="46" rx="4"/><rect x="870" y="175" width="90" height="46" rx="4"/></g><g fill="#6b2d4f"><rect x="525" y="200" width="150" height="60" rx="4"/></g></svg></div><div class="ph-layer"></div><div class="wrap hero-grid">
+  <div>
+    <h1>Walk into Zimbabwe's thrift mall.</h1>
+    <p>Rare vintage and thrifted pieces from independent sellers, plus the news, events and vlogs that keep our thrift community talking. One mall, every shop.</p>
+    <a class="btn" href="#shops">Start shopping</a> <a class="btn alt" href="#news">See what's on</a>
+  </div>
+  <nav class="dir" aria-label="Mall directory">
+    <h2>Mall directory</h2>
+    <a href="#shops">Shop floor <small>Browse every seller</small></a>
+    <a href="#news">Notice board <small>Thrift news</small></a>
+    <a href="#events">Events hall <small>Markets &amp; pop-ups</small></a>
+    <a href="#vlogs">Vlog lounge <small>Rare finds on video</small></a>
+  </nav>
+</div><div class="floor"></div></div>
+<div class="wrap bbs" id="bbs"></div>
+
+<section class="s" id="shops"><div class="wrap">
+  <div class="head"><h2>The shop floor</h2><p>Every storefront is a real seller. Tap a shop to see only their rails.</p></div>
+  <div class="shops" id="shopList"></div>
+  <div class="filters">
+    <input id="q" type="search" placeholder="Search jackets, denim, bags..." aria-label="Search">
+    <select id="fc" aria-label="Category"><option value="">All categories</option><option>Accessories</option><option>Clothing</option><option>Rare Finds</option></select>
+    <select id="fs" aria-label="Size"><option value="">All sizes</option></select>
+  </div>
+  <div class="grid" id="prods"></div>
+</div></section>
+
+<div class="esc"><span>Escalator up: Notice board</span></div>
+<section class="s board" id="news"><div class="wrap">
+  <div class="head"><h2>Notice board</h2><p>News and updates from the thrift community.</p></div>
+  <div class="notes" id="notes"></div>
+</div></section>
+
+<section class="s" id="events"><div class="wrap">
+  <div class="head"><h2>Events hall</h2><p>Thrift markets, swaps and pop-ups near you.</p></div>
+  <div class="ev" id="evs"></div>
+</div></section>
+
+<div class="esc"><span>Out to the garden court</span></div>
+<section class="s park" id="vlogs"><div class="wrap">
+  <div class="head"><h2>Vlog lounge</h2><p>Sellers and collectors show off rare finds and tell the story behind them.</p></div>
+  <div class="vl" id="vls"></div>
+</div><svg class="trees" viewBox="0 0 1200 150" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><rect y="118" width="1200" height="32" fill="#2f7a4a"/><g fill="#6b4a2f"><rect x="86" y="96" width="9" height="26"/><rect x="326" y="100" width="9" height="22"/><rect x="636" y="92" width="9" height="30"/><rect x="926" y="98" width="9" height="24"/><rect x="1126" y="94" width="9" height="28"/></g><g fill="#3f9a5c"><circle cx="90" cy="68" r="46"/><circle cx="330" cy="78" r="38"/><circle cx="640" cy="62" r="50"/><circle cx="930" cy="76" r="40"/><circle cx="1130" cy="66" r="44"/></g><g fill="#6b2d4f"><rect x="470" y="98" width="130" height="8" rx="2"/><rect x="478" y="106" width="8" height="14"/><rect x="584" y="106" width="8" height="14"/></g></svg></section>
+
+<section class="sell s" style="padding:40px 0"><div class="wrap">
+  <h2 class="sign">Got thrift to sell? Open a shop.</h2>
+  <button class="btn dark" id="openShop">Open your shop</button>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <div><a class="logo" href="#top" style="text-decoration:none">Thriftmall</a><p>Zimbabwe's thrift community, under one roof.</p></div>
+  <div><p>WhatsApp: <b>+263 77 000 0000</b></p><p>Email: <b>hello@thriftmall.co.zw</b></p></div>
+  <div><p>Thriftmall is a platform. Payment, delivery and returns are agreed directly between buyer and seller.</p></div>
+</div></footer>
+
+<div class="modal" id="accM"><div class="box"><button class="x" data-close aria-label="Close">&times;</button><div id="accBody"></div></div></div>
+<div class="modal" id="cartM"><div class="box"><button class="x" data-close aria-label="Close">&times;</button><h2>Your cart</h2><div id="cartBody"></div></div></div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ===== EDIT THESE: community content shown on the Notice board, Events hall and Vlog lounge ===== */
+const NEWS=[
+ {d:'This week',t:'Welcome to Thriftmall',x:'Zimbabwe\'s first thrift mall is open. Sellers can open a shop in minutes and start listing.'},
+ {d:'Community',t:'Sellers wanted in every city',x:'Harare, Bulawayo, Mutare, Gweru and beyond: list your rare vintage pieces and reach thrift lovers nationwide.'},
+ {d:'Tip',t:'How to spot real vintage',x:'Check stitching, care labels and zips. Older pieces often have single-needle seams and metal zips.'}
+];
+const EVENTS=[
+ {m:'Oct',day:'24',t:'Harare Thrift Market Day',x:'Meet sellers in person. Location to be announced.'},
+ {m:'Nov',day:'07',t:'Denim Swap, Bulawayo',x:'Bring a pair, take a pair. Free entry.'},
+ {m:'Nov',day:'21',t:'Vintage Pop-up, Mutare',x:'One-day pop-up with rare finds and local music.'}
+];
+const VLOGS=[
+ {t:'Rare finds haul',by:'Add your first vlog',u:'#'},
+ {t:'Meet the sellers',by:'Coming soon',u:'#'},
+ {t:'How we restore vintage denim',by:'Coming soon',u:'#'}
+];
+/* Billboards: add a photo with img:'images/billboard1.jpg' (optional). href is where a tap goes. */
+const BILLBOARDS=[
+ {t:'New in: 90s denim',s:'Fresh drops from our sellers',href:'#shops',img:'images/denim.jpg',pos:'center 62%'},
+ {t:'Open 7 days a week',s:'Thrift never closes at Thriftmall',href:'#events',img:'images/sign.jpg',pos:'center 38%'},
+ {t:'Sell your thrift here',s:'Open a shop in minutes',href:'#shops'}
+];
+/* ================================================================================================= */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const load=(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));return v??d}catch{return d}};
+const store=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true}catch{toast('Storage is full. Remove a product or use smaller photos.');return false}};
+let users=load('tm_users',[]),prods=load('tm_prods',[]),cart=load('tm_cart',[]),meId=load('tm_me',null);
+let shopFilter=null,photo=null,logoTmp=null,mode='login',acct='buyer';
+const me=()=>users.find(u=>u.id===meId)||null;
+const usd=n=>'US$'+Number(n).toFixed(2);
+function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>t.style.display='none',2800)}
+function shrink(file,max=700){return new Promise((res,rej)=>{if(!file||!file.type.startsWith('image/'))return rej();const r=new FileReader();r.onload=()=>{const i=new Image();i.onload=()=>{const s=Math.min(1,max/Math.max(i.width,i.height)),c=document.createElement('canvas');c.width=i.width*s;c.height=i.height*s;c.getContext('2d').drawImage(i,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.78))};i.onerror=rej;i.src=r.result};r.onerror=rej;r.readAsDataURL(file)})}
+const waNum=n=>{let d=String(n).replace(/\D/g,'');if(d.startsWith('0'))d='263'+d.slice(1);return d};
+
+function render(){
+  const sellers=users.filter(u=>u.type==='seller');
+  $('#shopList').innerHTML=sellers.length?sellers.map(s=>`<button class="store${shopFilter===s.id?' on':''}" data-shop="${s.id}"><div class="awn"></div><div class="lg" style="${s.logo?`background-image:url(${s.logo})`:''}">${s.logo?'':esc(s.shop[0]||'?')}</div><b>${esc(s.shop)}</b><span>${esc(s.loc)}</span></button>`).join(''):'<div class="empty" style="grid-column:1/-1">No shops yet. Be the first to open one.</div>';
+  const sizes=[...new Set(prods.map(p=>p.size))].sort();const cur=$('#fs').value;
+  $('#fs').innerHTML='<option value="">All sizes</option>'+sizes.map(s=>`<option${s===cur?' selected':''}>${esc(s)}</option>`).join('');
+  const q=$('#q').value.toLowerCase(),c=$('#fc').value,z=$('#fs').value;
+  const list=prods.filter(p=>(!shopFilter||p.sid===shopFilter)&&(!c||p.cat===c)&&(!z||p.size===z)&&(!q||(p.name+p.cat).toLowerCase().includes(q))).reverse();
+  $('#prods').innerHTML=list.length?list.map(p=>{const s=users.find(u=>u.id===p.sid);const inC=cart.includes(p.id);return `<article class="card"><div class="ph" style="background-image:url(${p.img})" role="img" aria-label="${esc(p.name)}"></div><div class="b"><h3>${esc(p.name)}</h3><div class="meta"><span class="tag c">${esc(p.cat)}</span><span class="tag">Size ${esc(p.size)}</span><span class="tag">${esc(p.cond)}</span></div><div class="by">${s?esc(s.shop)+', '+esc(s.loc):''}</div><div class="row"><span class="price">${usd(p.price)}</span><button class="mini${inC?' in':''}" data-cart="${p.id}">${inC?'In cart':'Add to cart'}</button></div></div></article>`}).join(''):`<div class="empty">${shopFilter||q||c||z?'Nothing matches. Clear your filters to see more.':'The racks are empty. Sellers: open a shop and add your first piece.'}</div>`;
+  $('#bbs').innerHTML=BILLBOARDS.map(b=>`<a class="bb" href="${esc(b.href)}"${b.img?` style="background-image:linear-gradient(180deg,rgba(0,0,0,.05) 35%,rgba(0,0,0,.7)),url(${esc(b.img)});background-position:${esc(b.pos||'center')}"`:''}><b>${esc(b.t)}</b><span>${esc(b.s)}</span></a>`).join('');
+  $('#notes').innerHTML=NEWS.map(n=>`<div class="note"><div class="d">${esc(n.d)}</div><h3>${esc(n.t)}</h3><p>${esc(n.x)}</p></div>`).join('');
+  $('#evs').innerHTML=EVENTS.map(e=>`<div class="ticket"><div class="dt"><span>${esc(e.m)}</span><b>${esc(e.day)}</b></div><div class="tx"><h3>${esc(e.t)}</h3><p>${esc(e.x)}</p></div></div>`).join('');
+  $('#vls').innerHTML=VLOGS.map(v=>`<a class="vlog" href="${esc(v.u)}" target="_blank" rel="noopener"><div class="th" aria-hidden="true">&#9654;</div><div class="t"><b>${esc(v.t)}</b><span>${esc(v.by)}</span></div></a>`).join('');
+  cart=cart.filter(id=>prods.some(p=>p.id===id));$('#cnt').textContent=cart.length;
+  $('#accBtn').textContent=me()?(me().type==='seller'?me().shop:me().name.split(' ')[0]):'Account';
+}
+
+/* ---- Cart & checkout: one WhatsApp order per shop ---- */
+function openCart(){
+  const items=cart.map(id=>prods.find(p=>p.id===id)).filter(Boolean);
+  if(!items.length){$('#cartBody').innerHTML='<p>Your cart is empty. Every piece is one of a kind, so add yours before someone else does.</p>'}
+  else{
+    const by={};items.forEach(p=>(by[p.sid]=by[p.sid]||[]).push(p));
+    $('#cartBody').innerHTML=Object.keys(by).map(sid=>{const s=users.find(u=>u.id==sid),ps=by[sid],t=ps.reduce((a,p)=>a+Number(p.price),0);
+      return `<div class="cg"><h3>${esc(s?s.shop:'Shop')}</h3>${ps.map(p=>`<div class="ci"><span>${esc(p.name)} (${esc(p.size)})</span><span>${usd(p.price)} <button class="link" data-rm="${p.id}">Remove</button></span></div>`).join('')}<div class="ci"><b>Subtotal</b><b>${usd(t)}</b></div><button class="btn dark full" data-pay="${sid}">Checkout with ${esc(s?s.shop:'seller')}</button></div>`}).join('')+`<p class="by">You pay each seller directly. Checkout opens WhatsApp with your order ready to send. Agree payment, delivery and returns with the seller.</p>`;
+  }
+  $('#cartM').classList.add('show');
+}
+function pay(sid){
+  const s=users.find(u=>u.id==sid),ps=cart.map(id=>prods.find(p=>p.id===id)).filter(p=>p&&p.sid==sid);if(!s||!ps.length)return;
+  const buyer=me()&&me().type==='buyer'?` My name is ${me().name}.`:'';
+  const msg=`Hi ${s.shop}, I found these on Thriftmall:\n${ps.map(p=>`- ${p.name} (size ${p.size}) ${usd(p.price)}`).join('\n')}\nTotal: ${usd(ps.reduce((a,p)=>a+Number(p.price),0))}.${buyer} Is it still available? How can I pay?`;
+  window.open('https://wa.me/'+waNum(s.wa)+'?text='+encodeURIComponent(msg),'_blank','noopener');
+}
+
+/* ---- Account ---- */
+function accView(){
+  const u=me(),b=$('#accBody');
+  if(u&&u.type==='seller'){
+    const mine=prods.filter(p=>p.sid===u.id);photo=null;
+    b.innerHTML=`<h2>${esc(u.shop)}</h2><p class="by" style="margin-bottom:14px">Seller dashboard &middot; ${esc(u.name)}, ${esc(u.loc)}</p>
+    <div class="sw"><div class="lg" id="lgPrev" style="${u.logo?`background-image:url(${u.logo})`:''}"></div><div><b>Shop logo or photo</b><br><button class="link" id="lgBtn">Upload from device</button><input type="file" id="lgIn" accept="image/*" hidden></div></div>
+    <h3 style="font-size:1.1rem;margin:10px 0">Add a product</h3>
+    <div class="f"><div class="drop" id="drop"><b>Drag a photo here or tap to upload</b><br><small>From your phone or computer</small><img class="prev" id="pv" hidden alt="Preview"></div><input type="file" id="pin" accept="image/*" hidden></div>
+    <div class="f"><label>Product name</label><input id="pn" placeholder="e.g. 90s Levi's denim jacket"></div>
+    <div class="two"><div class="f"><label>Price (US$)</label><input id="pp" type="number" min="0" step="0.01"></div><div class="f"><label>Size</label><input id="ps" placeholder="M, 32, UK 8"></div></div>
+    <div class="two"><div class="f"><label>Condition</label><select id="pc"><option>Like new</option><option>Good</option><option>Fair, well loved</option><option>Needs repair</option></select></div><div class="f"><label>Category</label><select id="pk"><option>Accessories</option><option>Clothing</option><option>Rare Finds</option></select></div></div>
+    <button class="btn dark full" id="addP">Add to the mall</button>
+    <h3 style="font-size:1.1rem;margin:20px 0 6px">Your products (${mine.length})</h3>
+    ${mine.map(p=>`<div class="mine"><i style="background-image:url(${p.img})"></i><span>${esc(p.name)}<br>${usd(p.price)}</span><button class="link" data-del="${p.id}">Delete</button></div>`).join('')||'<p class="by">Nothing listed yet.</p>'}
+    <button class="btn full" style="margin-top:18px" id="out">Log out</button>`;return;
+  }
+  if(u){
+    b.innerHTML=`<h2>Hi ${esc(u.name.split(' ')[0])}</h2><p>Your buyer account is active. Thriftmall will send you news, events and finds tailored to you at ${esc(u.email)}. You can still buy without an account.</p><button class="btn full" style="margin-top:18px" id="out">Log out</button>`;return;
+  }
+  b.innerHTML=`<h2>${mode==='login'?'Log in':'Create account'}</h2>
+  ${mode==='signup'?`<div class="seg"><button data-t="buyer" class="${acct==='buyer'?'on':''}">I'm a buyer</button><button data-t="seller" class="${acct==='seller'?'on':''}">I'm a seller</button></div>`:''}
+  ${mode==='signup'&&acct==='seller'?`<div class="f"><label>Shop name</label><input id="sh"></div>`:''}
+  ${mode==='signup'?`<div class="f"><label>Full name</label><input id="fn" autocomplete="name"></div>`:''}
+  ${mode==='signup'&&acct==='seller'?`<div class="two"><div class="f"><label>Location</label><input id="lo" placeholder="e.g. Harare, Avondale"></div><div class="f"><label>WhatsApp number</label><input id="wa" type="tel" placeholder="0771234567"></div></div>`:''}
+  <div class="f"><label>Email</label><input id="em" type="email" autocomplete="email"></div>
+  <div class="f"><label>Password</label><input id="pw" type="password" autocomplete="${mode==='login'?'current-password':'new-password'}"></div>
+  <button class="btn dark full" id="go">${mode==='login'?'Log in':'Create account'}</button>
+  <p style="text-align:center;margin-top:14px">${mode==='login'?`No account? <button class="link" id="sw">Create a new account</button>`:`Have an account? <button class="link" id="sw">Log in</button>`}</p>
+  ${mode==='login'?'<p class="by" style="text-align:center;margin-top:8px">Buying? You don\'t need an account. An account only gives you tailored news and updates.</p>':''}`;
+}
+function openAcc(m){if(m)mode=m;if(m==='signup')acct='seller';accView();$('#accM').classList.add('show')}
+function setPhoto(file,after){shrink(file).then(after).catch(()=>toast('Please choose an image file.'))}
+
+document.addEventListener('click',async e=>{
+  const t=e.target;
+  if(t.matches('.modal')||t.dataset.close!==undefined){document.querySelectorAll('.modal').forEach(m=>m.classList.remove('show'));return}
+  if(t.id==='accBtn')return openAcc();
+  if(t.id==='openShop')return me()?openAcc():openAcc('signup');
+  if(t.id==='cartBtn')return openCart();
+  const st=t.closest('[data-shop]');if(st){const id=+st.dataset.shop;shopFilter=shopFilter===id?null:id;render();return}
+  if(t.dataset.cart){const id=+t.dataset.cart;cart=cart.includes(id)?cart.filter(x=>x!==id):[...cart,id];store('tm_cart',cart);render();return}
+  if(t.dataset.rm){cart=cart.filter(x=>x!==+t.dataset.rm);store('tm_cart',cart);render();openCart();return}
+  if(t.dataset.pay)return pay(t.dataset.pay);
+  if(t.dataset.t){acct=t.dataset.t;return accView()}
+  if(t.id==='sw'){mode=mode==='login'?'signup':'login';return accView()}
+  if(t.id==='out'){meId=null;store('tm_me',null);render();return accView()}
+  if(t.id==='lgBtn')return $('#lgIn').click();
+  if(t.id==='drop'||t.closest('#drop'))return $('#pin').click();
+  if(t.dataset.del){prods=prods.filter(p=>p.id!==+t.dataset.del);store('tm_prods',prods);render();return accView()}
+  if(t.id==='go'){
+    const em=$('#em').value.trim().toLowerCase(),pw=$('#pw').value;
+    if(!em||!pw)return toast('Enter your email and password.');
+    if(mode==='login'){const u=users.find(u=>u.email===em&&u.pw===pw);if(!u)return toast('Email or password is wrong. Check them or create an account.');meId=u.id}
+    else{
+      const fn=$('#fn').value.trim();if(!fn)return toast('Enter your full name.');
+      if(users.some(u=>u.email===em))return toast('That email already has an account. Log in instead.');
+      if(pw.length<6)return toast('Use a password of at least 6 characters.');
+      const u={id:Date.now(),type:acct,name:fn,email:em,pw};
+      if(acct==='seller'){u.shop=$('#sh').value.trim();u.loc=$('#lo').value.trim();u.wa=$('#wa').value.trim();if(!u.shop||!u.loc||waNum(u.wa).length<9)return toast('Enter your shop name, location and a valid WhatsApp number.')}
+      users.push(u);if(!store('tm_users',users))return;meId=u.id;
+    }
+    store('tm_me',meId);render();accView();toast('Welcome to Thriftmall!');return;
+  }
+  if(t.id==='addP'){
+    const u=me(),n=$('#pn').value.trim(),p=parseFloat($('#pp').value),s=$('#ps').value.trim();
+    if(!photo)return toast('Add a product photo first.');
+    if(!n||!s||!(p>=0)||$('#pp').value==='')return toast('Enter the name, price in US$ and size.');
+    prods.push({id:Date.now(),sid:u.id,name:n,price:p,size:s,cond:$('#pc').value,cat:$('#pk').value,img:photo});
+    if(!store('tm_prods',prods)){prods.pop();return}
+    render();accView();toast('Added. It is now on the shop floor.');
+  }
+});
+document.addEventListener('change',e=>{
+  const f=e.target.files&&e.target.files[0];if(!f)return;
+  if(e.target.id==='lgIn')setPhoto(f,d=>{const u=me();u.logo=d;if(store('tm_users',users)){render();accView()}});
+  if(e.target.id==='pin')setPhoto(f,showPhoto);
+});
+function showPhoto(d){photo=d;const pv=$('#pv');pv.src=d;pv.hidden=false}
+document.addEventListener('dragover',e=>{if(e.target.closest('#drop')){e.preventDefault();$('#drop').classList.add('over')}});
+document.addEventListener('dragleave',e=>{if(e.target.closest('#drop'))$('#drop').classList.remove('over')});
+document.addEventListener('drop',e=>{if(e.target.closest('#drop')){e.preventDefault();$('#drop').classList.remove('over');setPhoto(e.dataTransfer.files[0],showPhoto)}});
+['q','fc','fs'].forEach(id=>$('#'+id).addEventListener('input',render));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal').forEach(m=>m.classList.remove('show'))});
+render();
+</script>
+</body>
+</html>
