@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Thriftmall | Vintage Market & Community Events</title>
+    <title>Thriftmall | Vintage Marketplace & Community</title>
     <meta
       name="description"
-      content="Thriftmall is a curated vintage marketplace and community hub for rare finds, thrifted style, music nights, exhibitions, and local market culture."
+      content="Thriftmall: curated vintage pieces, local sellers, and community events in one warm marketplace."
     />
     <style>
       :root {
@@ -18,7 +18,6 @@
         --gold: #c38c52;
         --rust: #9d4d3d;
         --forest: #1d3731;
-        --forest-soft: #2e4e46;
         --ink: #201b1a;
         --muted: #604e46;
         --line: rgba(32, 27, 26, 0.12);
@@ -92,6 +91,7 @@
         font-size: clamp(1.8rem, 2.5vw, 2.8rem);
         letter-spacing: -0.08em;
         font-weight: 700;
+        cursor: pointer;
       }
 
       .brand span {
@@ -119,6 +119,28 @@
       .nav-btn:hover {
         background: rgba(157, 77, 61, 0.08);
         border-color: rgba(157, 77, 61, 0.2);
+      }
+
+      .nav-right {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .cart-badge {
+        position: absolute;
+        top: -8px;
+        right: 2px;
+        min-width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--rust);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.65rem;
+        font-weight: 800;
       }
 
       .ticker {
@@ -172,15 +194,7 @@
         padding: 58px 0 58px;
         background:
           linear-gradient(135deg, rgba(32, 27, 26, 0.24), rgba(32, 27, 26, 0.06)),
-          url('https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=1400&q=80') center/cover no-repeat;
-      }
-
-      .hero::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(90deg, rgba(243,234,220,0.85) 0%, rgba(243,234,220,0.5) 32%, rgba(243,234,220,0.15) 100%);
-        z-index: -1;
+          linear-gradient(to right, #f3eadc 0%, #f8f3ee 100%);
       }
 
       .hero-grid {
@@ -267,41 +281,40 @@
       }
 
       .btn-light {
-        background: rgba(255,255,255,0.34);
+        background: rgba(255, 255, 255, 0.34);
         color: var(--ink);
       }
 
       .btn-light:hover {
-        background: rgba(255,255,255,0.6);
+        background: rgba(255, 255, 255, 0.6);
       }
 
       .hero-card {
         position: relative;
         min-height: 520px;
-        border: 1px solid rgba(32,27,26,0.08);
+        border: 1px solid rgba(32, 27, 26, 0.08);
         border-radius: var(--radius-xl);
         overflow: hidden;
-        background:
-          linear-gradient(180deg, rgba(20,16,14,0.08), rgba(20,16,14,0.18)),
-          url('https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=900&q=80') center/cover no-repeat;
+        background: linear-gradient(180deg, rgba(20, 16, 14, 0.08), rgba(20, 16, 14, 0.18)),
+          linear-gradient(to right, #d4b896, #e8d4b8);
         box-shadow: var(--shadow);
+        display: grid;
+        place-items: center;
       }
 
       .hero-card-inner {
-        position: absolute;
-        inset: auto 20px 20px 20px;
-        padding: 18px 18px 16px;
+        padding: 24px;
         border-radius: 18px;
-        background: rgba(250, 245, 239, 0.74);
-        backdrop-filter: blur(8px);
-        border: 1px solid rgba(32,27,26,0.08);
+        background: rgba(250, 245, 239, 0.84);
+        border: 1px solid rgba(32, 27, 26, 0.08);
+        text-align: center;
       }
 
       .pill {
         display: inline-block;
         padding: 6px 10px;
         border-radius: 999px;
-        background: rgba(32,27,26,0.12);
+        background: rgba(32, 27, 26, 0.12);
         color: var(--ink);
         font-size: 0.68rem;
         text-transform: uppercase;
@@ -311,7 +324,7 @@
       }
 
       .hero-card-inner h3 {
-        font-size: clamp(1.9rem, 3vw, 3rem);
+        font-size: clamp(1.9rem, 3vw, 2.4rem);
         letter-spacing: -0.08em;
         line-height: 0.98;
         margin-bottom: 8px;
@@ -331,8 +344,8 @@
       }
 
       .stat-card {
-        background: rgba(255,255,255,0.52);
-        border: 1px solid rgba(32,27,26,0.08);
+        background: rgba(255, 255, 255, 0.52);
+        border: 1px solid rgba(32, 27, 26, 0.08);
         border-radius: 18px;
         padding: 18px 16px;
       }
@@ -395,15 +408,15 @@
       .category-card {
         padding: 28px 22px 24px;
         border-radius: 22px;
-        border: 1px solid rgba(32,27,26,0.08);
-        background: rgba(255,255,255,0.42);
-        box-shadow: 0 12px 24px rgba(32,27,26,0.03);
+        border: 1px solid rgba(32, 27, 26, 0.08);
+        background: rgba(255, 255, 255, 0.42);
+        box-shadow: 0 12px 24px rgba(32, 27, 26, 0.03);
         transition: 0.2s ease;
       }
 
       .category-card:hover {
         transform: translateY(-4px);
-        box-shadow: 0 18px 30px rgba(32,27,26,0.06);
+        box-shadow: 0 18px 30px rgba(32, 27, 26, 0.06);
       }
 
       .category-icon {
@@ -412,7 +425,7 @@
         display: grid;
         place-items: center;
         border-radius: 18px;
-        background: linear-gradient(135deg, rgba(195,140,82,0.2), rgba(157,77,61,0.12));
+        background: linear-gradient(135deg, rgba(195, 140, 82, 0.2), rgba(157, 77, 61, 0.12));
         font-size: 2rem;
         margin-bottom: 18px;
       }
@@ -428,95 +441,6 @@
         line-height: 1.65;
       }
 
-      .story-section {
-        background: linear-gradient(135deg, rgba(217,192,154,0.22), rgba(248,243,238,0));
-        border-top: 1px solid var(--line);
-        border-bottom: 1px solid var(--line);
-      }
-
-      .story-grid {
-        display: grid;
-        grid-template-columns: 1.05fr 0.95fr;
-        gap: 28px;
-        align-items: center;
-      }
-
-      .story-visual {
-        position: relative;
-        min-height: 540px;
-        border-radius: var(--radius-xl);
-        overflow: hidden;
-        border: 1px solid rgba(32,27,26,0.08);
-        background:
-          linear-gradient(180deg, rgba(20,16,14,0.06), rgba(20,16,14,0.18)),
-          url('https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
-        box-shadow: var(--shadow);
-      }
-
-      .story-badge {
-        position: absolute;
-        left: 18px;
-        bottom: 18px;
-        padding: 10px 14px;
-        border-radius: 14px;
-        background: rgba(248,243,238,0.82);
-        border: 1px solid rgba(32,27,26,0.08);
-        backdrop-filter: blur(8px);
-        font-size: 0.72rem;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        font-weight: 800;
-      }
-
-      .story-copy {
-        padding: 24px 0;
-      }
-
-      .story-copy h3 {
-        font-size: clamp(2rem, 3vw, 3.5rem);
-        line-height: 1;
-        letter-spacing: -0.08em;
-        margin-bottom: 18px;
-        max-width: 600px;
-      }
-
-      .story-copy p {
-        color: var(--muted);
-        line-height: 1.8;
-        margin-bottom: 18px;
-      }
-
-      .story-points {
-        display: grid;
-        gap: 14px;
-        margin-top: 18px;
-      }
-
-      .story-point {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 12px 14px;
-        border-radius: 16px;
-        background: rgba(255,255,255,0.54);
-        border: 1px solid rgba(32,27,26,0.08);
-      }
-
-      .story-point strong {
-        width: 34px;
-        height: 34px;
-        display: grid;
-        place-items: center;
-        background: rgba(157,77,61,0.12);
-        color: var(--rust);
-        border-radius: 50%;
-        font-size: 0.9rem;
-      }
-
-      .events-section {
-        background: rgba(255,255,255,0.26);
-      }
-
       .event-grid {
         display: grid;
         grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -528,15 +452,17 @@
         flex-direction: column;
         border-radius: 22px;
         overflow: hidden;
-        border: 1px solid rgba(32,27,26,0.08);
-        background: rgba(255,255,255,0.45);
-        box-shadow: 0 12px 24px rgba(21,17,16,0.04);
+        border: 1px solid rgba(32, 27, 26, 0.08);
+        background: rgba(255, 255, 255, 0.45);
+        box-shadow: 0 12px 24px rgba(21, 17, 16, 0.04);
       }
 
       .event-thumb {
         height: 220px;
-        background-size: cover;
-        background-position: center;
+        background: linear-gradient(135deg, #d4b896, #e8d4b8);
+        display: grid;
+        place-items: center;
+        font-size: 3rem;
       }
 
       .event-body {
@@ -586,15 +512,17 @@
         position: relative;
         border-radius: 24px;
         overflow: hidden;
-        border: 1px solid rgba(32,27,26,0.08);
+        border: 1px solid rgba(32, 27, 26, 0.08);
         background: white;
-        box-shadow: 0 12px 24px rgba(21,17,16,0.04);
+        box-shadow: 0 12px 24px rgba(21, 17, 16, 0.04);
       }
 
       .feature-image {
         height: 260px;
-        background-size: cover;
-        background-position: center;
+        background: linear-gradient(135deg, #d4b896, #e8d4b8);
+        display: grid;
+        place-items: center;
+        font-size: 2.5rem;
       }
 
       .feature-body {
@@ -605,7 +533,7 @@
         display: inline-block;
         padding: 6px 10px;
         border-radius: 999px;
-        background: rgba(157,77,61,0.1);
+        background: rgba(157, 77, 61, 0.1);
         color: var(--rust);
         font-weight: 800;
         font-size: 0.68rem;
@@ -649,6 +577,110 @@
         text-transform: uppercase;
         letter-spacing: 0.12em;
         font-weight: 800;
+        transition: 0.2s;
+      }
+
+      .mini-btn:hover {
+        background: var(--rust);
+      }
+
+      .process-section {
+        background: rgba(31, 27, 26, 0.06);
+      }
+
+      .process-grid {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .process-step {
+        text-align: center;
+        padding: 24px 20px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.54);
+        border: 1px solid rgba(32, 27, 26, 0.08);
+      }
+
+      .step-num {
+        width: 48px;
+        height: 48px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: rgba(157, 77, 61, 0.15);
+        color: var(--rust);
+        font-weight: 800;
+        font-size: 1.3rem;
+        margin: 0 auto 14px;
+      }
+
+      .process-step h4 {
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+      }
+
+      .process-step p {
+        font-size: 0.85rem;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .faq-section {
+        padding: 84px 0;
+      }
+
+      .faq-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 24px;
+      }
+
+      .faq-item {
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 20px;
+      }
+
+      .faq-item strong {
+        display: block;
+        font-size: 1.05rem;
+        margin-bottom: 8px;
+        cursor: pointer;
+        color: var(--ink);
+      }
+
+      .faq-item p {
+        color: var(--muted);
+        line-height: 1.7;
+        font-size: 0.95rem;
+      }
+
+      .contact-section {
+        background: rgba(31, 27, 26, 0.06);
+        padding: 84px 0;
+      }
+
+      .contact-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 28px;
+      }
+
+      .contact-card {
+        padding: 28px;
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.54);
+        border: 1px solid rgba(32, 27, 26, 0.08);
+      }
+
+      .contact-card h3 {
+        font-size: 1.2rem;
+        margin-bottom: 12px;
+      }
+
+      .contact-card p {
+        color: var(--muted);
+        line-height: 1.7;
       }
 
       .footer {
@@ -675,9 +707,91 @@
         font-weight: 800;
       }
 
+      .footer-links a {
+        color: var(--muted);
+        transition: 0.2s;
+      }
+
+      .footer-links a:hover {
+        color: var(--rust);
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 100;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+      }
+
+      .modal.show {
+        display: flex;
+      }
+
+      .modal-content {
+        background: white;
+        border-radius: 22px;
+        padding: 32px;
+        max-width: 520px;
+        width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+
+      .modal-close {
+        float: right;
+        font-size: 1.8rem;
+        cursor: pointer;
+        background: none;
+        border: none;
+        color: var(--ink);
+      }
+
+      .field {
+        margin-bottom: 16px;
+      }
+
+      .field label {
+        display: block;
+        font-weight: 800;
+        margin-bottom: 8px;
+        font-size: 0.9rem;
+      }
+
+      .field input,
+      .field select,
+      .field textarea {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        font-size: 0.95rem;
+      }
+
+      .field textarea {
+        resize: vertical;
+        min-height: 100px;
+      }
+
+      .upload-area {
+        border: 2px dashed var(--line);
+        border-radius: 16px;
+        padding: 24px;
+        text-align: center;
+        background: rgba(195, 140, 82, 0.06);
+        margin: 12px 0;
+      }
+
+      .upload-area p {
+        color: var(--muted);
+        margin: 8px 0;
+      }
+
       @media (max-width: 980px) {
-        .hero-grid,
-        .story-grid {
+        .hero-grid {
           grid-template-columns: 1fr;
         }
 
@@ -687,6 +801,18 @@
 
         .feature-grid {
           grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .process-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .faq-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .contact-grid {
+          grid-template-columns: 1fr;
         }
       }
 
@@ -702,7 +828,8 @@
           text-align: center;
         }
 
-        .nav-links {
+        .nav-links,
+        .nav-right {
           width: 100%;
           justify-content: center;
           flex-wrap: wrap;
@@ -710,8 +837,7 @@
 
         .stats,
         .category-grid,
-        .event-grid,
-        .feature-grid {
+        .process-grid {
           grid-template-columns: 1fr;
         }
 
@@ -730,71 +856,70 @@
   <body>
     <header class="topbar">
       <div class="container nav">
-        <div class="brand">Thrift<span>mall</span></div>
+        <div class="brand" onclick="goHome()">Thrift<span>mall</span></div>
         <nav class="nav-links">
-          <button class="nav-btn">Home</button>
-          <button class="nav-btn">Browse</button>
-          <button class="nav-btn">Events</button>
-          <button class="nav-btn">Journal</button>
+          <button class="nav-btn" onclick="goHome()">Home</button>
+          <button class="nav-btn" onclick="showBrowse()">Browse</button>
+          <button class="nav-btn" onclick="showEvents()">Events</button>
         </nav>
+        <div class="nav-right">
+          <button class="nav-btn" onclick="openAccount()">Account</button>
+          <button class="nav-btn" onclick="openCart()" style="position: relative;">
+            Cart <span class="cart-badge" id="cartBadge">0</span>
+          </button>
+        </div>
       </div>
     </header>
 
     <div class="ticker">
       <div class="container" style="overflow:hidden; padding:0;">
-        <div class="ticker-track">
+        <div class="ticker-track" id="tickerTrack">
           <span class="ticker-pill">Live</span>
-          <span class="ticker-item">New community market weekend announced<span class="ticker-dot">•</span></span>
-          <span class="ticker-item">Live vinyl night at the courtyard<span class="ticker-dot">•</span></span>
-          <span class="ticker-item">Collector exhibition now open<span class="ticker-dot">•</span></span>
-          <span class="ticker-item">New community market weekend announced<span class="ticker-dot">•</span></span>
-          <span class="ticker-item">Live vinyl night at the courtyard<span class="ticker-dot">•</span></span>
-          <span class="ticker-item">Collector exhibition now open</span>
+          <span class="ticker-item">Welcome to Thriftmall<span class="ticker-dot">•</span></span>
         </div>
       </div>
     </div>
 
-    <main>
+    <main id="mainContent">
       <section class="hero">
         <div class="container hero-grid">
           <div class="hero-copy">
-            <div class="eyebrow">Curated vintage finds</div>
+            <div class="eyebrow">Curated vintage pieces</div>
             <h1>
-              Old-world style,
-              <span class="line-break">new-life treasures.</span>
+              Vintage treasures,
+              <span class="line-break">community stories.</span>
             </h1>
             <div class="hero-tag">Discover something rare</div>
             <p>
-              Thriftmall brings together exceptional vintage pieces, local sellers, music, and
-              community events in a warm, collector-led storefront inspired by the rhythm of real
-              secondhand culture.
+              Thriftmall brings together exceptional vintage pieces from local sellers, plus live
+              music, exhibitions, and community events in one warm marketplace.
             </p>
             <div class="hero-actions">
-              <button class="btn btn-primary">Browse now</button>
-              <button class="btn btn-light">View events</button>
+              <button class="btn btn-primary" onclick="showBrowse()">Browse now</button>
+              <button class="btn btn-light" onclick="showEvents()">View events</button>
             </div>
 
             <div class="stats">
               <div class="stat-card">
-                <strong>500+</strong>
-                <span>Rare finds</span>
+                <strong id="productCount">0</strong>
+                <span>Vintage finds</span>
               </div>
               <div class="stat-card">
-                <strong>18</strong>
-                <span>Local sellers</span>
+                <strong id="sellerCount">0</strong>
+                <span>Sellers</span>
               </div>
               <div class="stat-card">
-                <strong>12</strong>
-                <span>Live nights</span>
+                <strong id="eventCount">0</strong>
+                <span>Events</span>
               </div>
             </div>
           </div>
 
           <div class="hero-card">
             <div class="hero-card-inner">
-              <span class="pill">Featured room</span>
-              <h3>Collector edit</h3>
-              <p>Leather, denim, and well-loved pieces chosen for their story, patina, and character.</p>
+              <span class="pill">Featured</span>
+              <h3>Collector pieces</h3>
+              <p>Leather, denim, and well-loved vintage pieces chosen for their story and character.</p>
             </div>
           </div>
         </div>
@@ -805,118 +930,27 @@
           <div class="section-head">
             <div>
               <div class="section-label">Shop by category</div>
-              <h2 class="section-title">Curated rooms for every kind of treasure.</h2>
+              <h2 class="section-title">Curated collections of vintage pieces.</h2>
             </div>
-            <p class="section-copy">From accessories and tailoring to rare keepsakes, each collection is carefully edited for character and story.</p>
           </div>
 
           <div class="category-grid">
             <article class="category-card">
               <div class="category-icon">👜</div>
               <h3>Accessories</h3>
-              <p>Bags, belts, jewelry, and standout finishing pieces from local collectors and vintage dealers.</p>
+              <p>Bags, belts, jewelry, and standout pieces from local collectors and vintage dealers.</p>
             </article>
 
             <article class="category-card">
               <div class="category-icon">👗</div>
               <h3>Clothing</h3>
-              <p>Tailoring, denim, soft knits, and well-loved silhouettes built for everyday style and stories.</p>
+              <p>Tailoring, denim, knits, and well-loved silhouettes built for everyday vintage style.</p>
             </article>
 
             <article class="category-card">
               <div class="category-icon">✨</div>
               <h3>Rare Finds</h3>
-              <p>Limited editions, collectible pieces, and one-of-a-kind objects that carry personality and provenance.</p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section class="section story-section">
-        <div class="container story-grid">
-          <div class="story-visual">
-            <div class="story-badge">Thrift culture</div>
-          </div>
-
-          <div class="story-copy">
-            <div class="section-label">The Thriftmall story</div>
-            <h3>Vintage, music, and community — all in one room.</h3>
-            <p>
-              Thriftmall is designed for people who love the feeling of discovery: the slow browse,
-              the unfussy detail, and the joy of finding something that already feels lived in and loved.
-            </p>
-            <p>
-              We blend the atmosphere of a late-night secondhand shop with the energy of a local cultural hub,
-              making room for exhibitions, live music, and community-led events that keep the thrift spirit alive.
-            </p>
-
-            <div class="story-points">
-              <div class="story-point">
-                <strong>01</strong>
-                <span>Curated vintage collections from independent sellers</span>
-              </div>
-              <div class="story-point">
-                <strong>02</strong>
-                <span>Community-first events for music, art, and market culture</span>
-              </div>
-              <div class="story-point">
-                <strong>03</strong>
-                <span>Editorial presentation that feels warm, atmospheric, and human</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section events-section">
-        <div class="container">
-          <div class="section-head">
-            <div>
-              <div class="section-label">Events</div>
-              <h2 class="section-title">Music, exhibitions, and community gatherings.</h2>
-            </div>
-            <p class="section-copy">A place where thrift culture meets local sound, creative expression, and neighborhood discovery.</p>
-          </div>
-
-          <div class="event-grid">
-            <article class="event-card">
-              <div class="event-thumb" style="background-image:url('https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=900&q=80');"></div>
-              <div class="event-body">
-                <div class="event-meta">Live music</div>
-                <h3>Vinyl & Vibes</h3>
-                <p>Evening sets, local DJ sessions, and crate-digging energy in the courtyard.</p>
-                <a href="#" class="event-link">Reserve →</a>
-              </div>
-            </article>
-
-            <article class="event-card">
-              <div class="event-thumb" style="background-image:url('https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=900&q=80');"></div>
-              <div class="event-body">
-                <div class="event-meta">Exhibition</div>
-                <h3>Collector Spotlight</h3>
-                <p>Curated displays of rare garments, materials, and personal archives from the community.</p>
-                <a href="#" class="event-link">See details →</a>
-              </div>
-            </article>
-
-            <article class="event-card">
-              <div class="event-thumb" style="background-image:url('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=900&q=80');"></div>
-              <div class="event-body">
-                <div class="event-meta">Market day</div>
-                <h3>Swap & Shop</h3>
-                <p>Community trading, secondhand finds, and neighborhood sellers all under one roof.</p>
-                <a href="#" class="event-link">Join in →</a>
-              </div>
-            </article>
-
-            <article class="event-card">
-              <div class="event-thumb" style="background-image:url('https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=900&q=80');"></div>
-              <div class="event-body">
-                <div class="event-meta">Creative night</div>
-                <h3>Thrift Talks</h3>
-                <p>Artist conversations, styling sessions, and stories behind the pieces people love.</p>
-                <a href="#" class="event-link">Learn more →</a>
-              </div>
+              <p>Limited editions, collectible pieces, and one-of-a-kind objects with provenance.</p>
             </article>
           </div>
         </div>
@@ -926,51 +960,129 @@
         <div class="container">
           <div class="section-head">
             <div>
-              <div class="section-label">Featured picks</div>
+              <div class="section-label">Featured Products</div>
               <h2 class="section-title">Fresh drops from the floor.</h2>
             </div>
-            <p class="section-copy">New arrivals, rare gems, and pieces pulled from the best of the market.</p>
           </div>
 
-          <div class="feature-grid">
-            <article class="feature-card">
-              <div class="feature-image" style="background-image:url('https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=900&q=80');"></div>
-              <div class="feature-body">
-                <span class="tag">Clothing</span>
-                <h3>Vintage Wool Coat</h3>
-                <p>Warm tailoring with rich texture, a strong silhouette, and a quietly lived-in finish.</p>
-                <div class="price-row">
-                  <div class="price">$118</div>
-                  <button class="mini-btn">Add</button>
-                </div>
-              </div>
-            </article>
+          <div class="feature-grid" id="productsGrid">
+            <div style="padding: 40px; text-align: center; color: var(--muted);">
+              Products will appear here when sellers add them.
+            </div>
+          </div>
+        </div>
+      </section>
 
-            <article class="feature-card">
-              <div class="feature-image" style="background-image:url('https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=900&q=80');"></div>
-              <div class="feature-body">
-                <span class="tag">Accessories</span>
-                <h3>Leather Weekend Bag</h3>
-                <p>Structured with a worn-in patina, ideal for everyday carry and secondhand style.</p>
-                <div class="price-row">
-                  <div class="price">$96</div>
-                  <button class="mini-btn">Add</button>
-                </div>
-              </div>
-            </article>
+      <section class="section" id="eventsSection" style="display: none;">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <div class="section-label">Events</div>
+              <h2 class="section-title">Music, exhibitions, and community.</h2>
+            </div>
+          </div>
 
-            <article class="feature-card">
-              <div class="feature-image" style="background-image:url('https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=900&q=80');"></div>
-              <div class="feature-body">
-                <span class="tag">Rare finds</span>
-                <h3>Collector Denim</h3>
-                <p>Heavyweight denim with subtle fading and a finish that feels straight from a vintage archive.</p>
-                <div class="price-row">
-                  <div class="price">$135</div>
-                  <button class="mini-btn">Add</button>
-                </div>
-              </div>
-            </article>
+          <div class="event-grid" id="eventsGrid">
+            <div style="padding: 40px; text-align: center; color: var(--muted);">
+              Events will appear here.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="process-section section">
+        <div class="container">
+          <h2 class="section-title" style="text-align: center; margin-bottom: 42px;">How it works</h2>
+
+          <div class="process-grid">
+            <div class="process-step">
+              <div class="step-num">1</div>
+              <h4>Browse</h4>
+              <p>Explore curated vintage pieces from sellers</p>
+            </div>
+            <div class="process-step">
+              <div class="step-num">2</div>
+              <h4>Select</h4>
+              <p>Pick the pieces you love</p>
+            </div>
+            <div class="process-step">
+              <div class="step-num">3</div>
+              <h4>Cart</h4>
+              <p>Add to your shopping cart</p>
+            </div>
+            <div class="process-step">
+              <div class="step-num">4</div>
+              <h4>Checkout</h4>
+              <p>Review your order details</p>
+            </div>
+            <div class="process-step">
+              <div class="step-num">5</div>
+              <h4>WhatsApp</h4>
+              <p>Receive payment & shipping details</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="faq-section">
+        <div class="container">
+          <h2 class="section-title" style="margin-bottom: 42px;">Frequently asked questions</h2>
+
+          <div class="faq-grid">
+            <div class="faq-item">
+              <strong>How do I purchase items?</strong>
+              <p>Browse our collection, add items to cart, and proceed to checkout. You'll receive payment details via WhatsApp.</p>
+            </div>
+            <div class="faq-item">
+              <strong>How long does shipping take?</strong>
+              <p>Shipping times vary by seller and location. Details are provided after purchase confirmation.</p>
+            </div>
+            <div class="faq-item">
+              <strong>Can I return items?</strong>
+              <p>Returns depend on the seller's policy. Contact the seller via WhatsApp for return inquiries.</p>
+            </div>
+            <div class="faq-item">
+              <strong>How do I become a seller?</strong>
+              <p>Click Account, sign up as a seller, and start uploading your vintage pieces with photos from your phone.</p>
+            </div>
+            <div class="faq-item">
+              <strong>How do I upload product photos?</strong>
+              <p>In your seller dashboard, click upload and select photos directly from your device. No URLs needed!</p>
+            </div>
+            <div class="faq-item">
+              <strong>Are my products approved before listing?</strong>
+              <p>Products auto-publish when you add them. Keep descriptions and images quality-focused for best results.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="contact-section">
+        <div class="container">
+          <h2 class="section-title" style="margin-bottom: 42px; text-align: center;">Get in touch</h2>
+
+          <div class="contact-grid">
+            <div class="contact-card">
+              <h3>WhatsApp</h3>
+              <p>
+                Message us anytime for support:<br>
+                <strong>+1 (234) 567-8900</strong>
+              </p>
+            </div>
+            <div class="contact-card">
+              <h3>Email</h3>
+              <p>
+                Questions? Reach out:<br>
+                <strong>hello@thriftmall.com</strong>
+              </p>
+            </div>
+            <div class="contact-card">
+              <h3>Community</h3>
+              <p>
+                Follow for updates:<br>
+                <strong>@thriftmall</strong>
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -980,12 +1092,429 @@
       <div class="container footer-inner">
         <div class="brand">Thrift<span>mall</span></div>
         <div class="footer-links">
-          <a href="#">Browse</a>
-          <a href="#">Events</a>
-          <a href="#">Journal</a>
-          <a href="#">Community</a>
+          <a href="#" onclick="goHome(); return false;">Home</a>
+          <a href="#" onclick="openTerms(); return false;">Terms</a>
+          <a href="#" onclick="openPrivacy(); return false;">Privacy</a>
+          <a href="#" onclick="openContact(); return false;">Contact</a>
         </div>
       </div>
     </footer>
+
+    <!-- Account Modal -->
+    <div class="modal" id="accountModal">
+      <div class="modal-content">
+        <button class="modal-close" onclick="closeModal('accountModal')">×</button>
+        <h2 id="modalTitle">Account</h2>
+        
+        <div id="loginView">
+          <div class="field">
+            <label>Email</label>
+            <input id="loginEmail" type="email" placeholder="your@email.com" />
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <input id="loginPassword" type="password" placeholder="••••••" />
+          </div>
+          <button class="btn btn-primary" style="width: 100%; margin-top: 12px;" onclick="doLogin()">Sign In</button>
+          <p style="text-align: center; margin-top: 16px; font-size: 0.9rem;">
+            New user? <a href="#" onclick="showSignup(); return false;" style="color: var(--rust); font-weight: 800;">Create account</a>
+          </p>
+        </div>
+
+        <div id="signupView" style="display: none;">
+          <div class="field">
+            <label>Full Name</label>
+            <input id="signupName" type="text" placeholder="Jane Doe" />
+          </div>
+          <div class="field">
+            <label>Email</label>
+            <input id="signupEmail" type="email" placeholder="your@email.com" />
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <input id="signupPassword" type="password" placeholder="••••••" />
+          </div>
+          <div class="field">
+            <label>
+              <input type="radio" name="userType" value="buyer" checked /> I'm a buyer
+            </label>
+            <label style="margin-left: 16px;">
+              <input type="radio" name="userType" value="seller" /> I'm a seller
+            </label>
+          </div>
+          <button class="btn btn-primary" style="width: 100%; margin-top: 12px;" onclick="doSignup()">Create Account</button>
+          <p style="text-align: center; margin-top: 16px; font-size: 0.9rem;">
+            Already have an account? <a href="#" onclick="showLogin(); return false;" style="color: var(--rust); font-weight: 800;">Sign in</a>
+          </p>
+        </div>
+
+        <div id="sellerDashboard" style="display: none;">
+          <h3 style="margin: 20px 0 16px; font-size: 1.2rem;">Add Product</h3>
+
+          <div class="field">
+            <label>Product Name</label>
+            <input id="prodName" type="text" placeholder="e.g., Vintage Leather Jacket" />
+          </div>
+
+          <div class="field">
+            <label>Price ($)</label>
+            <input id="prodPrice" type="number" placeholder="0.00" />
+          </div>
+
+          <div class="field">
+            <label>Category</label>
+            <select id="prodCategory">
+              <option value="Accessories">Accessories</option>
+              <option value="Clothing">Clothing</option>
+              <option value="Rare Finds">Rare Finds</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Description</label>
+            <textarea id="prodDesc" placeholder="Describe the vintage piece, fabric, size, condition..."></textarea>
+          </div>
+
+          <div class="field">
+            <label>Upload Photos from Device</label>
+            <div class="upload-area" onclick="document.getElementById('fileInput').click();">
+              <p>📱 Click to upload or drag & drop</p>
+              <p style="font-size: 0.85rem;">PNG, JPG, GIF up to 5MB</p>
+              <input
+                id="fileInput"
+                type="file"
+                multiple
+                accept="image/*"
+                style="display: none;"
+                onchange="handleFileUpload(event)"
+              />
+            </div>
+            <div id="uploadedPhotos" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 12px;"></div>
+          </div>
+
+          <button class="btn btn-primary" style="width: 100%; margin-top: 16px;" onclick="addProduct()">Add Product</button>
+          <button class="btn" style="width: 100%; margin-top: 8px; background: rgba(157,77,61,0.1); color: var(--rust);" onclick="doLogout()">Log Out</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div class="modal" id="cartModal">
+      <div class="modal-content">
+        <button class="modal-close" onclick="closeModal('cartModal')">×</button>
+        <h2>Shopping Cart</h2>
+        
+        <div id="cartItems" style="margin: 20px 0;">
+          <!-- Cart items will be added here -->
+        </div>
+
+        <div style="border-top: 1px solid var(--line); padding-top: 16px; margin-top: 16px;">
+          <div style="font-size: 1.2rem; font-weight: 800; margin-bottom: 16px;">
+            Total: $<span id="cartTotal">0.00</span>
+          </div>
+          <button class="btn btn-primary" style="width: 100%;" onclick="checkout()">Proceed to Checkout</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Data storage
+      let currentUser = null;
+      let products = JSON.parse(localStorage.getItem('thriftmall_products')) || [];
+      let events = JSON.parse(localStorage.getItem('thriftmall_events')) || [];
+      let cart = JSON.parse(localStorage.getItem('thriftmall_cart')) || [];
+      let sellers = JSON.parse(localStorage.getItem('thriftmall_sellers')) || [];
+
+      function updateStats() {
+        document.getElementById('productCount').textContent = products.length;
+        document.getElementById('sellerCount').textContent = sellers.length;
+        document.getElementById('eventCount').textContent = events.length;
+      }
+
+      function goHome() {
+        document.getElementById('mainContent').innerHTML = document.getElementById('mainContent').innerHTML;
+        updateStats();
+        renderProducts();
+      }
+
+      function showBrowse() {
+        renderProducts();
+        document.querySelector('.section').scrollIntoView({ behavior: 'smooth' });
+      }
+
+      function showEvents() {
+        renderEvents();
+        document.getElementById('eventsSection').style.display = 'block';
+        document.getElementById('eventsSection').scrollIntoView({ behavior: 'smooth' });
+      }
+
+      function openAccount() {
+        if (currentUser) {
+          if (currentUser.type === 'seller') {
+            document.getElementById('loginView').style.display = 'none';
+            document.getElementById('signupView').style.display = 'none';
+            document.getElementById('sellerDashboard').style.display = 'block';
+            document.getElementById('modalTitle').textContent = currentUser.name;
+          }
+        } else {
+          document.getElementById('loginView').style.display = 'block';
+          document.getElementById('signupView').style.display = 'none';
+          document.getElementById('sellerDashboard').style.display = 'none';
+        }
+        document.getElementById('accountModal').classList.add('show');
+      }
+
+      function showSignup() {
+        document.getElementById('loginView').style.display = 'none';
+        document.getElementById('signupView').style.display = 'block';
+      }
+
+      function showLogin() {
+        document.getElementById('loginView').style.display = 'block';
+        document.getElementById('signupView').style.display = 'none';
+      }
+
+      function doLogin() {
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+
+        if (!email || !password) {
+          alert('Please fill in all fields');
+          return;
+        }
+
+        const user = sellers.find(s => s.email === email && s.password === password);
+        if (user) {
+          currentUser = user;
+          localStorage.setItem('thriftmall_currentUser', JSON.stringify(currentUser));
+          alert('Welcome back, ' + user.name + '!');
+          openAccount();
+        } else {
+          alert('Invalid email or password');
+        }
+      }
+
+      function doSignup() {
+        const name = document.getElementById('signupName').value;
+        const email = document.getElementById('signupEmail').value;
+        const password = document.getElementById('signupPassword').value;
+        const type = document.querySelector('input[name="userType"]:checked').value;
+
+        if (!name || !email || !password) {
+          alert('Please fill in all fields');
+          return;
+        }
+
+        if (sellers.find(s => s.email === email)) {
+          alert('Email already registered');
+          return;
+        }
+
+        const newUser = { name, email, password, type, id: Date.now(), products: [] };
+        sellers.push(newUser);
+        localStorage.setItem('thriftmall_sellers', JSON.stringify(sellers));
+
+        currentUser = newUser;
+        localStorage.setItem('thriftmall_currentUser', JSON.stringify(currentUser));
+
+        alert('Account created successfully!');
+        openAccount();
+      }
+
+      function doLogout() {
+        currentUser = null;
+        localStorage.removeItem('thriftmall_currentUser');
+        closeModal('accountModal');
+        goHome();
+      }
+
+      function handleFileUpload(event) {
+        const files = event.target.files;
+        const container = document.getElementById('uploadedPhotos');
+        
+        for (let file of files) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            const img = document.createElement('div');
+            img.style.cssText = 'width: 100%; height: 100px; background-size: cover; border-radius: 12px; background-image: url(' + e.target.result + ');';
+            container.appendChild(img);
+          };
+          reader.readAsDataURL(file);
+        }
+      }
+
+      function addProduct() {
+        if (!currentUser || currentUser.type !== 'seller') {
+          alert('Please log in as a seller first');
+          return;
+        }
+
+        const name = document.getElementById('prodName').value;
+        const price = document.getElementById('prodPrice').value;
+        const category = document.getElementById('prodCategory').value;
+        const desc = document.getElementById('prodDesc').value;
+
+        if (!name || !price || !desc) {
+          alert('Please fill in all fields');
+          return;
+        }
+
+        const product = {
+          id: Date.now(),
+          name,
+          price,
+          category,
+          desc,
+          seller: currentUser.name,
+          sellerId: currentUser.id,
+          image: '📦'
+        };
+
+        products.push(product);
+        currentUser.products.push(product.id);
+
+        localStorage.setItem('thriftmall_products', JSON.stringify(products));
+        sellers[sellers.findIndex(s => s.id === currentUser.id)] = currentUser;
+        localStorage.setItem('thriftmall_sellers', JSON.stringify(sellers));
+
+        alert('Product added! It will appear in the marketplace now.');
+        document.getElementById('prodName').value = '';
+        document.getElementById('prodPrice').value = '';
+        document.getElementById('prodDesc').value = '';
+        document.getElementById('uploadedPhotos').innerHTML = '';
+        document.getElementById('fileInput').value = '';
+
+        updateStats();
+        renderProducts();
+      }
+
+      function renderProducts() {
+        const grid = document.getElementById('productsGrid');
+        if (products.length === 0) {
+          grid.innerHTML = '<div style="padding: 40px; text-align: center; color: var(--muted); grid-column: 1/-1;">No products yet. Check back soon!</div>';
+          return;
+        }
+
+        grid.innerHTML = products.map(p => `
+          <article class="feature-card">
+            <div class="feature-image">${p.image}</div>
+            <div class="feature-body">
+              <span class="tag">${p.category}</span>
+              <h3>${p.name}</h3>
+              <p>${p.desc.substring(0, 60)}...</p>
+              <div class="price-row">
+                <div class="price">$${p.price}</div>
+                <button class="mini-btn" onclick="addToCart('${p.id}', '${p.name}', ${p.price})">Add</button>
+              </div>
+            </div>
+          </article>
+        `).join('');
+      }
+
+      function renderEvents() {
+        const grid = document.getElementById('eventsGrid');
+        if (events.length === 0) {
+          grid.innerHTML = '<div style="padding: 40px; text-align: center; color: var(--muted); grid-column: 1/-1;">No events scheduled yet.</div>';
+          return;
+        }
+
+        grid.innerHTML = events.map(e => `
+          <article class="event-card">
+            <div class="event-thumb">${e.icon || '🎵'}</div>
+            <div class="event-body">
+              <div class="event-meta">${e.type}</div>
+              <h3>${e.name}</h3>
+              <p>${e.description}</p>
+              <a href="#" class="event-link">Learn more →</a>
+            </div>
+          </article>
+        `).join('');
+      }
+
+      function addToCart(id, name, price) {
+        const cartItem = { id, name, price, qty: 1 };
+        const existing = cart.find(c => c.id === id);
+        if (existing) {
+          existing.qty += 1;
+        } else {
+          cart.push(cartItem);
+        }
+        localStorage.setItem('thriftmall_cart', JSON.stringify(cart));
+        updateCartBadge();
+        alert(name + ' added to cart!');
+      }
+
+      function updateCartBadge() {
+        const count = cart.reduce((sum, item) => sum + item.qty, 0);
+        document.getElementById('cartBadge').textContent = count;
+      }
+
+      function openCart() {
+        const container = document.getElementById('cartItems');
+        if (cart.length === 0) {
+          container.innerHTML = '<p style="color: var(--muted);">Your cart is empty</p>';
+        } else {
+          container.innerHTML = cart.map((item, idx) => `
+            <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--line);">
+              <div>
+                <strong>${item.name}</strong><br>
+                <span style="font-size: 0.9rem; color: var(--muted);">Qty: ${item.qty}</span>
+              </div>
+              <div style="text-align: right;">
+                <div>$${(item.price * item.qty).toFixed(2)}</div>
+                <button onclick="removeFromCart(${idx})" style="border: none; background: none; color: #c14444; cursor: pointer; font-size: 0.85rem; text-decoration: underline;">Remove</button>
+              </div>
+            </div>
+          `).join('');
+        }
+        document.getElementById('cartModal').classList.add('show');
+      }
+
+      function removeFromCart(idx) {
+        cart.splice(idx, 1);
+        localStorage.setItem('thriftmall_cart', JSON.stringify(cart));
+        updateCartBadge();
+        openCart();
+      }
+
+      function checkout() {
+        const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+        if (total === 0) {
+          alert('Your cart is empty');
+          return;
+        }
+        const message = `I'd like to purchase: ${cart.map(c => c.qty + 'x ' + c.name).join(', ')}. Total: $${total.toFixed(2)}`;
+        const whatsappURL = 'https://wa.me/12345678900?text=' + encodeURIComponent(message);
+        window.open(whatsappURL, '_blank');
+      }
+
+      function openTerms() {
+        alert('Terms & Conditions\n\nBy using Thriftmall, you agree to our marketplace terms. All products are sold as-is. Contact sellers via WhatsApp for disputes.');
+      }
+
+      function openPrivacy() {
+        alert('Privacy Policy\n\nWe protect your data. Your information is used only for transactions and communications. We never share your data with third parties.');
+      }
+
+      function openContact() {
+        alert('Contact Us\n\nEmail: hello@thriftmall.com\nWhatsApp: +1 (234) 567-8900\n\nWe respond within 24 hours!');
+      }
+
+      function closeModal(modalId) {
+        document.getElementById(modalId).classList.remove('show');
+      }
+
+      // Initialize
+      updateStats();
+      updateCartBadge();
+      renderProducts();
+
+      // Close modals on outside click
+      document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('modal')) {
+          e.target.classList.remove('show');
+        }
+      });
+    </script>
   </body>
 </html>
