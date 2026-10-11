@@ -3,52 +3,55 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ThriftMall — Luxury Vintage Thrift Pieces</title>
+  <title>ThriftMall | Vintage Thrift Pieces</title>
+  <meta name="description" content="ThriftMall is a premium vintage thrift marketplace for curated pieces, cultural events, and local seller discovery." />
   <style>
     :root {
-      --cream: #faf8f3;
-      --beige: #f1e7dc;
-      --taupe: #e8dcc8;
-      --gold: #d4a574;
-      --bronze: #8b6f47;
-      --terracotta: #c85a3a;
-      --dark: #2a1f18;
-      --light: #fdfbf8;
-      --shadow-sm: 0 4px 12px rgba(42,31,24,0.08);
-      --shadow-md: 0 12px 28px rgba(42,31,24,0.12);
-      --shadow-lg: 0 18px 40px rgba(42,31,24,0.16);
+      --ivory: #f6f1ea;
+      --paper: #fbf8f4;
+      --sand: #e9dcc6;
+      --gold: #c79d69;
+      --bronze: #7b5d3b;
+      --terracotta: #b75d3c;
+      --forest: #213b34;
+      --olive: #5a6d5d;
+      --ink: #201915;
+      --muted: #655c57;
+      --line: rgba(32,25,21,0.08);
+      --shadow: 0 18px 38px rgba(32,25,21,0.12);
       --radius: 18px;
+      --radius-sm: 12px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
-      font-family: Georgia, 'Times New Roman', serif;
-      background: var(--cream);
-      color: var(--dark);
-      line-height: 1.7;
+      font-family: Georgia, "Times New Roman", serif;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.6;
     }
 
     a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
     button, input { font: inherit; }
     button { cursor: pointer; }
 
-    .container { width: min(1220px, calc(100% - 36px)); margin: 0 auto; }
+    .container { width: min(1180px, calc(100% - 32px)); margin: 0 auto; }
     .view { display: none; }
     .view.active { display: block; }
 
-    .header {
+    .topbar {
       position: sticky;
       top: 0;
-      z-index: 80;
-      background: rgba(250,248,243,0.9);
+      z-index: 50;
+      background: rgba(251,248,244,0.92);
       backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(212,165,116,0.2);
-      box-shadow: var(--shadow-sm);
+      border-bottom: 1px solid var(--line);
     }
 
-    .header-inner {
-      height: 74px;
+    .nav {
+      height: 72px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -56,182 +59,171 @@
     }
 
     .brand {
-      font-size: clamp(1.8rem, 2vw, 2.2rem);
+      font-size: clamp(1.8rem, 2.2vw, 2.5rem);
       font-weight: 700;
-      letter-spacing: -0.06em;
+      letter-spacing: -0.08em;
       cursor: pointer;
     }
-    .brand-dot { color: var(--terracotta); }
+    .brand span { color: var(--terracotta); }
 
-    .nav {
+    .nav-links {
       display: flex;
       align-items: center;
       gap: 8px;
-      flex-wrap: wrap;
     }
 
     .nav-btn {
-      background: transparent;
       border: 1px solid transparent;
-      border-radius: 999px;
-      color: var(--dark);
+      background: transparent;
+      color: var(--ink);
       padding: 10px 14px;
-      font-size: 0.95rem;
-      font-weight: 500;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 600;
       transition: 0.2s ease;
     }
-
-    .nav-btn:hover { background: rgba(212,165,116,0.1); }
+    .nav-btn:hover {
+      background: rgba(199,157,105,0.1);
+      border-color: rgba(199,157,105,0.18);
+    }
     .nav-btn.cart { position: relative; }
     .cart-badge {
       position: absolute;
-      top: -8px;
-      right: 2px;
-      width: 20px;
-      height: 20px;
+      top: -7px;
+      right: 4px;
+      min-width: 18px;
+      height: 18px;
+      padding: 0 5px;
+      border-radius: 50%;
+      background: var(--terracotta);
+      color: white;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 0.68rem;
       font-weight: 800;
-      color: white;
-      background: var(--terracotta);
-      border-radius: 50%;
     }
+
+    .ticker {
+      overflow: hidden;
+      background: var(--forest);
+      color: white;
+      border-bottom: 2px solid var(--terracotta);
+    }
+    .ticker-track {
+      display: inline-flex;
+      align-items: center;
+      gap: 30px;
+      white-space: nowrap;
+      padding: 12px 0;
+      animation: ticker-scroll 22s linear infinite;
+    }
+    @keyframes ticker-scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .ticker-pill {
+      display: inline-block;
+      padding: 6px 10px;
+      background: rgba(183,93,60,0.9);
+      color: white;
+      border-radius: 999px;
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-right: 10px;
+    }
+    .ticker-item {
+      font-size: 0.9rem;
+      letter-spacing: 0.02em;
+      opacity: 0.92;
+    }
+    .ticker-dot { color: var(--sand); margin: 0 8px; }
 
     .hero {
       position: relative;
       overflow: hidden;
       padding: 72px 0 56px;
-      background: linear-gradient(135deg, rgba(212,165,116,0.18), rgba(200,90,58,0.06));
+      background:
+        radial-gradient(circle at top right, rgba(199,157,105,0.18), transparent 40%),
+        linear-gradient(180deg, rgba(233,220,198,0.2), rgba(251,248,244,0));
     }
 
-    .hero::before {
-      content: "";
-      position: absolute;
-      inset: auto -18% -30% auto;
-      width: 620px;
-      height: 620px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(212,165,116,0.14), transparent 65%);
-      pointer-events: none;
-    }
-
-    .hero-content {
+    .hero-inner {
       position: relative;
       text-align: center;
       z-index: 1;
     }
 
     .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 8px 14px;
+      display: inline-block;
+      padding: 8px 16px;
       border-radius: 999px;
-      background: rgba(212,165,116,0.12);
+      background: rgba(199,157,105,0.15);
       color: var(--bronze);
-      border: 1px solid rgba(139,111,71,0.18);
+      border: 1px solid rgba(123,93,59,0.14);
       font-size: 0.72rem;
-      letter-spacing: 0.14em;
+      font-weight: 800;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
-      font-weight: 700;
     }
 
     .hero h1 {
       margin-top: 18px;
-      font-size: clamp(2.3rem, 5vw, 4rem);
-      line-height: 1.04;
-      letter-spacing: -0.06em;
+      font-size: clamp(2.5rem, 6vw, 5.2rem);
+      line-height: 0.96;
+      letter-spacing: -0.08em;
       font-weight: 700;
+      color: var(--ink);
     }
 
-    .hero-tag {
-      margin-top: 14px;
-      font-size: 1.2rem;
-      letter-spacing: 0.18em;
+    .hero-tagline {
+      margin-top: 18px;
+      font-size: 1.08rem;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--terracotta);
-      font-weight: 500;
+      font-weight: 600;
     }
 
     .hero-actions {
+      margin-top: 28px;
       display: flex;
       justify-content: center;
-      gap: 12px;
       flex-wrap: wrap;
-      margin-top: 28px;
+      gap: 12px;
     }
-
     .btn {
-      border-radius: 8px;
-      padding: 14px 26px;
-      font-weight: 700;
-      transition: 0.25s ease;
-      border: 1.5px solid transparent;
-    }
-    .btn-primary {
-      background: var(--dark);
-      color: white;
-      box-shadow: var(--shadow-sm);
-    }
-    .btn-primary:hover { background: var(--terracotta); }
-    .btn-secondary {
-      background: transparent;
-      color: var(--dark);
-      border-color: var(--dark);
-    }
-    .btn-secondary:hover { background: rgba(255,255,255,0.32); }
-
-    .news-bar {
-      background: var(--dark);
-      color: white;
-      border-bottom: 2px solid var(--terracotta);
-      overflow: hidden;
-      padding: 12px 0;
-    }
-
-    .ticker-wrap {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      white-space: nowrap;
-      animation: ticker 18s linear infinite;
-    }
-
-    @keyframes ticker {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-
-    .ticker-label {
-      display: inline-block;
-      background: var(--terracotta);
-      color: white;
-      padding: 6px 12px;
-      font-size: 0.72rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      font-weight: 800;
-      margin-right: 8px;
-    }
-
-    .ticker-text {
-      font-size: 0.92rem;
-      opacity: 0.9;
       display: inline-flex;
       align-items: center;
-      gap: 12px;
+      justify-content: center;
+      padding: 14px 24px;
+      border-radius: 999px;
+      border: 1px solid var(--ink);
+      font-size: 0.94rem;
+      font-weight: 700;
+      transition: 0.2s ease;
     }
-    .ticker-dot { color: var(--gold); }
+    .btn-primary {
+      background: var(--ink);
+      color: white;
+      border-color: var(--ink);
+    }
+    .btn-primary:hover { background: var(--terracotta); border-color: var(--terracotta); }
+    .btn-secondary {
+      background: transparent;
+      color: var(--ink);
+    }
+    .btn-secondary:hover { background: rgba(199,157,105,0.08); }
 
-    .events-section, .shops-section, .marketplace-section {
-      padding: 62px 0;
+    .section {
+      padding: 70px 0;
     }
 
     .section-label {
       color: var(--terracotta);
-      font-size: 0.72rem;
+      font-size: 0.76rem;
       letter-spacing: 0.18em;
       text-transform: uppercase;
       font-weight: 800;
@@ -239,312 +231,272 @@
     }
 
     .section-title {
-      font-size: clamp(2rem, 3vw, 2.8rem);
-      line-height: 1.12;
+      font-size: clamp(2rem, 3.5vw, 3rem);
       letter-spacing: -0.05em;
-      margin-bottom: 30px;
+      line-height: 1.05;
+      margin-bottom: 18px;
+      max-width: 700px;
+    }
+
+    .intro-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+      margin-top: 34px;
+    }
+
+    .feature-card {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 24px 20px;
+      box-shadow: 0 8px 24px rgba(32,25,21,0.05);
+    }
+    .feature-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      background: rgba(199,157,105,0.12);
+      display: grid;
+      place-items: center;
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+    }
+    .feature-card h3 {
+      font-size: 1.15rem;
+      margin-bottom: 8px;
+    }
+    .feature-card p {
+      color: var(--muted);
+      font-size: 0.96rem;
     }
 
     .events-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 22px;
+      margin-top: 34px;
     }
-
     .event-card {
       background: white;
+      border: 1px solid var(--line);
       border-radius: var(--radius);
       overflow: hidden;
-      box-shadow: var(--shadow-md);
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      box-shadow: 0 12px 28px rgba(32,25,21,0.06);
     }
-    .event-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-lg);
-    }
-
     .event-image {
-      height: 200px;
+      height: 205px;
       display: grid;
       place-items: center;
-      font-size: 2.7rem;
-      background: linear-gradient(135deg, rgba(232,220,200,0.8), rgba(250,248,243,1));
+      font-size: 2.8rem;
+      background: linear-gradient(135deg, rgba(233,220,198,0.8), rgba(251,248,244,1));
     }
     .event-body {
-      padding: 22px 18px 20px;
+      padding: 20px 18px 22px;
     }
     .event-date {
       color: var(--terracotta);
-      font-size: 0.88rem;
-      font-weight: 700;
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
       margin-bottom: 10px;
     }
     .event-card h3 {
       font-size: 1.18rem;
       margin-bottom: 8px;
-      line-height: 1.3;
     }
     .event-card p {
-      color: var(--bronze);
-      font-size: 0.9rem;
+      color: var(--muted);
+      font-size: 0.96rem;
     }
 
-    .shops-wrapper {
+    .journey {
+      background: linear-gradient(180deg, rgba(233,220,198,0.18), rgba(251,248,244,0));
+    }
+    .steps {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 18px;
+      margin-top: 28px;
     }
-
-    .shop-card {
+    .step {
       background: white;
-      border-radius: 16px;
-      padding: 24px 18px;
-      text-align: center;
-      box-shadow: var(--shadow-sm);
-      transition: transform 0.2s ease;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 22px 18px;
     }
-    .shop-card:hover { transform: translateY(-2px); }
-
-    .shop-avatar {
-      width: 72px;
-      height: 72px;
+    .step-number {
+      width: 42px;
+      height: 42px;
       border-radius: 50%;
-      margin: 0 auto 14px;
-      display: grid;
-      place-items: center;
-      color: white;
-      font-weight: 700;
-      font-size: 1.8rem;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .shop-name { font-size: 1.1rem; font-weight: 700; }
-    .shop-location { margin-top: 4px; color: var(--bronze); font-size: 0.84rem; }
-
-    .filter-bar {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 28px;
-    }
-
-    .filter-chip {
-      border: 1px solid var(--taupe);
-      background: white;
-      border-radius: 999px;
-      color: var(--dark);
-      padding: 9px 16px;
-      font-weight: 600;
-      transition: 0.2s ease;
-    }
-    .filter-chip:hover, .filter-chip.active {
-      background: var(--dark);
-      color: white;
-      border-color: var(--dark);
-    }
-
-    .products-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 20px;
-    }
-
-    .product-card {
-      background: white;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: var(--shadow-sm);
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
-    }
-    .product-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-md);
-    }
-
-    .product-image {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 3/4;
-      background: linear-gradient(135deg, #e9dcc8, #e4d2b0);
-      display: grid;
-      place-items: center;
-      font-size: 1.9rem;
-      overflow: hidden;
-    }
-    .product-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .product-badge {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      background: var(--terracotta);
-      color: white;
-      font-size: 0.68rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      font-weight: 800;
-      border-radius: 6px;
-      padding: 5px 8px;
-    }
-
-    .product-body {
-      padding: 16px 16px 18px;
-    }
-
-    .product-seller {
-      font-size: 0.72rem;
+      background: rgba(183,93,60,0.12);
       color: var(--terracotta);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+      display: grid;
+      place-items: center;
       font-weight: 800;
-      margin-bottom: 4px;
-    }
-    .product-name {
-      font-size: 1rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-      min-height: 48px;
-    }
-    .product-meta {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
       margin-bottom: 12px;
-      color: var(--bronze);
-      font-size: 0.82rem;
     }
-    .product-price {
-      font-size: 1.25rem;
-      font-weight: 800;
-      color: var(--dark);
+    .step h3 { font-size: 1.1rem; margin-bottom: 8px; }
+    .step p { color: var(--muted); font-size: 0.94rem; }
+
+    .browse-shell {
+      border: 1px solid var(--line);
+      background: white;
+      border-radius: var(--radius);
+      padding: clamp(22px, 2vw, 28px);
+      box-shadow: 0 12px 28px rgba(32,25,21,0.04);
     }
-    .product-add {
-      width: 100%;
-      padding: 11px 12px;
-      border-radius: 8px;
-      background: var(--dark);
-      color: white;
-      font-weight: 700;
-      transition: 0.2s ease;
+    .browse-empty {
+      display: grid;
+      place-items: center;
+      text-align: center;
+      min-height: 270px;
+      background: linear-gradient(180deg, rgba(233,220,198,0.16), rgba(251,248,244,0));
+      border: 1px dashed rgba(123,93,59,0.3);
+      border-radius: var(--radius-sm);
+      padding: 24px;
     }
-    .product-add:hover { background: var(--terracotta); }
+    .browse-empty .icon {
+      width: 74px;
+      height: 74px;
+      border-radius: 50%;
+      background: rgba(199,157,105,0.12);
+      display: grid;
+      place-items: center;
+      margin: 0 auto 18px;
+      font-size: 2rem;
+    }
+    .browse-empty h3 {
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      letter-spacing: -0.05em;
+      margin-bottom: 10px;
+    }
+    .browse-empty p {
+      max-width: 560px;
+      color: var(--muted);
+      font-size: 1rem;
+    }
 
     .seller-strip {
-      margin-top: 10px;
-      background: linear-gradient(135deg, #8b6f47, #c85a3a);
+      background: linear-gradient(135deg, #2f2a26, #564636 55%, #7d5a3b);
       color: white;
-      padding: 70px 0;
+      padding: 76px 0;
+    }
+    .seller-inner {
       text-align: center;
     }
-    .seller-strip h2 {
-      font-size: clamp(2rem, 3vw, 2.8rem);
-      margin-bottom: 10px;
+    .seller-inner h2 {
+      font-size: clamp(2.1rem, 4vw, 3.4rem);
+      line-height: 1;
       letter-spacing: -0.05em;
+      margin-bottom: 14px;
     }
-    .seller-strip p {
-      margin-bottom: 26px;
-      font-size: 1.06rem;
-      opacity: 0.95;
+    .seller-inner p {
+      max-width: 760px;
+      margin: 0 auto 20px;
+      color: rgba(255,255,255,0.82);
+      font-size: 1.04rem;
+    }
+    .seller-row {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 22px;
     }
 
     .footer {
-      background: var(--dark);
-      color: #d9c8b5;
-      padding: 56px 0 24px;
+      background: #1b1a1a;
+      color: rgba(255,255,255,0.74);
+      padding: 52px 0 24px;
     }
     .footer-grid {
       display: grid;
-      grid-template-columns: 1.6fr 1fr 1fr 1fr;
-      gap: 30px;
-      margin-bottom: 28px;
+      grid-template-columns: 1.7fr 1fr 1fr 1fr;
+      gap: 28px;
+      margin-bottom: 20px;
     }
-    .footer-grid h4 {
+    .footer h4 {
       color: white;
-      margin-bottom: 12px;
       font-size: 1rem;
+      margin-bottom: 14px;
     }
-    .footer-grid p, .footer-grid a {
+    .footer p, .footer a {
       display: block;
-      color: rgba(255,255,255,0.74);
       margin-bottom: 8px;
       font-size: 0.96rem;
+      color: rgba(255,255,255,0.72);
     }
-    .footer-grid a:hover { color: white; }
+    .footer a:hover { color: white; }
     .footer-bottom {
-      border-top: 1px solid rgba(255,255,255,0.12);
+      border-top: 1px solid rgba(255,255,255,0.1);
       padding-top: 18px;
-      text-align: center;
-      color: rgba(255,255,255,0.66);
       font-size: 0.82rem;
+      text-align: center;
+      color: rgba(255,255,255,0.6);
     }
 
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(42,31,24,0.6);
-      z-index: 120;
+      background: rgba(20,16,14,0.62);
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 18px;
+      padding: 16px;
+      z-index: 120;
     }
     .modal-overlay.show { display: flex; }
 
     .modal {
-      width: min(500px, 100%);
       background: white;
       border-radius: 18px;
-      padding: 34px 26px;
-      box-shadow: var(--shadow-lg);
+      max-width: 520px;
+      width: 100%;
+      padding: 28px 24px;
+      box-shadow: var(--shadow);
     }
     .modal h2 {
-      font-size: clamp(1.7rem, 2vw, 2.2rem);
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      letter-spacing: -0.05em;
+      line-height: 1.1;
       margin-bottom: 8px;
     }
-    .modal-desc {
-      color: var(--bronze);
-      margin-bottom: 18px;
-      font-size: 0.94rem;
-    }
-    .form-group { margin-bottom: 15px; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .form-group label {
+    .modal-desc { color: var(--muted); margin-bottom: 18px; }
+    .field { margin-bottom: 15px; }
+    .field label {
       display: block;
-      font-weight: 700;
-      margin-bottom: 6px;
       font-size: 0.9rem;
+      font-weight: 700;
+      margin-bottom: 7px;
     }
-    .form-group input {
+    .field input {
       width: 100%;
-      border: 1px solid var(--taupe);
-      border-radius: 8px;
-      padding: 10px 12px;
-      font-size: 0.96rem;
+      padding: 11px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(32,25,21,0.12);
       background: white;
+      color: var(--ink);
     }
-
+    .field input:focus { outline: none; border-color: rgba(183,93,60,0.7); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .error {
       display: none;
-      margin-bottom: 14px;
-      background: #fdeaea;
-      border: 1px solid #efb4b4;
-      color: #8a2f2f;
-      border-radius: 8px;
+      background: rgba(183,93,60,0.08);
+      color: #9d3a23;
+      border: 1px solid rgba(183,93,60,0.2);
+      border-radius: 10px;
       padding: 10px 12px;
+      margin-bottom: 14px;
       font-size: 0.9rem;
     }
 
     .cart-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(42,31,24,0.45);
-      z-index: 100;
+      background: rgba(20,16,14,0.45);
+      z-index: 90;
       display: none;
     }
     .cart-overlay.show { display: block; }
@@ -556,26 +508,26 @@
       width: min(420px, 100vw);
       height: 100vh;
       background: white;
-      z-index: 110;
-      box-shadow: -20px 0 40px rgba(42,31,24,0.16);
-      transform: translateX(105%);
-      transition: transform 0.35s ease;
+      box-shadow: -18px 0 40px rgba(32,25,21,0.14);
+      transform: translateX(110%);
+      transition: transform 0.3s ease;
+      z-index: 100;
       display: flex;
       flex-direction: column;
     }
     .cart-drawer.open { transform: translateX(0); }
 
     .cart-header, .cart-footer {
-      border-bottom: 1px solid rgba(139,111,71,0.18);
       padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
     .cart-footer {
       border-bottom: none;
-      border-top: 1px solid rgba(139,111,71,0.18);
-      background: var(--beige);
+      border-top: 1px solid var(--line);
+      background: var(--ivory);
       display: block;
     }
     .cart-body {
@@ -586,43 +538,47 @@
     .cart-item {
       display: flex;
       gap: 12px;
-      padding: 12px 0;
-      border-bottom: 1px solid rgba(139,111,71,0.18);
+      border-bottom: 1px solid var(--line);
+      padding: 14px 0;
     }
     .cart-thumb {
       width: 62px;
       height: 78px;
-      border-radius: 8px;
-      background: linear-gradient(135deg, #e9dcc8, #e4d2b0);
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(233,220,198,0.8), rgba(251,248,244,1));
       overflow: hidden;
       flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      font-size: 1.2rem;
     }
     .cart-thumb img { width: 100%; height: 100%; object-fit: cover; }
     .cart-info { flex: 1; }
-    .cart-name { font-weight: 700; margin-bottom: 4px; }
-    .cart-meta { font-size: 0.8rem; color: var(--bronze); }
+    .cart-name { font-weight: 700; margin-bottom: 5px; }
+    .cart-meta { font-size: 0.76rem; color: var(--muted); }
     .cart-price { margin-top: 8px; font-weight: 800; }
     .remove-btn {
-      background: none;
       border: none;
-      color: #a45555;
-      font-weight: 800;
+      background: none;
+      color: #b44a4a;
       font-size: 1rem;
+      font-weight: 700;
+      padding: 4px 0 0;
     }
-
     .total-row {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      font-weight: 800;
-      margin-bottom: 16px;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: 1.08rem;
+      font-weight: 700;
     }
     .checkout-btn {
       width: 100%;
-      background: #27c763;
+      background: #25d366;
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       padding: 12px 14px;
       font-weight: 800;
       margin-top: 8px;
@@ -631,38 +587,39 @@
     .toast {
       position: fixed;
       left: 50%;
-      bottom: 26px;
+      bottom: 24px;
       transform: translateX(-50%) translateY(120px);
-      background: var(--dark);
+      background: var(--ink);
       color: white;
-      padding: 11px 18px;
+      padding: 10px 16px;
       border-radius: 999px;
+      z-index: 200;
       font-size: 0.82rem;
       font-weight: 700;
-      z-index: 200;
       transition: 0.25s ease;
     }
     .toast.show { transform: translateX(-50%) translateY(0); }
 
     @media (max-width: 980px) {
-      .events-grid, .products-grid, .shops-wrapper { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .intro-grid, .events-grid, .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .footer-grid { grid-template-columns: 1fr 1fr; }
     }
 
     @media (max-width: 640px) {
-      .events-grid, .products-grid, .shops-wrapper, .footer-grid, .form-row { grid-template-columns: 1fr; }
-      .header-inner { height: auto; padding: 12px 0; flex-wrap: wrap; }
-      .nav { width: 100%; justify-content: center; }
-      .hero { padding-top: 48px; }
-      .hero-tag { letter-spacing: 0.08em; }
+      .intro-grid, .events-grid, .steps, .footer-grid, .form-row { grid-template-columns: 1fr; }
+      .nav { height: auto; padding: 12px 0; flex-wrap: wrap; }
+      .nav-links { width: 100%; justify-content: center; }
+      .brand { width: 100%; text-align: center; }
+      .hero { padding-top: 52px; }
+      .hero-tagline { letter-spacing: 0.08em; }
     }
   </style>
 </head>
 <body>
-  <header class="header">
-    <div class="container header-inner">
-      <div class="brand" onclick="navigate('home')">Thrift<span class="brand-dot">.</span></div>
-      <nav class="nav">
+  <header class="topbar">
+    <div class="container nav">
+      <div class="brand" onclick="navigate('home')">Thrift<span>.</span></div>
+      <nav class="nav-links">
         <button class="nav-btn" onclick="navigate('home')">Home</button>
         <button class="nav-btn" onclick="navigate('market')">Browse</button>
         <button class="nav-btn cart" onclick="openCart()">
@@ -673,71 +630,143 @@
     </div>
   </header>
 
-  <div class="news-bar">
+  <div class="ticker">
     <div class="container" style="overflow:hidden;">
-      <div class="ticker-wrap">
-        <span class="ticker-label">Live</span>
-        <span class="ticker-text">New vintage Levi's collection just dropped<span class="ticker-dot">•</span></span>
-        <span class="ticker-text">Weekend sale: 20% off curated pieces<span class="ticker-dot">•</span></span>
-        <span class="ticker-text">Rare 90s designer finds now in stock<span class="ticker-dot">•</span></span>
-        <span class="ticker-text">New vintage Levi's collection just dropped<span class="ticker-dot">•</span></span>
-        <span class="ticker-text">Weekend sale: 20% off curated pieces<span class="ticker-dot">•</span></span>
-        <span class="ticker-text">Rare 90s designer finds now in stock</span>
+      <div class="ticker-track">
+        <span class="ticker-pill">News</span>
+        <span class="ticker-item">New community market weekend announced<span class="ticker-dot">•</span></span>
+        <span class="ticker-item">Live vinyl night at the courtyard<span class="ticker-dot">•</span></span>
+        <span class="ticker-item">Collector spotlight exhibition now open<span class="ticker-dot">•</span></span>
+        <span class="ticker-item">New community market weekend announced<span class="ticker-dot">•</span></span>
+        <span class="ticker-item">Live vinyl night at the courtyard<span class="ticker-dot">•</span></span>
+        <span class="ticker-item">Collector spotlight exhibition now open</span>
       </div>
     </div>
   </div>
 
   <div class="view active" id="view-home">
     <section class="hero">
-      <div class="container hero-content">
-        <div class="eyebrow">Curated Vintage Finds</div>
+      <div class="container hero-inner">
+        <div class="eyebrow">Curated vintage finds</div>
         <h1>Vintage Thrift Pieces</h1>
-        <div class="hero-tag">Authentic • Curated • One-of-a-kind</div>
+        <div class="hero-tagline">Discover something rare</div>
         <div class="hero-actions">
-          <button class="btn btn-primary" onclick="navigate('market')">Explore Now</button>
-          <button class="btn btn-secondary" onclick="document.getElementById('sellerModal').classList.add('show')">Become a Seller</button>
+          <button class="btn btn-primary" onclick="navigate('market')">Browse now</button>
+          <button class="btn btn-secondary" onclick="document.getElementById('sellerModal').classList.add('show')">Become a seller</button>
         </div>
       </div>
     </section>
 
-    <section class="events-section">
+    <section class="section">
       <div class="container">
-        <div class="section-label">Happening now</div>
-        <h2 class="section-title">Events & luxury drops</h2>
+        <div class="section-label">Why ThriftMall</div>
+        <h2 class="section-title">Designed like a beautiful vintage mall, not a generic marketplace.</h2>
+        <div class="intro-grid">
+          <div class="feature-card">
+            <div class="feature-icon">👜</div>
+            <h3>Curated pieces</h3>
+            <p>Find rare vintage clothing, bags, homeware, and accessories sourced with care.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🎵</div>
+            <h3>Real experiences</h3>
+            <p>Discover music nights, pop-ups, exhibitions, and local cultural events hosted by the community.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🏪</div>
+            <h3>Studio sellers</h3>
+            <p>Support independent sellers and boutique curators with an easy direct-buy experience.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-label">Events</div>
+        <h2 class="section-title">Culture, music, and vintage moments</h2>
         <div class="events-grid">
-          <div class="event-card">
-            <div class="event-image">📦</div>
+          <article class="event-card">
+            <div class="event-image">🎧</div>
             <div class="event-body">
-              <div class="event-date">This week</div>
-              <h3>New arrivals drop</h3>
-              <p>Fresh pieces from local collectors, curated for everyday style and statement looks.</p>
+              <div class="event-date">25 Oct</div>
+              <h3>Vinyl & Vintage Night</h3>
+              <p>Live sets, curated styling, and a showcase of rare timeless finds in a warm evening setting.</p>
             </div>
-          </div>
-          <div class="event-card">
-            <div class="event-image">🏷️</div>
+          </article>
+          <article class="event-card">
+            <div class="event-image">🛍️</div>
             <div class="event-body">
-              <div class="event-date">Weekend special</div>
-              <h3>Flash sale</h3>
-              <p>Selected vintage pieces priced for quick wins and wardrobe refresh moments.</p>
+              <div class="event-date">01 Nov</div>
+              <h3>Collector Market Weekend</h3>
+              <p>A one-day shopping experience featuring independent vintage sellers, local designers, and rare pieces.</p>
             </div>
-          </div>
-          <div class="event-card">
-            <div class="event-image">🎯</div>
+          </article>
+          <article class="event-card">
+            <div class="event-image">🎨</div>
             <div class="event-body">
-              <div class="event-date">Next month</div>
-              <h3>Vintage showcase</h3>
-              <p>Rare designer and archival finds brought together in one elevated edit.</p>
+              <div class="event-date">12 Nov</div>
+              <h3>Exhibition & Pop-Up</h3>
+              <p>Showcasing archival fashion, styling stories, and limited-run drop pieces from trusted sellers.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section journey">
+      <div class="container">
+        <div class="section-label">Buyer journey</div>
+        <h2 class="section-title">Simple and direct</h2>
+        <div class="steps">
+          <div class="step">
+            <div class="step-number">1</div>
+            <h3>Browse</h3>
+            <p>Explore a curated collection of listings from local vintage sellers.</p>
+          </div>
+          <div class="step">
+            <div class="step-number">2</div>
+            <h3>Select</h3>
+            <p>Choose the piece that fits your style, size, and budget.</p>
+          </div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <h3>Cart</h3>
+            <p>Add items to your cart and review your purchase before checkout.</p>
+          </div>
+          <div class="step">
+            <div class="step-number">4</div>
+            <h3>Checkout</h3>
+            <p>Proceed to the seller’s WhatsApp to confirm the order.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-label">Marketplace</div>
+        <h2 class="section-title">The collection is being curated live</h2>
+        <div class="browse-shell">
+          <div class="browse-empty">
+            <div>
+              <div class="icon">✨</div>
+              <h3>Listings will appear here when sellers add them.</h3>
+              <p>Browse the marketplace once sellers start uploading their real pieces. The site is ready for new products, direct checkout, and seller WhatsApp conversations.</p>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="shops-section">
-      <div class="container">
-        <div class="section-label">Featured sellers</div>
-        <h2 class="section-title">Curators worth meeting</h2>
-        <div id="shopGrid" class="shops-wrapper"></div>
+    <section class="seller-strip">
+      <div class="container seller-inner">
+        <div class="section-label" style="color: rgba(255,255,255,0.7);">For sellers</div>
+        <h2>Sell your vintage finds with us.</h2>
+        <p>Join ThriftMall to list your curated items, promote your boutique, and connect directly with shoppers through WhatsApp.</p>
+        <div class="seller-row">
+          <button class="btn btn-primary" onclick="document.getElementById('sellerModal').classList.add('show')">Apply as a seller</button>
+        </div>
       </div>
     </section>
 
@@ -745,63 +774,46 @@
       <div class="container">
         <div class="footer-grid">
           <div>
-            <h4>Thrift<span class="brand-dot">.</span></h4>
-            <p>Luxury vintage thrift pieces, selected with care for collectors, stylists, and everyday treasure-seekers.</p>
+            <h4>ThriftMall</h4>
+            <p>A premium vintage marketplace for authentic style, local stories, and live community culture.</p>
           </div>
           <div>
-            <h4>Shop</h4>
-            <a onclick="navigate('market')">Browse all</a>
-            <a onclick="navigate('market')">Latest arrivals</a>
-            <a onclick="navigate('market')">On sale</a>
+            <h4>Explore</h4>
+            <a onclick="navigate('market')">Browse</a>
+            <a href="#">Events</a>
+            <a href="#">Collections</a>
           </div>
           <div>
-            <h4>Sellers</h4>
-            <a onclick="document.getElementById('sellerModal').classList.add('show')">Start selling</a>
-            <a onclick="navigate('login')">Seller login</a>
-            <a href="#">How it works</a>
+            <h4>Sell</h4>
+            <a onclick="document.getElementById('sellerModal').classList.add('show')">Become a seller</a>
+            <a href="#">Seller guide</a>
+            <a href="#">Pricing</a>
           </div>
           <div>
-            <h4>Help</h4>
+            <h4>Support</h4>
             <a href="#">Contact</a>
-            <a href="#">Returns</a>
-            <a href="#">About</a>
+            <a href="#">Shipping</a>
+            <a href="#">FAQs</a>
           </div>
         </div>
-        <div class="footer-bottom">© 2025 ThriftMall. Vintage finds. Authenticated stories. Premium curation.</div>
+        <div class="footer-bottom">© 2025 ThriftMall — vintage pieces, live culture, and curated finds.</div>
       </div>
     </footer>
   </div>
 
   <div class="view" id="view-market">
-    <section class="marketplace-section">
+    <section class="section">
       <div class="container">
         <div class="section-label">Marketplace</div>
-        <h2 class="section-title">Browse vintage treasures</h2>
-        <div id="filterBar" class="filter-bar"></div>
-        <div id="productGrid" class="products-grid"></div>
-      </div>
-    </section>
-  </div>
-
-  <div class="view" id="view-login">
-    <section style="padding: 70px 0;">
-      <div class="container" style="max-width: 500px;">
-        <div class="modal">
-          <h2>Seller Login</h2>
-          <p class="modal-desc">Access your shop dashboard</p>
-          <div class="error" id="loginError"></div>
-          <div class="form-group">
-            <label>Email</label>
-            <input id="loginEmail" type="email" placeholder="you@email.com">
+        <h2 class="section-title">Browse the live collection</h2>
+        <div class="browse-shell">
+          <div class="browse-empty">
+            <div>
+              <div class="icon">🧺</div>
+              <h3>No listings yet</h3>
+              <p>Seller inventory will appear here when products are added. Buyers can then select items, add to cart, and continue to checkout through the seller’s WhatsApp.</p>
+            </div>
           </div>
-          <div class="form-group">
-            <label>Password</label>
-            <input id="loginPassword" type="password" placeholder="••••••••">
-          </div>
-          <button class="btn btn-primary" style="width:100%;margin-top:12px;" onclick="doLogin()">Log In</button>
-          <p style="margin-top:16px; text-align:center; color:var(--bronze); font-size:0.9rem;">
-            New seller? <a href="#" onclick="document.getElementById('sellerModal').classList.add('show'); return false;" style="color:var(--terracotta); font-weight:800;">Create account</a>
-          </p>
         </div>
       </div>
     </section>
@@ -810,37 +822,35 @@
   <div class="modal-overlay" id="sellerModal">
     <div class="modal">
       <h2>Become a seller</h2>
-      <p class="modal-desc">Join our vintage curator community</p>
+      <p class="modal-desc">List your curated vintage pieces and connect with buyers directly.</p>
       <div class="error" id="signupError"></div>
+      <div class="field">
+        <label>Shop name</label>
+        <input id="shopName" type="text" placeholder="Your shop or brand name" />
+      </div>
       <div class="form-row">
-        <div class="form-group">
-          <label>Shop name</label>
-          <input id="shopName" type="text" placeholder="Velvet Vintage">
+        <div class="field">
+          <label>First name</label>
+          <input id="ownerName" type="text" placeholder="Jane" />
         </div>
-        <div class="form-group">
-          <label>Your name</label>
-          <input id="ownerName" type="text" placeholder="Jane Doe">
+        <div class="field">
+          <label>Last name</label>
+          <input id="ownerLast" type="text" placeholder="Doe" />
         </div>
       </div>
-      <div class="form-group">
+      <div class="field">
         <label>Email</label>
-        <input id="sellerEmail" type="email" placeholder="you@email.com">
+        <input id="sellerEmail" type="email" placeholder="you@email.com" />
       </div>
-      <div class="form-group">
+      <div class="field">
         <label>Password</label>
-        <input id="sellerPassword" type="password" placeholder="Minimum 6 chars">
+        <input id="sellerPassword" type="password" placeholder="Minimum 6 characters" />
       </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>WhatsApp</label>
-          <input id="sellerWa" type="tel" placeholder="+1 234 567 8900">
-        </div>
-        <div class="form-group">
-          <label>City</label>
-          <input id="sellerCity" type="text" placeholder="Lagos">
-        </div>
+      <div class="field">
+        <label>WhatsApp number</label>
+        <input id="sellerWa" type="tel" placeholder="+1 234 567 890" />
       </div>
-      <button class="btn btn-primary" style="width:100%;" onclick="doSignup()">Create account</button>
+      <button class="btn btn-primary" style="width:100%; margin-top:8px;" onclick="doSignup()">Apply now</button>
       <button class="btn btn-secondary" style="width:100%; margin-top:10px;" onclick="document.getElementById('sellerModal').classList.remove('show')">Close</button>
     </div>
   </div>
@@ -848,14 +858,14 @@
   <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
   <aside class="cart-drawer" id="cartDrawer">
     <div class="cart-header">
-      <h3>Your Cart</h3>
-      <button style="background:none; color:var(--bronze); font-size:1.7rem; border:none;" onclick="closeCart()">×</button>
+      <h3>Your cart</h3>
+      <button style="background:none; border:none; color:var(--bronze); font-size:1.7rem;" onclick="closeCart()">×</button>
     </div>
     <div class="cart-body" id="cartBody"></div>
     <div class="cart-footer">
       <div class="total-row">
         <span>Total</span>
-        <span id="cartTotal">$0</span>
+        <span id="cartTotal">US$0</span>
       </div>
       <div id="checkoutButtons"></div>
     </div>
@@ -864,98 +874,45 @@
   <div class="toast" id="toast"></div>
 
   <script>
-    const CUR = '$';
+    const CUR = 'US$';
     const ADMIN_WA = '+1234567890';
 
-    const defaultSellers = [
-      {
-        id: 's1',
-        shopName: 'Velvet Vintage',
-        ownerName: 'Amaka',
-        email: 'amaka@example.com',
-        pass: 'demo123',
-        whatsapp: '+2348000000001',
-        city: 'Lagos',
-        status: 'active',
-        color: '#8b6f47',
-        products: [
-          { id: 'p1', name: 'Woven Leather Tote', price: 85, size: 'One Size', cat: 'Bags', cond: 'Excellent', img: '', on: true },
-          { id: 'p2', name: 'Cropped Denim Jacket', price: 125, size: 'M', cat: 'Jackets', cond: 'Like New', img: '', on: true },
-          { id: 'p3', name: 'Retro Pleated Skirt', price: 65, size: 'S', cat: 'Dresses', cond: 'Excellent', img: '', on: true },
-          { id: 'p4', name: 'Vintage Belt', price: 35, size: 'One Size', cat: 'Accessories', cond: 'Good', img: '', on: true }
-        ]
-      },
-      {
-        id: 's2',
-        shopName: 'Old Gold Finds',
-        ownerName: 'Tayo',
-        email: 'tayo@example.com',
-        pass: 'demo123',
-        whatsapp: '+2348000000002',
-        city: 'Ibadan',
-        status: 'active',
-        color: '#d4a574',
-        products: [
-          { id: 'p5', name: 'Wool Overcoat', price: 145, size: 'L', cat: 'Outerwear', cond: 'Like New', img: '', on: true },
-          { id: 'p6', name: 'Brown Leather Boots', price: 110, size: '40', cat: 'Shoes', cond: 'Excellent', img: '', on: true },
-          { id: 'p7', name: 'Silk Pocket Square', price: 28, size: 'One Size', cat: 'Accessories', cond: 'Good', img: '', on: true },
-          { id: 'p8', name: 'Tailored Trousers', price: 55, size: '32', cat: 'Bottoms', cond: 'Excellent', img: '', on: true }
-        ]
-      },
-      {
-        id: 's3',
-        shopName: 'Sunset Collectibles',
-        ownerName: 'Nene',
-        email: 'nene@example.com',
-        pass: 'demo123',
-        whatsapp: '+2348000000003',
-        city: 'Abuja',
-        status: 'active',
-        color: '#c85a3a',
-        products: [
-          { id: 'p9', name: 'Beaded Evening Dress', price: 160, size: 'S-M', cat: 'Dresses', cond: 'Like New', img: '', on: true },
-          { id: 'p10', name: 'Vintage Handbag', price: 95, size: 'One Size', cat: 'Bags', cond: 'Excellent', img: '', on: true }
-        ]
-      },
-      {
-        id: 's4',
-        shopName: 'Treasures & Heirlooms',
-        ownerName: 'Chioma',
-        email: 'chioma@example.com',
-        pass: 'demo123',
-        whatsapp: '+2348000000004',
-        city: 'Portharcourt',
-        status: 'active',
-        color: '#8b6f47',
-        products: [
-          { id: 'p11', name: 'Houndstooth Blazer', price: 88, size: 'M', cat: 'Jackets', cond: 'Good', img: '', on: true }
-        ]
-      }
-    ];
-
     const storage = {
-      get(k, d) { try { return localStorage.getItem(k) ?? d; } catch { return d; } },
-      set(k, v) { try { localStorage.setItem(k, v); } catch {} },
+      get(k, fallback) {
+        try { return localStorage.getItem(k) ?? fallback; } catch { return fallback; }
+      },
+      set(k, value) {
+        try { localStorage.setItem(k, String(value)); } catch {}
+      }
     };
 
     function loadSellers() {
-      const raw = storage.get('thriftmall_sellers', null);
-      return raw ? JSON.parse(raw) : defaultSellers;
+      const raw = storage.get('thriftmall_sellers', '[]');
+      try { return JSON.parse(raw); } catch { return []; }
     }
-    function saveSellers(data) { storage.set('thriftmall_sellers', JSON.stringify(data)); }
+
+    function saveSellers(data) {
+      storage.set('thriftmall_sellers', JSON.stringify(data));
+    }
+
     function getCart() {
-      try { return JSON.parse(storage.get('thriftmall_cart', '[]')); }
-      catch { return []; }
+      const raw = storage.get('thriftmall_cart', '[]');
+      try { return JSON.parse(raw); } catch { return []; }
     }
-    function saveCart(data) { storage.set('thriftmall_cart', JSON.stringify(data)); }
+
+    function saveCart(data) {
+      storage.set('thriftmall_cart', JSON.stringify(data));
+    }
 
     let cart = getCart();
-    let selectedCategory = 'All';
 
-    function fmt(value) { return `${CUR}${Number(value).toLocaleString()}`; }
-    function toast(msg) {
+    function formatMoney(value) {
+      return `${CUR}${Number(value).toLocaleString()}`;
+    }
+
+    function toast(message) {
       const el = document.getElementById('toast');
-      el.textContent = msg;
+      el.textContent = message;
       el.classList.add('show');
       clearTimeout(toast.timer);
       toast.timer = setTimeout(() => el.classList.remove('show'), 1800);
@@ -966,77 +923,6 @@
       const target = document.getElementById('view-' + view);
       if (target) target.classList.add('active');
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      if (view === 'market') renderMarket();
-    }
-
-    function renderShops() {
-      const sellers = loadSellers().filter(s => s.status === 'active');
-      document.getElementById('shopGrid').innerHTML = sellers.map(s => `
-        <div class="shop-card">
-          <div class="shop-avatar" style="background:${s.color}">${s.shopName[0]}</div>
-          <div class="shop-name">${s.shopName}</div>
-          <div class="shop-location">${s.city} • ${(s.products || []).length} items</div>
-        </div>
-      `).join('');
-    }
-
-    function renderMarket() {
-      const sellers = loadSellers().filter(s => s.status === 'active');
-      const cats = ['All', ...new Set(sellers.flatMap(s => (s.products || []).filter(p => p.on).map(p => p.cat)))];
-      document.getElementById('filterBar').innerHTML = cats.map(c => `
-        <button class="filter-chip ${selectedCategory === c ? 'active' : ''}" onclick="selectedCategory='${c}'; renderMarket()">${c}</button>
-      `).join('');
-
-      let items = [];
-      sellers.forEach(s => {
-        (s.products || []).filter(p => p.on).forEach(p => {
-          items.push({ ...p, sellerName: s.shopName, sellerId: s.id, sellerWa: s.whatsapp, sellerCity: s.city });
-        });
-      });
-      if (selectedCategory !== 'All') items = items.filter(p => p.cat === selectedCategory);
-
-      document.getElementById('productGrid').innerHTML = items.map(p => {
-        const inCart = cart.some(item => item.id === p.id);
-        return `
-          <div class="product-card">
-            <div class="product-image">
-              <span class="product-badge">${p.cond}</span>
-              ${p.img ? '<img src="' + p.img + '" alt="' + p.name + '" />' : '✦'}
-            </div>
-            <div class="product-body">
-              <div class="product-seller">${p.sellerName}</div>
-              <div class="product-name">${p.name}</div>
-              <div class="product-meta">
-                <span>${p.size}</span>
-                <span>${p.sellerCity}</span>
-              </div>
-              <div class="product-price">${fmt(p.price)}</div>
-              <button class="product-add" onclick="toggleCart('${p.id}')">${inCart ? '✓ In Cart' : 'Add to Cart'}</button>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function toggleCart(productId) {
-      const items = loadSellers().filter(s => s.status === 'active').flatMap(s =>
-        (s.products || []).filter(p => p.on).map(p => ({ ...p, sellerName: s.shopName, sellerId: s.id, sellerWa: s.whatsapp }))
-      );
-      const selected = items.find(item => item.id === productId);
-      if (!selected) return;
-
-      const exists = cart.some(item => item.id === productId);
-      if (exists) {
-        cart = cart.filter(item => item.id !== productId);
-        toast('Removed from cart');
-      } else {
-        cart.push({ ...selected });
-        toast('Added to cart');
-      }
-      saveCart(cart);
-      updateCartBadge();
-      renderMarket();
-      renderCart();
     }
 
     function updateCartBadge() {
@@ -1060,54 +946,63 @@
       const checkoutButtons = document.getElementById('checkoutButtons');
 
       if (!cart.length) {
-        body.innerHTML = '<p style="text-align:center; color:var(--bronze); padding:28px 10px;">Your cart is empty.</p>';
-        totalEl.textContent = '$0';
+        body.innerHTML = '<p style="text-align:center; color:var(--muted); padding:42px 10px;">Your cart is empty.</p>';
+        totalEl.textContent = 'US$0';
         checkoutButtons.innerHTML = '';
         return;
       }
 
-      const subtotal = cart.reduce((sum, item) => sum + Number(item.price), 0);
-      totalEl.textContent = fmt(subtotal);
+      const subtotal = cart.reduce((sum, item) => sum + Number(item.price || 0), 0);
+      totalEl.textContent = formatMoney(subtotal);
 
       body.innerHTML = cart.map(item => `
         <div class="cart-item">
-          <div class="cart-thumb">${item.img ? '<img src="' + item.img + '" alt="' + item.name + '" />' : '✦'}</div>
+          <div class="cart-thumb">${item.image ? '<img src="' + item.image + '" alt="' + item.name + '" />' : '👜'}</div>
           <div class="cart-info">
             <div class="cart-name">${item.name}</div>
-            <div class="cart-meta">${item.size} • ${item.cond}</div>
-            <div class="cart-price">${fmt(item.price)}</div>
+            <div class="cart-meta">${item.size || 'One size'} • ${item.condition || 'Good'}</div>
+            <div class="cart-price">${formatMoney(item.price)}</div>
           </div>
-          <button class="remove-btn" onclick="toggleCart('${item.id}')">✕</button>
+          <button class="remove-btn" onclick="removeFromCart('${item.id}')">✕</button>
         </div>
       `).join('');
 
       const grouped = {};
       cart.forEach(item => {
-        if (!grouped[item.sellerId]) grouped[item.sellerId] = { sellerName: item.sellerName, wa: item.sellerWa, items: [] };
-        grouped[item.sellerId].items.push(item);
+        const sellerId = item.sellerId || 'unknown';
+        if (!grouped[sellerId]) grouped[sellerId] = { sellerName: item.sellerName || 'Seller', wa: item.sellerWa || ADMIN_WA, items: [] };
+        grouped[sellerId].items.push(item);
       });
 
       checkoutButtons.innerHTML = Object.values(grouped).map(group => {
-        const groupTotal = group.items.reduce((sum, item) => sum + Number(item.price), 0);
+        const groupTotal = group.items.reduce((sum, item) => sum + Number(item.price || 0), 0);
         const msg = encodeURIComponent(
-          `Hi ${group.sellerName}! I want to order:\n\n${group.items.map(item => `• ${item.name} (${item.size}) — ${fmt(item.price)}`).join('\n')}\n\nTotal: ${fmt(groupTotal)}\nPlease confirm availability and arrange delivery.`
+          `Hi ${group.sellerName}! I want to order:\n\n${group.items.map(item => `• ${item.name} (${item.size || 'One size'}) — ${formatMoney(item.price)}`).join('\n')}\n\nTotal: ${formatMoney(groupTotal)}\nPlease confirm availability and arrange delivery.`
         );
-        return `<button class="checkout-btn" onclick="window.open('https://wa.me/${(group.wa || ADMIN_WA).replace(/\D/g, '')}?text=${msg}', '_blank')">WhatsApp ${group.sellerName}</button>`;
+        return `<button class="checkout-btn" onclick="window.open('https://wa.me/${(group.wa || ADMIN_WA).replace(/\D/g, '')}?text=${msg}', '_blank')">Checkout with ${group.sellerName}</button>`;
       }).join('');
     }
 
+    function removeFromCart(itemId) {
+      cart = cart.filter(item => item.id !== itemId);
+      saveCart(cart);
+      updateCartBadge();
+      renderCart();
+      toast('Removed from cart');
+    }
+
     function doSignup() {
-      const shop = document.getElementById('shopName').value.trim();
-      const owner = document.getElementById('ownerName').value.trim();
+      const shopName = document.getElementById('shopName').value.trim();
+      const ownerName = document.getElementById('ownerName').value.trim();
+      const ownerLast = document.getElementById('ownerLast').value.trim();
       const email = document.getElementById('sellerEmail').value.trim();
       const pass = document.getElementById('sellerPassword').value.trim();
       const wa = document.getElementById('sellerWa').value.trim();
-      const city = document.getElementById('sellerCity').value.trim();
       const err = document.getElementById('signupError');
 
       err.style.display = 'none';
-      if (!shop || !owner || !email || !pass || !wa || !city) {
-        err.textContent = 'Please fill all fields.';
+      if (!shopName || !ownerName || !ownerLast || !email || !pass || !wa) {
+        err.textContent = 'Please fill in all fields.';
         err.style.display = 'block';
         return;
       }
@@ -1119,49 +1014,29 @@
 
       const sellers = loadSellers();
       if (sellers.some(s => s.email.toLowerCase() === email.toLowerCase())) {
-        err.textContent = 'This email is already registered.';
+        err.textContent = 'That email is already registered.';
         err.style.display = 'block';
         return;
       }
 
       sellers.push({
         id: 'seller_' + Date.now(),
-        shopName: shop,
-        ownerName: owner,
+        shopName,
+        ownerName: ownerName + ' ' + ownerLast,
         email: email.toLowerCase(),
         pass,
         whatsapp: wa,
-        city,
         status: 'active',
-        color: ['#8b6f47', '#d4a574', '#c85a3a'][sellers.length % 3],
-        products: []
+        products: [],
+        createdAt: Date.now()
       });
 
       saveSellers(sellers);
       document.getElementById('sellerModal').classList.remove('show');
-      toast('Account created successfully');
+      toast('Seller application sent');
     }
 
-    function doLogin() {
-      const email = document.getElementById('loginEmail').value.trim().toLowerCase();
-      const pass = document.getElementById('loginPassword').value.trim();
-      const err = document.getElementById('loginError');
-      err.style.display = 'none';
-
-      const seller = loadSellers().find(s => s.email.toLowerCase() === email && s.pass === pass);
-      if (!seller) {
-        err.textContent = 'Incorrect email or password.';
-        err.style.display = 'block';
-        return;
-      }
-
-      toast('Logged in');
-      navigate('home');
-    }
-
-    renderShops();
     updateCartBadge();
-    renderMarket();
   </script>
 </body>
 </html>
