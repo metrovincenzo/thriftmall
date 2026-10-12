@@ -71,6 +71,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 .mine{display:flex;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}.mine i{width:44px;height:44px;border-radius:8px;background:var(--panel) center/cover;flex:none}.mine span{flex:1;font-size:.92rem}
 .cg{border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:14px;background:#fff}.cg h3{font-size:1.2rem;margin-bottom:6px}.ci{display:flex;justify-content:space-between;gap:10px;padding:5px 0;font-size:.92rem}
 .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 20px;border-radius:99px;z-index:200;display:none;max-width:90%}
+.doc h3{font-size:1.15rem;margin:18px 0 6px}.doc p,.doc li{color:var(--muted);font-size:.96rem}.doc ul{padding-left:20px}
 .skip{position:absolute;left:-999px;top:8px;background:var(--ink);color:#fff;padding:10px 16px;border-radius:99px;z-index:300}.skip:focus{left:8px}
 .chips{display:flex;gap:8px 20px;flex-wrap:wrap;margin-top:28px;color:var(--muted);font-size:.95rem}.chips span{display:flex;align-items:center;gap:8px}.chips span::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--rust)}
 .how{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}.how div{padding-top:16px;border-top:2px solid var(--ink)}.how b{display:block;font-family:Fraunces,Georgia,serif;font-size:1.3rem;font-weight:600;margin-bottom:4px}.how p{color:var(--muted);font-size:.98rem}
@@ -109,28 +110,50 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 <div><h2>Sell with us.</h2><p>Open a shop in minutes, list your pieces from your phone, and reach thrift lovers across Zimbabwe.</p><button class="btn dark" id="openShop">Open your shop</button></div></div></section>
 </main>
 <footer><div class="wrap"><div><a class="brand" href="#top" style="font-size:1.4rem">Thrift<span>mall</span></a><p>Zimbabwe thrift mall.</p></div>
-<div><p>WhatsApp: <b>+263 77 000 0000</b></p><p>Email: <b>hello@thriftmall.co.zw</b></p></div>
-<div style="max-width:300px"><p>Thriftmall is a platform. Payment, delivery and returns are agreed directly between buyer and seller.</p></div></div></footer>
+<div><p>WhatsApp: <a href="https://wa.me/8619707204817" target="_blank" rel="noopener"><b>+86 197 0720 4817</b></a></p><p>Email: <a href="mailto:chinyadzaeverton@gmail.com"><b>chinyadzaeverton@gmail.com</b></a></p></div>
+<div style="max-width:300px"><p>Thriftmall is a platform. Payment, delivery and returns are agreed directly between buyer and seller.</p><p style="margin-top:8px"><button class="link" data-doc="terms">Terms</button> &middot; <button class="link" data-doc="privacy">Privacy</button></p></div></div></footer>
 <div class="modal" id="accM"><div class="box" role="dialog" aria-modal="true" aria-label="Account"><button class="x" data-close aria-label="Close">&times;</button><div id="accBody"></div></div></div>
 <div class="modal" id="cartM"><div class="box" role="dialog" aria-modal="true" aria-label="Cart"><button class="x" data-close aria-label="Close">&times;</button><h2>Your cart</h2><div id="cartBody"></div></div></div>
+<div class="modal" id="docM"><div class="box" role="dialog" aria-modal="true" aria-label="Policy"><button class="x" data-close aria-label="Close">&times;</button><div id="docBody"></div></div></div>
 <div class="toast" id="toast" role="status"></div>
 <script>
 /* ===== EDIT THESE: community content shown on the Notice board, Events hall and Vlog lounge ===== */
 const NEWS=[
- {d:'This week',t:'Welcome to Thriftmall',x:'Thriftmall is open. Sellers can open a shop in minutes and start listing.'},
- {d:'Community',t:'Sellers wanted in every city',x:'Harare, Bulawayo, Mutare, Gweru and beyond: list your rare vintage pieces and reach thrift lovers nationwide.'},
- {d:'Tip',t:'How to spot real vintage',x:'Check stitching, care labels and zips. Older pieces often have single-needle seams and metal zips.'}
+ {d:'Market culture',t:'Bhero is how Zimbabwe thrifts',x:'From Mupedzanhamo in Mbare to markets in Mutare and Victoria Falls, secondhand clothing is an everyday way to dress well for less. Thriftmall brings finds from these sellers online.'},
+ {d:'Community',t:'Curated thrift hits the runway',x:'Thrift & Threads, from the Mcheno and More platform, paired local designers with curated, cleaned secondhand retailers to change how bhero is seen.',u:'https://www.greedysouth.co.zw/2025/10/thrift-threads-new-dawn-for-sustainable.html',l:'Read the story'},
+ {d:'Policy watch',t:'Used-clothing imports face a ban',x:'FairPlanet reported in June 2026 that government introduced a ban on importing used clothes in April, after bedbug concerns in some townships. Sellers: keep stock clean and check current rules.',u:'https://www.fairplanet.org/magazine/the-bedbugs-europe-sent-how-imported-used-clothes-are-infesting-zimbabwes-poorest-communities/',l:'Read the report'},
+ {d:'Seller notice',t:'No used underwear on Thriftmall',x:'Selling used undergarments has been banned in Zimbabwe since 2011, so we do not allow those listings. Describe condition honestly and photograph any flaws.',u:'https://www.sowetan.co.za/news/south-africa/2020-11-13-second-hand-underwear-still-hot-property-in-zim-as-economy-bites',l:'Read more'}
 ];
 const EVENTS=[
- {m:'Oct',day:'24',t:'Harare Thrift Market Day',x:'Meet sellers in person. Location to be announced.'},
- {m:'Nov',day:'07',t:'Denim Swap, Bulawayo',x:'Bring a pair, take a pair. Free entry.'},
- {m:'Nov',day:'21',t:'Vintage Pop-up, Mutare',x:'One-day pop-up with rare finds and local music.'}
+ {t:'Avondale Flea Market, Harare',x:'A regular market near Avondale Shopping Centre with secondhand clothes, vinyl, jewellery and local art. Dates vary, so check before you go.',u:'https://thingstodoinzimbabwe.com/events/',l:'Event guide'},
+ {t:'Mupedzanhamo, Mbare',x:'Zimbabwe\'s best-known secondhand clothes market. Go early for the best pick.',u:'https://www.newsday.co.zw/opinion-analysis/article/3979/feature-impoverished-zimbos-turn-to-used-clothes-as-economy-dips',l:'Read about it'},
+ {t:'Thrift & Threads',x:'A recurring fashion and art event from Mcheno and More with runway shows, stalls and curated thrift. Follow them for the next date.',u:'https://www.zimsphere.co.zw/2025/11/thrift-and-threads-is-changing-the-face-of-zimbabwean-fashion.html',l:'Read the review'}
 ];
 const VLOGS=[
- {t:'Rare finds haul',by:'Add your first vlog',u:'#'},
- {t:'Meet the sellers',by:'Coming soon',u:'#'},
- {t:'How we restore vintage denim',by:'Coming soon',u:'#'}
+ {t:'Thrifting in Mbare, Harare',by:'Thrift finds on TikTok',u:'https://www.tiktok.com/discover/thrifting-in-mbare-harare-zimbabwe'},
+ {t:'Beginner\'s guide to flea market thrifting',by:'By Mcheno',k:'Read',u:'https://mcheno.co.zw/the-beginners-guide-to-thrifting-in-zimbabwe-how-to-make-the-most-out-of-your-trip-to-the-flea-market'},
+ {t:'Share your thrift vlog',by:'Email us your link to be featured',k:'You',u:'mailto:chinyadzaeverton@gmail.com'}
 ];
+const DOCS={
+terms:`<h2>Terms of Use</h2><p class="by">Last updated 11 October 2026</p><div class="doc">
+<h3>1. What Thriftmall is</h3><p>Thriftmall is a platform where independent sellers list vintage and thrifted items for buyers in Zimbabwe. We are not the seller. We do not handle payments, delivery or returns.</p>
+<h3>2. Buying</h3><p>Prices are in US$ and set by sellers. Most pieces are one of a kind. Checkout opens WhatsApp so you can finish the sale with the seller. Confirm the item, price and delivery before you pay. Returns follow each seller's policy.</p>
+<h3>3. Selling</h3><p>You must own or be allowed to sell what you list. Use honest photos, sizes, conditions and prices, and list clean items only. You are responsible for following Zimbabwean law, including import and customs rules, and for any taxes or licences that apply to your trade.</p>
+<h3>4. Not allowed</h3><ul><li>Used undergarments (their sale is banned in Zimbabwe).</li><li>Stolen goods, or fakes sold as genuine brands.</li><li>Dirty, infested or unsafe items.</li><li>Illegal, misleading or abusive listings or messages.</li></ul>
+<h3>5. Accounts</h3><p>Give accurate details and keep your password private. You are responsible for activity on your account. We may remove listings or accounts that break these terms.</p>
+<h3>6. Your content</h3><p>You keep ownership of the photos and text you upload. You allow Thriftmall to display them on the site.</p>
+<h3>7. Liability</h3><p>Thriftmall is provided as is. To the extent the law allows, we are not liable for disputes between buyers and sellers or for losses from transactions made through the site.</p>
+<h3>8. Law and contact</h3><p>These terms are governed by the laws of Zimbabwe. Questions: chinyadzaeverton@gmail.com.</p></div>`,
+privacy:`<h2>Privacy Policy</h2><p class="by">Last updated 11 October 2026</p><div class="doc">
+<h3>Who we are</h3><p>Thriftmall is a platform for vintage and thrifted shops in Zimbabwe. Contact: chinyadzaeverton@gmail.com.</p>
+<h3>What we collect</h3><ul><li>Buyers: full name, email and password.</li><li>Sellers: shop name, full name, location, WhatsApp number, email, password, shop logo, and product photos and details.</li><li>Your cart and the filters you use.</li></ul>
+<h3>How we use it</h3><p>To run accounts, show shops and listings, open WhatsApp checkout with the right seller, and send buyers who created an account news, events and finds tailored to them. A seller's WhatsApp number is used so buyers can message them to complete a purchase.</p>
+<h3>Where it is stored</h3><p>For now, account and cart data are stored in your own browser on your device. Clearing your browser data removes it. We will update this policy if that changes.</p>
+<h3>Who sees it</h3><p>We do not sell personal data. At checkout your order goes to the seller through WhatsApp, and WhatsApp's own privacy terms apply. Fonts load from Google Fonts, which can see your IP address.</p>
+<h3>Your rights</h3><p>Under Zimbabwe's Cyber and Data Protection Act [Chapter 12:07] you can ask to see, correct or delete your personal data. Email us and we will respond. You may also complain to POTRAZ, the Data Protection Authority.</p>
+<h3>Security and children</h3><p>Use a unique password. Thriftmall is meant for adults aged 18 and over.</p>
+<h3>Changes</h3><p>We will post updates on this page with a new date.</p></div>`
+};
 /* ================================================================================================= */
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -152,9 +175,9 @@ function render(){
   const q=$('#q').value.toLowerCase(),c=$('#fc').value,z=$('#fs').value;
   const list=prods.filter(p=>(!shopFilter||p.sid===shopFilter)&&(!c||p.cat===c)&&(!z||p.size===z)&&(!q||(p.name+p.cat).toLowerCase().includes(q))).reverse();
   $('#prods').innerHTML=list.length?list.map(p=>{const s=users.find(u=>u.id===p.sid);const inC=cart.includes(p.id);return `<article class="card"><div class="ph" style="background-image:url(${p.img})" role="img" aria-label="${esc(p.name)}"></div><div class="b"><h3>${esc(p.name)}</h3><div class="meta"><span class="tag c">${esc(p.cat)}</span><span class="tag">Size ${esc(p.size)}</span><span class="tag">${esc(p.cond)}</span></div><div class="by">${s?esc(s.shop)+', '+esc(s.loc):''}</div><div class="row"><span class="price">${usd(p.price)}</span><button class="mini${inC?' in':''}" data-cart="${p.id}">${inC?'In cart':'Add to cart'}</button></div></div></article>`}).join(''):`<div class="empty">${shopFilter||q||c||z?'Nothing matches. Clear your filters to see more.':'The racks are empty. Sellers: open a shop and add your first piece.'}</div>`;
-  $('#notes').innerHTML=NEWS.map(n=>`<div class="note"><div class="d">${esc(n.d)}</div><h3>${esc(n.t)}</h3><p>${esc(n.x)}</p></div>`).join('');
-  $('#evs').innerHTML=EVENTS.map(e=>`<div class="ticket"><div class="dt"><span>${esc(e.m)}</span><b>${esc(e.day)}</b></div><div class="tx"><h3>${esc(e.t)}</h3><p>${esc(e.x)}</p></div></div>`).join('');
-  $('#vls').innerHTML=VLOGS.map(v=>`<a class="vlog"${v.u&&v.u!=='#'?` href="${esc(v.u)}" target="_blank" rel="noopener"`:''}><div class="th" aria-hidden="true">&#9654;</div><div class="t"><b>${esc(v.t)}</b><span>${esc(v.by)}</span></div></a>`).join('');
+  $('#notes').innerHTML=NEWS.map(n=>`<div class="note"><div class="d">${esc(n.d)}</div><h3>${esc(n.t)}</h3><p>${esc(n.x)}</p>${n.u?`<p><a class="link" href="${esc(n.u)}" target="_blank" rel="noopener">${esc(n.l||'Read more')}</a></p>`:''}</div>`).join('');
+  $('#evs').innerHTML=EVENTS.map(e=>`<div class="ticket"><div class="dt">${e.day?`<span>${esc(e.m)}</span><b>${esc(e.day)}</b>`:`<span>Regular</span><b>&#8635;</b>`}</div><div class="tx"><h3>${esc(e.t)}</h3><p>${esc(e.x)}</p>${e.u?`<p><a class="link" href="${esc(e.u)}" target="_blank" rel="noopener">${esc(e.l||'Details')}</a></p>`:''}</div></div>`).join('');
+  $('#vls').innerHTML=VLOGS.map(v=>`<a class="vlog"${v.u&&v.u!=='#'?` href="${esc(v.u)}" target="_blank" rel="noopener"`:''}><div class="th" aria-hidden="true" style="font-size:${v.k?'1.3rem':'2rem'}">${v.k?esc(v.k):'&#9654;'}</div><div class="t"><b>${esc(v.t)}</b><span>${esc(v.by)}</span></div></a>`).join('');
   cart=cart.filter(id=>prods.some(p=>p.id===id));$('#cnt').textContent=cart.length;
   $('#accBtn').textContent=me()?(me().type==='seller'?me().shop:me().name.split(' ')[0]):'Account';
 }
@@ -204,7 +227,7 @@ function accView(){
   ${mode==='signup'&&acct==='seller'?`<div class="two"><div class="f"><label>Location</label><input id="lo" placeholder="e.g. Harare, Avondale"></div><div class="f"><label>WhatsApp number</label><input id="wa" type="tel" placeholder="0771234567"></div></div>`:''}
   <div class="f"><label>Email</label><input id="em" type="email" autocomplete="email"></div>
   <div class="f"><label>Password</label><input id="pw" type="password" autocomplete="${mode==='login'?'current-password':'new-password'}"></div>
-  <button class="btn dark full" id="go">${mode==='login'?'Log in':'Create account'}</button>
+  <button class="btn dark full" id="go">${mode==='login'?'Log in':'Create account'}</button>${mode==='signup'?'<p class="by" style="margin-top:10px">By creating an account you agree to our <button class="link" data-doc="terms">Terms</button> and <button class="link" data-doc="privacy">Privacy Policy</button>.</p>':''}
   <p style="text-align:center;margin-top:14px">${mode==='login'?`No account? <button class="link" id="sw">Create a new account</button>`:`Have an account? <button class="link" id="sw">Log in</button>`}</p>
   ${mode==='login'?'<p class="by" style="text-align:center;margin-top:8px">Buying? You don\'t need an account. An account only gives you tailored news and updates.</p>':''}`;
 }
@@ -261,6 +284,7 @@ document.addEventListener('dragleave',e=>{if(e.target.closest('#drop'))$('#drop'
 document.addEventListener('drop',e=>{if(e.target.closest('#drop')){e.preventDefault();$('#drop').classList.remove('over');setPhoto(e.dataTransfer.files[0],showPhoto)}});
 ['q','fc','fs'].forEach(id=>$('#'+id).addEventListener('input',render));
 document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal').forEach(m=>m.classList.remove('show'))});
+document.addEventListener('click',e=>{const b=e.target.closest('[data-doc]');if(b){$('#docBody').innerHTML=DOCS[b.dataset.doc];$('#docM').classList.add('show')}});
 render();
 </script>
 </body>
