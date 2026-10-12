@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Thriftmall | ZIM Thrift Mall</title><meta name="theme-color" content="#f8f3ee"><meta property="og:title" content="Thriftmall | Zimbabwe Thrift Mall"><meta property="og:description" content="Rare vintage and secondhand finds from independent Zimbabwean sellers."><meta property="og:type" content="website"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%239d4d3d%27/%3E%3Ctext x=%2732%27 y=%2745%27 font-size=%2738%27 font-family=%27Georgia%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23f8f3ee%27%3Et%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:opsz,wght@9..144,500;600&display=swap" rel="stylesheet"><meta name="description" content="Zimbabwe thrift mall: vintage and thrifted shops, news, events and vlogs in one place."><style>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Thriftmall | Zimbabwe Thrift Mall</title><meta name="theme-color" content="#f8f3ee"><meta property="og:title" content="Thriftmall | Zimbabwe Thrift Mall"><meta property="og:description" content="Rare vintage and secondhand finds from independent Zimbabwean sellers."><meta property="og:type" content="website"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%239d4d3d%27/%3E%3Ctext x=%2732%27 y=%2745%27 font-size=%2738%27 font-family=%27Georgia%27 font-weight=%27700%27 text-anchor=%27middle%27 fill=%27%23f8f3ee%27%3Et%3C/text%3E%3C/svg%3E"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:opsz,wght@9..144,500;600&display=swap" rel="stylesheet"><meta name="description" content="Zimbabwe thrift mall: vintage and thrifted shops, news, events and vlogs in one place."><style>
 :root{--bg:#f3eadc;--paper:#f8f3ee;--panel:#efe4d0;--rust:#9d4d3d;--forest:#1d3731;--ink:#201b1a;--muted:#604e46;--line:rgba(32,27,26,.14)}
 *{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth;font-size:106%}
 body{font-family:"DM Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--paper);color:var(--ink);line-height:1.65}
@@ -97,6 +97,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 <a href="#shops"><b>Shops</b><span>Every seller</span></a><a href="#news"><b>News</b><span>Notice board</span></a><a href="#events"><b>Events</b><span>Markets &amp; pop-ups</span></a><a href="#vlogs"><b>Vlogs</b><span>Rare finds on video</span></a>
 </div></nav>
 <section class="s" style="padding:64px 0 0"><div class="wrap"><div class="how"><div><b>Browse</b><p>Find pieces from sellers across Zimbabwe.</p></div><div><b>Add to cart</b><p>Every piece is one of a kind, so grab it first.</p></div><div><b>Message the seller</b><p>Checkout opens WhatsApp with your order ready.</p></div><div><b>Pay and collect</b><p>Agree payment and delivery with the seller.</p></div></div></div></section>
+<section class="s tint" id="foryou" hidden style="padding:56px 0"><div class="wrap"><div class="head"><h2 id="fyh">Picked for you</h2><p>New pieces from the categories and shops you follow.</p></div><div class="grid" id="fy"></div></div></section>
 <section class="s" id="shops"><div class="wrap">
 <div class="head"><h2>The shops</h2><p>Tap a shop to see only its pieces.</p></div>
 <div class="shops" id="shopList"></div>
@@ -116,6 +117,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 <div class="modal" id="cartM"><div class="box" role="dialog" aria-modal="true" aria-label="Cart"><button class="x" data-close aria-label="Close">&times;</button><h2>Your cart</h2><div id="cartBody"></div></div></div>
 <div class="modal" id="docM"><div class="box" role="dialog" aria-modal="true" aria-label="Policy"><button class="x" data-close aria-label="Close">&times;</button><div id="docBody"></div></div></div>
 <div class="toast" id="toast" role="status"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
 /* ===== EDIT THESE: community content shown on the Notice board, Events hall and Vlog lounge ===== */
 const NEWS=[
@@ -146,9 +148,9 @@ terms:`<h2>Terms of Use</h2><p class="by">Last updated 11 October 2026</p><div c
 <h3>8. Law and contact</h3><p>These terms are governed by the laws of Zimbabwe. Questions: chinyadzaeverton@gmail.com.</p></div>`,
 privacy:`<h2>Privacy Policy</h2><p class="by">Last updated 11 October 2026</p><div class="doc">
 <h3>Who we are</h3><p>Thriftmall is a platform for vintage and thrifted shops in Zimbabwe. Contact: chinyadzaeverton@gmail.com.</p>
-<h3>What we collect</h3><ul><li>Buyers: full name, email and password.</li><li>Sellers: shop name, full name, location, WhatsApp number, email, password, shop logo, and product photos and details.</li><li>Your cart and the filters you use.</li></ul>
+<h3>What we collect</h3><ul><li>Buyers: full name, email and password, plus the categories and shops you follow and whether you want email updates.</li><li>Sellers: shop name, full name, location, WhatsApp number, email, password, shop logo, and product photos and details.</li><li>Your cart and the filters you use.</li></ul>
 <h3>How we use it</h3><p>To run accounts, show shops and listings, open WhatsApp checkout with the right seller, and send buyers who created an account news, events and finds tailored to them. A seller's WhatsApp number is used so buyers can message them to complete a purchase.</p>
-<h3>Where it is stored</h3><p>For now, account and cart data are stored in your own browser on your device. Clearing your browser data removes it. We will update this policy if that changes.</p>
+<h3>Where it is stored</h3><p>Accounts, shop details, listings and photos are stored with Supabase, our database and file storage provider. Passwords are handled by Supabase's login system and we never see them in plain text. Supabase's servers may be outside Zimbabwe. Your cart is kept in your own browser. A seller's shop name, location, WhatsApp number, logo and listings are public so buyers can shop and message them.</p>
 <h3>Who sees it</h3><p>We do not sell personal data. At checkout your order goes to the seller through WhatsApp, and WhatsApp's own privacy terms apply. Fonts load from Google Fonts, which can see your IP address.</p>
 <h3>Your rights</h3><p>Under Zimbabwe's Cyber and Data Protection Act [Chapter 12:07] you can ask to see, correct or delete your personal data. Email us and we will respond. You may also complain to POTRAZ, the Data Protection Authority.</p>
 <h3>Security and children</h3><p>Use a unique password. Thriftmall is meant for adults aged 18 and over.</p>
@@ -159,7 +161,7 @@ const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const load=(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));return v??d}catch{return d}};
 const store=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true}catch{toast('Storage is full. Remove a product or use smaller photos.');return false}};
-let users=load('tm_users',[]),prods=load('tm_prods',[]),cart=load('tm_cart',[]),meId=load('tm_me',null);
+let users=[],prods=[],cart=load('tm_cart',[]),meId=null,sb=null;
 let shopFilter=null,photo=null,logoTmp=null,mode='login',acct='buyer';
 const me=()=>users.find(u=>u.id===meId)||null;
 const usd=n=>'US$'+Number(n).toFixed(2);
@@ -167,6 +169,7 @@ function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';cl
 function shrink(file,max=700){return new Promise((res,rej)=>{if(!file||!file.type.startsWith('image/'))return rej();const r=new FileReader();r.onload=()=>{const i=new Image();i.onload=()=>{const s=Math.min(1,max/Math.max(i.width,i.height)),c=document.createElement('canvas');c.width=i.width*s;c.height=i.height*s;c.getContext('2d').drawImage(i,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.78))};i.onerror=rej;i.src=r.result};r.onerror=rej;r.readAsDataURL(file)})}
 const waNum=n=>{let d=String(n).replace(/\D/g,'');if(d.startsWith('0'))d='263'+d.slice(1);return d};
 
+const cardHTML=p=>{const s=users.find(u=>u.id===p.sid);const inC=cart.includes(p.id);return `<article class="card"><div class="ph" style="background-image:url(${p.img})" role="img" aria-label="${esc(p.name)}"></div><div class="b"><h3>${esc(p.name)}</h3><div class="meta"><span class="tag c">${esc(p.cat)}</span><span class="tag">Size ${esc(p.size)}</span><span class="tag">${esc(p.cond)}</span></div><div class="by">${s?esc(s.shop)+', '+esc(s.loc):''}</div><div class="row"><span class="price">${usd(p.price)}</span><button class="mini${inC?' in':''}" data-cart="${p.id}">${inC?'In cart':'Add to cart'}</button></div></div></article>`};
 function render(){
   const sellers=users.filter(u=>u.type==='seller');
   $('#shopList').innerHTML=sellers.length?sellers.map(s=>`<button class="store${shopFilter===s.id?' on':''}" data-shop="${s.id}"><div class="awn"></div><div class="lg" style="${s.logo?`background-image:url(${s.logo})`:''}">${s.logo?'':esc(s.shop[0]||'?')}</div><b>${esc(s.shop)}</b><span>${esc(s.loc)}</span></button>`).join(''):'<div class="empty" style="grid-column:1/-1">No shops yet. Be the first to open one.</div>';
@@ -174,11 +177,13 @@ function render(){
   $('#fs').innerHTML='<option value="">All sizes</option>'+sizes.map(s=>`<option${s===cur?' selected':''}>${esc(s)}</option>`).join('');
   const q=$('#q').value.toLowerCase(),c=$('#fc').value,z=$('#fs').value;
   const list=prods.filter(p=>(!shopFilter||p.sid===shopFilter)&&(!c||p.cat===c)&&(!z||p.size===z)&&(!q||(p.name+p.cat).toLowerCase().includes(q))).reverse();
-  $('#prods').innerHTML=list.length?list.map(p=>{const s=users.find(u=>u.id===p.sid);const inC=cart.includes(p.id);return `<article class="card"><div class="ph" style="background-image:url(${p.img})" role="img" aria-label="${esc(p.name)}"></div><div class="b"><h3>${esc(p.name)}</h3><div class="meta"><span class="tag c">${esc(p.cat)}</span><span class="tag">Size ${esc(p.size)}</span><span class="tag">${esc(p.cond)}</span></div><div class="by">${s?esc(s.shop)+', '+esc(s.loc):''}</div><div class="row"><span class="price">${usd(p.price)}</span><button class="mini${inC?' in':''}" data-cart="${p.id}">${inC?'In cart':'Add to cart'}</button></div></div></article>`}).join(''):`<div class="empty">${shopFilter||q||c||z?'Nothing matches. Clear your filters to see more.':'The racks are empty. Sellers: open a shop and add your first piece.'}</div>`;
+  $('#prods').innerHTML=list.length?list.map(cardHTML).join(''):`<div class="empty">${shopFilter||q||c||z?'Nothing matches. Clear your filters to see more.':'The racks are empty. Sellers: open a shop and add your first piece.'}</div>`;
+  const mm=me(),fl=(mm&&mm.follows)||[],fy=mm&&mm.type==='buyer'&&fl.length?prods.filter(p=>fl.includes('cat:'+p.cat)||fl.includes('shop:'+p.sid)).reverse().slice(0,4):[];
+  $('#foryou').hidden=!fy.length;$('#fy').innerHTML=fy.map(cardHTML).join('');if(mm)$('#fyh').textContent='Picked for you, '+mm.name.split(' ')[0];
   $('#notes').innerHTML=NEWS.map(n=>`<div class="note"><div class="d">${esc(n.d)}</div><h3>${esc(n.t)}</h3><p>${esc(n.x)}</p>${n.u?`<p><a class="link" href="${esc(n.u)}" target="_blank" rel="noopener">${esc(n.l||'Read more')}</a></p>`:''}</div>`).join('');
   $('#evs').innerHTML=EVENTS.map(e=>`<div class="ticket"><div class="dt">${e.day?`<span>${esc(e.m)}</span><b>${esc(e.day)}</b>`:`<span>Regular</span><b>&#8635;</b>`}</div><div class="tx"><h3>${esc(e.t)}</h3><p>${esc(e.x)}</p>${e.u?`<p><a class="link" href="${esc(e.u)}" target="_blank" rel="noopener">${esc(e.l||'Details')}</a></p>`:''}</div></div>`).join('');
   $('#vls').innerHTML=VLOGS.map(v=>`<a class="vlog"${v.u&&v.u!=='#'?` href="${esc(v.u)}" target="_blank" rel="noopener"`:''}><div class="th" aria-hidden="true" style="font-size:${v.k?'1.3rem':'2rem'}">${v.k?esc(v.k):'&#9654;'}</div><div class="t"><b>${esc(v.t)}</b><span>${esc(v.by)}</span></div></a>`).join('');
-  cart=cart.filter(id=>prods.some(p=>p.id===id));$('#cnt').textContent=cart.length;
+  if(window.__ld)cart=cart.filter(id=>prods.some(p=>p.id===id));$('#cnt').textContent=cart.length;
   $('#accBtn').textContent=me()?(me().type==='seller'?me().shop:me().name.split(' ')[0]):'Account';
 }
 
@@ -218,7 +223,12 @@ function accView(){
     <button class="btn full" style="margin-top:18px" id="out">Log out</button>`;return;
   }
   if(u){
-    b.innerHTML=`<h2>Hi ${esc(u.name.split(' ')[0])}</h2><p>Your buyer account is active. Thriftmall will send you news, events and finds tailored to you at ${esc(u.email)}. You can still buy without an account.</p><button class="btn full" style="margin-top:18px" id="out">Log out</button>`;return;
+    {const fl=u.follows||[],sel=users.filter(x=>x.type==='seller');
+    b.innerHTML=`<h2>Hi ${esc(u.name.split(' ')[0])}</h2><p class="by">Tell us what you love and we will line up new finds for you.</p>
+    <h3 style="font-size:1.1rem;margin:16px 0 8px">Follow categories</h3><div class="seg" style="grid-template-columns:repeat(3,1fr)">${['Accessories','Clothing','Rare Finds'].map(c=>`<button data-fol="cat:${c}" class="${fl.includes('cat:'+c)?'on':''}">${c}</button>`).join('')}</div>
+    <h3 style="font-size:1.1rem;margin:16px 0 8px">Follow shops</h3><div style="display:flex;gap:8px;flex-wrap:wrap">${sel.length?sel.map(x=>`<button class="mini${fl.includes('shop:'+x.id)?' in':''}" data-fol="shop:${x.id}">${fl.includes('shop:'+x.id)?'Following ':'Follow '}${esc(x.shop)}</button>`).join(''):'<span class="by">No shops yet.</span>'}</div>
+    <label style="display:flex;gap:10px;margin:18px 0;align-items:flex-start"><input type="checkbox" id="opt"${u.opt?' checked':''} style="margin-top:6px"><span>Email me new arrivals and events at ${esc(u.email||'my account email')}</span></label>
+    <button class="btn full" id="out">Log out</button>`;return}
   }
   b.innerHTML=`<h2>${mode==='login'?'Log in':'Create account'}</h2>
   ${mode==='signup'?`<div class="seg"><button data-t="buyer" class="${acct==='buyer'?'on':''}">I'm a buyer</button><button data-t="seller" class="${acct==='seller'?'on':''}">I'm a seller</button></div>`:''}
@@ -234,48 +244,82 @@ function accView(){
 function openAcc(m){if(m)mode=m;if(m==='signup')acct='seller';accView();$('#accM').classList.add('show')}
 function setPhoto(file,after){shrink(file).then(after).catch(()=>toast('Please choose an image file.'))}
 
+const SB_URL='https://vkirepgarlrkfmnzvktj.supabase.co',SB_KEY='sb_publishable_yO_DVXdzCroTjrY5KD4ctQ_DTu4_dmy';
+try{sb=window.supabase.createClient(SB_URL,SB_KEY)}catch(err){console.error(err)}
+const fromP=r=>({id:r.id,type:r.type,name:r.name,shop:r.shop,loc:r.loc,wa:r.wa,logo:r.logo_url,follows:r.follows||[],opt:!!r.updates_opt_in});
+const fromPr=r=>({id:r.id,sid:r.seller_id,name:r.name,price:r.price,size:r.size,cond:r.cond,cat:r.cat,img:r.img_url});
+async function loadAll(){
+  if(!sb){toast('Could not connect. Check your internet and refresh.');return}
+  const [a,b]=await Promise.all([sb.from('profiles').select('*'),sb.from('products').select('*').order('created_at')]);
+  if(a.error||b.error){console.error(a.error||b.error);toast('Could not load the shops. Please refresh.')}
+  users=(a.data||[]).map(fromP);prods=(b.data||[]).map(fromPr);
+  const {data}=await sb.auth.getSession(),ss=data&&data.session;
+  meId=ss?ss.user.id:null;const m=me();if(m&&ss)m.email=ss.user.email;
+  window.__ld=1;render();
+}
+async function up(dataUrl,tag){
+  const blob=await (await fetch(dataUrl)).blob();
+  const path=meId+'/'+Date.now()+'-'+tag+'.jpg';
+  const {error}=await sb.storage.from('images').upload(path,blob,{contentType:'image/jpeg'});
+  if(error)throw error;
+  return sb.storage.from('images').getPublicUrl(path).data.publicUrl;
+}
 document.addEventListener('click',async e=>{
   const t=e.target;
   if(t.matches('.modal')||t.dataset.close!==undefined){document.querySelectorAll('.modal').forEach(m=>m.classList.remove('show'));return}
   if(t.id==='accBtn')return openAcc();
   if(t.id==='openShop')return me()?openAcc():openAcc('signup');
   if(t.id==='cartBtn')return openCart();
-  const st=t.closest('[data-shop]');if(st){const id=+st.dataset.shop;shopFilter=shopFilter===id?null:id;render();return}
+  const st=t.closest('[data-shop]');if(st){const id=st.dataset.shop;shopFilter=shopFilter===id?null:id;render();return}
   if(t.dataset.cart){const id=+t.dataset.cart;cart=cart.includes(id)?cart.filter(x=>x!==id):[...cart,id];store('tm_cart',cart);render();return}
   if(t.dataset.rm){cart=cart.filter(x=>x!==+t.dataset.rm);store('tm_cart',cart);render();openCart();return}
   if(t.dataset.pay)return pay(t.dataset.pay);
   if(t.dataset.t){acct=t.dataset.t;return accView()}
   if(t.id==='sw'){mode=mode==='login'?'signup':'login';return accView()}
-  if(t.id==='out'){meId=null;store('tm_me',null);render();return accView()}
+  if(t.id==='out'){await sb.auth.signOut();await loadAll();accView();return}
   if(t.id==='lgBtn')return $('#lgIn').click();
   if(t.id==='drop'||t.closest('#drop'))return $('#pin').click();
-  if(t.dataset.del){prods=prods.filter(p=>p.id!==+t.dataset.del);store('tm_prods',prods);render();return accView()}
+  if(t.dataset.fol){const m=me();if(!m)return;const k=t.dataset.fol,f=m.follows||[],nf=f.includes(k)?f.filter(x=>x!==k):[...f,k];const {error}=await sb.from('profiles').update({follows:nf}).eq('id',m.id);if(error)return toast('Could not save. Try again.');m.follows=nf;accView();render();return}
+  if(t.dataset.del){const {error}=await sb.from('products').delete().eq('id',t.dataset.del);if(error)return toast('Could not delete. Try again.');await loadAll();return accView()}
   if(t.id==='go'){
+    if(!sb)return toast('Not connected. Refresh and try again.');
     const em=$('#em').value.trim().toLowerCase(),pw=$('#pw').value;
     if(!em||!pw)return toast('Enter your email and password.');
-    if(mode==='login'){const u=users.find(u=>u.email===em&&u.pw===pw);if(!u)return toast('Email or password is wrong. Check them or create an account.');meId=u.id}
-    else{
-      const fn=$('#fn').value.trim();if(!fn)return toast('Enter your full name.');
-      if(users.some(u=>u.email===em))return toast('That email already has an account. Log in instead.');
-      if(pw.length<6)return toast('Use a password of at least 6 characters.');
-      const u={id:Date.now(),type:acct,name:fn,email:em,pw};
-      if(acct==='seller'){u.shop=$('#sh').value.trim();u.loc=$('#lo').value.trim();u.wa=$('#wa').value.trim();if(!u.shop||!u.loc||waNum(u.wa).length<9)return toast('Enter your shop name, location and a valid WhatsApp number.')}
-      users.push(u);if(!store('tm_users',users))return;meId=u.id;
-    }
-    store('tm_me',meId);render();accView();toast('Welcome to Thriftmall!');return;
+    t.disabled=true;
+    try{
+      if(mode==='login'){
+        const {error}=await sb.auth.signInWithPassword({email:em,password:pw});
+        if(error)throw new Error('Email or password is wrong. Check them or create an account.');
+      }else{
+        const fn=$('#fn').value.trim();if(!fn)throw new Error('Enter your full name.');
+        if(pw.length<6)throw new Error('Use a password of at least 6 characters.');
+        const meta={type:acct,name:fn};
+        if(acct==='seller'){const shop=$('#sh').value.trim(),loc=$('#lo').value.trim(),wa=$('#wa').value.trim();if(!shop||!loc||waNum(wa).length<9)throw new Error('Enter your shop name, location and a valid WhatsApp number.');Object.assign(meta,{shop,loc,wa})}
+        const {data,error}=await sb.auth.signUp({email:em,password:pw,options:{data:meta}});
+        if(error)throw error;
+        if(!data.session){mode='login';accView();toast('Check your email to confirm your account, then log in.');return}
+      }
+      await loadAll();accView();toast('Welcome to Thriftmall!');
+    }catch(err){toast(err.message||'Something went wrong. Try again.');t.disabled=false}
+    return;
   }
   if(t.id==='addP'){
     const u=me(),n=$('#pn').value.trim(),p=parseFloat($('#pp').value),s=$('#ps').value.trim();
     if(!photo)return toast('Add a product photo first.');
     if(!n||!s||!(p>=0)||$('#pp').value==='')return toast('Enter the name, price in US$ and size.');
-    prods.push({id:Date.now(),sid:u.id,name:n,price:p,size:s,cond:$('#pc').value,cat:$('#pk').value,img:photo});
-    if(!store('tm_prods',prods)){prods.pop();return}
-    render();accView();toast('Added. It is now on the shop floor.');
+    t.disabled=true;
+    try{
+      const img=await up(photo,'p');
+      const {error}=await sb.from('products').insert({seller_id:u.id,name:n,price:p,size:s,cond:$('#pc').value,cat:$('#pk').value,img_url:img});
+      if(error)throw error;
+      await loadAll();accView();toast('Added. It is now on the shop floor.');
+    }catch(err){console.error(err);toast('Could not add the product. Try again.');t.disabled=false}
   }
 });
 document.addEventListener('change',e=>{
+  if(e.target.id==='opt'){const m=me(),on=e.target.checked;sb.from('profiles').update({updates_opt_in:on}).eq('id',m.id).then(({error})=>{if(error)toast('Could not save. Try again.');else{m.opt=on;toast(on?'Updates turned on.':'Updates turned off.')}});return}
   const f=e.target.files&&e.target.files[0];if(!f)return;
-  if(e.target.id==='lgIn')setPhoto(f,d=>{const u=me();u.logo=d;if(store('tm_users',users)){render();accView()}});
+  if(e.target.id==='lgIn')setPhoto(f,async d=>{try{const url=await up(d,'logo');const {error}=await sb.from('profiles').update({logo_url:url}).eq('id',meId);if(error)throw error;await loadAll();accView()}catch(err){console.error(err);toast('Could not save the logo.')}});
   if(e.target.id==='pin')setPhoto(f,showPhoto);
 });
 function showPhoto(d){photo=d;const pv=$('#pv');pv.src=d;pv.hidden=false}
@@ -285,7 +329,7 @@ document.addEventListener('drop',e=>{if(e.target.closest('#drop')){e.preventDefa
 ['q','fc','fs'].forEach(id=>$('#'+id).addEventListener('input',render));
 document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal').forEach(m=>m.classList.remove('show'))});
 document.addEventListener('click',e=>{const b=e.target.closest('[data-doc]');if(b){$('#docBody').innerHTML=DOCS[b.dataset.doc];$('#docM').classList.add('show')}});
-render();
+render();loadAll();
 </script>
 </body>
 </html>
