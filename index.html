@@ -127,7 +127,7 @@ footer a:not(.wm),footer .fl{text-decoration:none;display:block;padding:4px 0;fo
 <div class="strip">Prices in US$ &middot; Pay the seller directly on WhatsApp</div>
 <header class="topbar"><div class="wrap nav">
 <a class="wm" href="#top">Thrift<em>mall</em></a>
-<nav class="tabs" aria-label="Shop"><a href="#rail" data-cat="">Shop all</a><a href="#rail" data-cat="Clothing">Clothing</a><a href="#rail" data-cat="Accessories">Accessories</a><a href="#rail" data-cat="Rare Finds">Rare Finds</a><a href="#shops">Sellers</a><a href="#journal">Journal</a></nav>
+<nav class="tabs" aria-label="Shop"><a href="#rail" data-cat="">Shops</a><a href="#rail" data-cat="Clothing">Clothing</a><a href="#rail" data-cat="Accessories">Accessories</a><a href="#rail" data-cat="Rare Finds">Rare Finds</a><a href="#shops">Sellers</a><a href="#journal">Journal</a></nav>
 <button id="accBtn" class="nb acct">Account</button><button id="cartBtn" class="nb">Cart<span class="badge" id="cnt">0</span></button>
 </div></header>
 <main id="top">
@@ -135,7 +135,7 @@ footer a:not(.wm),footer .fl{text-decoration:none;display:block;padding:4px 0;fo
 <section class="s" style="padding:36px 0 8px"><div class="wrap cards3" aria-label="Shop by category">
 <a class="tile" href="#rail" data-cat="Clothing" style="background-image:url(tile-clothing.jpg);background-position:50% 45%"><span>Clothing</span></a>
 <a class="tile" href="#rail" data-cat="Accessories" style="background-image:url(tile-accessories.jpg);background-position:60% 55%"><span>Accessories</span></a>
-<a class="tile" href="#rail" data-cat="Rare Finds" style="background-image:url(tile-rare.jpg);background-position:50% 62%"><span>Rare Finds</span></a>
+<a class="tile" href="#rail" data-cat="Rare Finds" style="background-image:url(tile-rare.jpg);background-position:50% 62%"><span>Rare Pieces</span></a>
 </div></section>
 <section class="s tint" id="fresh-s" hidden><div class="wrap"><div class="sh"><h2>Just unearthed</h2><p>The newest pieces from our sellers.</p></div><div class="fresh" id="fresh"></div></div></section>
 <section class="s" id="foryou" hidden style="padding:56px 0"><div class="wrap"><div class="sh"><h2 id="fyh">Picked for you</h2><p>New pieces from the categories and shops you follow.</p></div><div class="grid" id="fy"></div></div></section>
@@ -163,10 +163,9 @@ footer a:not(.wm),footer .fl{text-decoration:none;display:block;padding:4px 0;fo
 <script>
 /* ===== EDIT THESE: community content shown on the Notice board, Events hall and Vlog lounge ===== */
 const NEWS=[
- {d:'Market culture',t:'Bhero is how Zimbabwe thrifts',x:'From Mupedzanhamo in Mbare to markets in Mutare and Victoria Falls, secondhand clothing is an everyday way to dress well for less. Thriftmall brings finds from these sellers online.'},
+ {d:'Market culture',t:'Vintage is how Zimbabwe thrifts',x:'From Harare to markets in Mutare and Victoria Falls, thrift clothing is an everyday way to dress well for less. Thriftmall brings finds from these sellers online.'},
  {d:'Community',t:'Curated thrift hits the runway',x:'Thrift & Threads, from the Mcheno and More platform, paired local designers with curated, cleaned secondhand retailers to change how bhero is seen.',u:'https://www.greedysouth.co.zw/2025/10/thrift-threads-new-dawn-for-sustainable.html',l:'Read the story'},
  {d:'Policy watch',t:'Used-clothing imports face a ban',x:'FairPlanet reported in June 2026 that government introduced a ban on importing used clothes in April, after bedbug concerns in some townships. Sellers: keep stock clean and check current rules.',u:'https://www.fairplanet.org/magazine/the-bedbugs-europe-sent-how-imported-used-clothes-are-infesting-zimbabwes-poorest-communities/',l:'Read the report'},
- {d:'Seller notice',t:'No used underwear on Thriftmall',x:'Selling used undergarments has been banned in Zimbabwe since 2011, so we do not allow those listings. Describe condition honestly and photograph any flaws.',u:'https://www.sowetan.co.za/news/south-africa/2020-11-13-second-hand-underwear-still-hot-property-in-zim-as-economy-bites',l:'Read more'}
 ];
 const EVENTS=[
  {t:'Avondale Flea Market, Harare',x:'A regular market near Avondale Shopping Centre with secondhand clothes, vinyl, jewellery and local art. Dates vary, so check before you go.',u:'https://thingstodoinzimbabwe.com/events/',l:'Event guide'},
