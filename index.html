@@ -204,6 +204,7 @@ const load=(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));return v??d}c
 const store=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true}catch{toast('Storage is full. Remove a product or use smaller photos.');return false}};
 let users=[],prods=[],cart=load('tm_cart',[]),meId=null,sb=null;
 let shopFilter=null,photo=null,logoTmp=null,mode='login',acct='buyer';
+let authMethod='email', pendingAuth=null, phoneOtpChannel='sms';
 const me=()=>users.find(u=>u.id===meId)||null;
 const usd=n=>'US$'+Number(n).toFixed(2);
 function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>t.style.display='none',2800)}
@@ -275,6 +276,7 @@ function accView() {
     b.innerHTML = `<h2>Recover your account</h2>
       <p class="by" style="margin-bottom:16px">We'll send a one-time code to a contact method linked to your account.</p>
       <div class="seg"><button data-method="email" class="${authMethod === 'email' ? 'on' : ''}">Email</button><button data-method="phone" class="${authMethod === 'phone' ? 'on' : ''}">Phone</button></div>
+    ${authMethod === 'phone' && mode !== 'login' ? '<p class="by" style="margin:-6px 0 8px">Send verification code by</p><div class="seg"><button data-phone-channel="sms">SMS</button><button data-phone-channel="whatsapp">WhatsApp</button></div>' : ''}
       <div class="f"><label for="identifier">${authMethod === 'email' ? 'Email address' : 'Phone number with country code'}</label><input id="identifier" type="${authMethod === 'email' ? 'email' : 'tel'}" autocomplete="${authMethod === 'email' ? 'email' : 'tel'}" placeholder="${authMethod === 'email' ? 'you@example.com' : '+263 77 123 4567'}"></div>
       <button class="btn dark full" id="sendRecovery">Send recovery code</button>
       <p class="by" style="margin-top:12px">For phone recovery, your number must already be registered and phone OTP must be enabled.</p>
@@ -339,6 +341,7 @@ function accView() {
   b.innerHTML = `<h2>${mode === 'login' ? 'Log in' : 'Create account'}</h2>
     ${mode === 'signup' ? `<div class="seg"><button data-t="buyer" class="${acct === 'buyer' ? 'on' : ''}">I'm a buyer</button><button data-t="seller" class="${acct === 'seller' ? 'on' : ''}">I'm a seller</button></div>` : ''}
     <div class="seg"><button data-method="email" class="${authMethod === 'email' ? 'on' : ''}">Email</button><button data-method="phone" class="${authMethod === 'phone' ? 'on' : ''}">Phone</button></div>
+    ${authMethod === 'phone' && mode !== 'login' ? '<p class="by" style="margin:-6px 0 8px">Send verification code by</p><div class="seg"><button data-phone-channel="sms">SMS</button><button data-phone-channel="whatsapp">WhatsApp</button></div>' : ''}
     ${mode === 'signup' ? `<div class="f"><label for="fn">Full name</label><input id="fn" autocomplete="name"></div>` : ''}
     ${mode === 'signup' && acct === 'seller' ? `<div class="f"><label for="sh">Shop name</label><input id="sh" autocomplete="organization"></div><div class="two"><div class="f"><label for="lo">Location</label><input id="lo" placeholder="e.g. Harare, Avondale"></div><div class="f"><label for="wa">Public WhatsApp number</label><input id="wa" type="tel" placeholder="+263 77 123 4567"></div></div>` : ''}
     <div class="f"><label for="identifier">${authMethod === 'email' ? 'Email address' : 'Phone number with country code'}</label><input id="identifier" type="${authMethod === 'email' ? 'email' : 'tel'}" autocomplete="${authMethod === 'email' ? 'email' : 'tel'}" placeholder="${authMethod === 'email' ? 'you@example.com' : '+263 77 123 4567'}"></div>
@@ -427,7 +430,7 @@ async function handleAuth(t) {
     identifier = input.toLowerCase();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier)) return toast('Enter a valid email address.');
   } else {
-    identifier = safePhoneReplacement(input);
+    identifier = safePhone(input);
     if (!identifier) return toast('Enter a phone number in international format, e.g. +263771234567.');
   }
   if (!password) return toast('Enter your password.');
@@ -449,7 +452,7 @@ async function handleAuth(t) {
       Object.assign(metadata, { shop, loc: location, wa: whatsapp });
     }
     const options = { data: metadata, emailRedirectTo: window.location.origin + window.location.pathname };
-    const args = authMethod === 'email' ? { email: identifier, password, options } : { phone: identifier, password, options: { data: metadata } };
+    const args = authMethod === 'email' ? { email: identifier, password, options } : { phone: identifier, password, options: { data: metadata, channel: phoneOtpChannel } };
     const { data, error } = await sb.auth.signUp(args);
     if (error) {
       const message = String(error.message || '').toLowerCase();
@@ -464,10 +467,10 @@ async function handleAuth(t) {
       toast('Supabase is allowing sign-up without a verification step. Enable email or phone confirmation in Supabase Auth before using registration.');
       return;
     }
-    pendingAuth = { method: authMethod, identifier, intent: 'signup' };
+    pendingAuth = { method: authMethod, identifier, intent: 'signup', channel: phoneOtpChannel };
     mode = 'verify'; accView(); toast('A verification code has been requested.');
   } catch (error) {
-    toast(authErrorTextReplacement(error));
+    toast(authErrorText(error));
   } finally { if (button) button.disabled = false; }
 }
 function authErrorText(error) {
@@ -491,7 +494,7 @@ async function verifyOtp(t) {
     }
     pendingAuth = null; mode = 'login'; await loadAll(); accView(); $('#accM').classList.add('show');
     toast('Your contact is verified. Welcome to ThriftMall.');
-  } catch (error) { toast(authErrorTextReplacement(error)); }
+  } catch (error) { toast(authErrorText(error)); }
   finally { t.disabled = false; }
 }
 async function recovery(t) {
@@ -501,7 +504,7 @@ async function recovery(t) {
     identifier = identifier.toLowerCase();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier)) return toast('Enter a valid email address.');
   } else {
-    identifier = safePhoneReplacement(identifier);
+    identifier = safePhone(identifier);
     if (!identifier) return toast('Enter a phone number in international format, e.g. +263771234567.');
   }
   t.disabled = true;
@@ -511,12 +514,12 @@ async function recovery(t) {
       if (error) throw error;
       pendingAuth = { method:'email', identifier, intent:'email-reset' };
     } else {
-      const { error } = await sb.auth.signInWithOtp({ phone:identifier, options:{ shouldCreateUser:false } });
+      const { error } = await sb.auth.signInWithOtp({ phone:identifier, options:{ shouldCreateUser:false, channel:phoneOtpChannel } });
       if (error) throw error;
-      pendingAuth = { method:'phone', identifier, intent:'phone-reset' };
+      pendingAuth = { method:'phone', identifier, intent:'phone-reset', channel:phoneOtpChannel };
     }
     mode = 'verify'; accView(); toast('If this contact is linked to an account, a recovery code will be sent.');
-  } catch (error) { toast(authErrorTextReplacement(error)); }
+  } catch (error) { toast(authErrorText(error)); }
   finally { t.disabled = false; }
 }
 async function resendOtp(t) {
@@ -525,12 +528,12 @@ async function resendOtp(t) {
   try {
     let response;
     if (a.method === 'email' && a.intent === 'signup') response = await sb.auth.resend({ type:'signup', email:a.identifier });
-    else if (a.method === 'phone' && a.intent === 'signup') response = await sb.auth.resend({ type:'sms', phone:a.identifier });
+    else if (a.method === 'phone' && a.intent === 'signup') response = await sb.auth.signInWithOtp({ phone:a.identifier, options:{ shouldCreateUser:false, channel:a.channel || 'sms' } });
     else if (a.method === 'email') response = await sb.auth.resetPasswordForEmail(a.identifier, { redirectTo:window.location.origin + window.location.pathname });
     else response = await sb.auth.signInWithOtp({ phone:a.identifier, options:{ shouldCreateUser:false } });
     if (response.error) throw response.error;
     toast('A new code has been requested, if the contact is eligible.');
-  } catch (error) { toast(authErrorTextReplacement(error)); }
+  } catch (error) { toast(authErrorText(error)); }
   finally { t.disabled = false; }
 }
 async function saveProfile(t) {
@@ -596,6 +599,11 @@ document.addEventListener('click',async e=>{
   if(t.dataset.fol){const m=me();if(!m)return;const k=t.dataset.fol,f=m.follows||[],nf=f.includes(k)?f.filter(x=>x!==k):[...f,k];const {error}=await sb.from('profile_preferences').upsert({user_id:m.id,follows:nf,updates_opt_in:!!m.opt},{onConflict:'user_id'});if(error)return toast('Could not save your preferences. Try again.');m.follows=nf;accView();render();return}
   if(t.dataset.del){const {error}=await sb.from('products').delete().eq('id',t.dataset.del);if(error)return toast('Could not delete. Try again.');await loadAll();return accView()}
   if(t.dataset.method){authMethod=t.dataset.method;return accView()}
+  if(t.dataset.phoneChannel){
+    phoneOtpChannel=t.dataset.phoneChannel;
+    document.querySelectorAll('[data-phone-channel]').forEach(button=>button.classList.toggle('on',button.dataset.phoneChannel===phoneOtpChannel));
+    return;
+  }
   if(t.dataset.action==='forgot'){mode='forgot';return accView()}
   if(t.id==='backLogin'){pendingAuth=null;mode='login';return accView()}
   if(t.id==='go')return handleAuth(t);
