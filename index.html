@@ -362,7 +362,7 @@ function safeImageCss(value) {
     const image = new URL(String(value), window.location.href);
     const project = new URL(SB_URL);
     if (image.protocol !== 'https:' || image.origin !== project.origin || !image.pathname.startsWith('/storage/v1/object/public/images/')) return '';
-    return "background-image:url('" + image.href + "')";
+    return 'background-image:url("' + image.href + '")';
   } catch { return ''; }
 }
 function setPhoto(file,after){shrink(file).then(after).catch(()=>toast('Please choose an image file.'))}
