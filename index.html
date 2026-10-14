@@ -204,16 +204,18 @@ const load=(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));return v??d}c
 const store=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));return true}catch{toast('Storage is full. Remove a product or use smaller photos.');return false}};
 let users=[],prods=[],cart=load('tm_cart',[]),meId=null,sb=null;
 let shopFilter=null,photo=null,logoTmp=null,mode='login',acct='buyer';
+let authMethod='email',authChannel='sms',loginMethod='password',authFlow=null,authPending=null;
 const me=()=>users.find(u=>u.id===meId)||null;
 const usd=n=>'US$'+Number(n).toFixed(2);
 function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>t.style.display='none',2800)}
 function shrink(file,max=700){return new Promise((res,rej)=>{if(!file||!file.type.startsWith('image/'))return rej();const r=new FileReader();r.onload=()=>{const i=new Image();i.onload=()=>{const s=Math.min(1,max/Math.max(i.width,i.height)),c=document.createElement('canvas');c.width=i.width*s;c.height=i.height*s;c.getContext('2d').drawImage(i,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.78))};i.onerror=rej;i.src=r.result};r.onerror=rej;r.readAsDataURL(file)})}
 const waNum=n=>{const raw=String(n).trim();let d=raw.replace(/\D/g,'');if(raw.startsWith('+'))return d;if(raw.startsWith('00'))return d.slice(2);if(d.startsWith('0'))d='263'+d.slice(1);return d};
 
-const cardHTML=p=>{const s=users.find(u=>u.id===p.sid);const inC=cart.includes(p.id);return `<article class="card"><div class="ph" style="background-image:url(${p.img})" role="img" aria-label="${esc(p.name)}"></div><div class="b"><span class="no">No. ${String(p.id).padStart(3,'0')}</span><h3>${esc(p.name)}</h3><div class="meta"><span class="tag c">${esc(p.cat)}</span><span class="tag">Size ${esc(p.size)}</span><span class="tag">${esc(p.cond)}</span><span class="tag av">Available</span></div><div class="by">${s?esc(s.shop)+', '+esc(s.loc):''}</div><div class="row"><span class="price">${usd(p.price)}</span><button class="mini${inC?' in':''}" data-cart="${p.id}">${inC?'In cart':'Add to cart'}</button></div></div></article>`};
+function safeImageURL(raw){try{const u=new URL(String(raw||''));const base=new URL(SB_URL);if(u.origin!==base.origin||!u.pathname.startsWith('/storage/v1/object/public/images/'))return '';return u.href}catch{return ''}}
+const cardHTML=p=>{const s=users.find(u=>u.id===p.sid);const inC=cart.includes(p.id);return `<article class="card"><div class="ph" style="background-image:url(${safeImageURL(p.img)})" role="img" aria-label="${esc(p.name)}"></div><div class="b"><span class="no">No. ${String(p.id).padStart(3,'0')}</span><h3>${esc(p.name)}</h3><div class="meta"><span class="tag c">${esc(p.cat)}</span><span class="tag">Size ${esc(p.size)}</span><span class="tag">${esc(p.cond)}</span><span class="tag av">Available</span></div><div class="by">${s?esc(s.shop)+', '+esc(s.loc):''}</div><div class="row"><span class="price">${usd(p.price)}</span><button class="mini${inC?' in':''}" data-cart="${p.id}">${inC?'In cart':'Add to cart'}</button></div></div></article>`};
 function render(){
   const sellers=users.filter(u=>u.type==='seller');
-  $('#shopList').innerHTML=sellers.length?sellers.map(s=>`<button class="store${shopFilter===s.id?' on':''}" data-shop="${s.id}"><div class="awn"></div><div class="lg" style="${s.logo?`background-image:url(${s.logo})`:''}">${s.logo?'':esc(s.shop[0]||'?')}</div><b>${esc(s.shop)}</b><span>${esc(s.loc)}</span></button>`).join(''):'<div class="empty" style="grid-column:1/-1">No shops yet. Be the first to open one.</div>';
+  $('#shopList').innerHTML=sellers.length?sellers.map(s=>`<button class="store${shopFilter===s.id?' on':''}" data-shop="${s.id}"><div class="awn"></div><div class="lg" style="${s.logo?`background-image:url(${safeImageURL(s.logo)})`:''}">${s.logo?'':esc(s.shop[0]||'?')}</div><b>${esc(s.shop)}</b><span>${esc(s.loc)}</span></button>`).join(''):'<div class="empty" style="grid-column:1/-1">No shops yet. Be the first to open one.</div>';
   const sizes=[...new Set(prods.map(p=>p.size))].sort();const cur=$('#fs').value;
   $('#fs').innerHTML='<option value="">All sizes</option>'+sizes.map(s=>`<option${s===cur?' selected':''}>${esc(s)}</option>`).join('');
   const q=$('#q').value.toLowerCase(),c=$('#fc').value,z=$('#fs').value;
@@ -251,53 +253,74 @@ function pay(sid){
 /* ---- Account ---- */
 function accView(){
   const u=me(),b=$('#accBody');
+  if(authFlow==='verify'&&authPending){
+    const p=authPending,via=p.method==='email'?'email':'phone';
+    const purpose=p.kind==='signup'?'verify your '+via:p.kind==='phone-recovery'?'verify your phone to reset your password':'sign in with your '+via;
+    b.innerHTML='<h2>Check your '+via+'</h2><p class=\'by\' style=\'margin-bottom:18px\'>Enter the one-time code sent to <b>'+esc(p.identifier)+'</b> to '+purpose+'.</p><div class=\'f\'><label for=\'otpCode\'>6-digit verification code</label><input id=\'otpCode\' inputmode=\'numeric\' autocomplete=\'one-time-code\' pattern=\'[0-9]*\' maxlength=\'6\' placeholder=\'000000\' required></div><button class=\'btn dark full\' id=\'verifyOtp\'>Verify and continue</button><button class=\'btn full\' style=\'margin-top:10px\' id=\'resendOtp\'>Send another code'+(p.method==='phone'?' by SMS':'')+'</button><p style=\'text-align:center;margin-top:14px\'><button class=\'link\' id=\'cancelAuthFlow\'>Cancel</button></p>';return;
+  }
+  if(authFlow==='reset-password-email'||authFlow==='reset-password-phone'||authFlow==='change-password'){
+    const recovery=authFlow!=='change-password';
+    b.innerHTML='<h2>'+(recovery?'Choose a new password':'Change password')+'</h2><p class=\'by\' style=\'margin-bottom:18px\'>'+(authFlow==='reset-password-phone'?'Your phone was verified. Choose a new password to finish recovery.':authFlow==='reset-password-email'?'Your recovery link is verified. Choose a new password for your account.':'Use at least 8 characters and do not reuse a password from another site.')+'</p><div class=\'f\'><label for=\'newPw\'>New password</label><input id=\'newPw\' type=\'password\' autocomplete=\'new-password\' minlength=\'8\' required></div><div class=\'f\'><label for=\'confirmPw\'>Confirm new password</label><input id=\'confirmPw\' type=\'password\' autocomplete=\'new-password\' minlength=\'8\' required></div><button class=\'btn dark full\' id=\'saveNewPassword\'>Save password</button><button class=\'btn full\' id=\'cancelAuthFlow\' style=\'margin-top:10px\'>Cancel</button>';return;
+  }
   if(u&&u.type==='seller'){
     const mine=prods.filter(p=>p.sid===u.id);photo=null;
-    b.innerHTML=`<h2>${esc(u.shop)}</h2><p class="by" style="margin-bottom:14px">Seller dashboard &middot; ${esc(u.name)}, ${esc(u.loc)}</p>
-    <div class="sw"><div class="lg" id="lgPrev" style="${u.logo?`background-image:url(${u.logo})`:''}"></div><div><b>Shop logo or photo</b><br><button class="link" id="lgBtn">Upload from device</button><input type="file" id="lgIn" accept="image/*" hidden></div></div>
-    <h3 style="font-size:1.1rem;margin:10px 0">Add a product</h3>
-    <div class="f"><div class="drop" id="drop"><b>Drag a photo here or tap to upload</b><br><small>From your phone or computer</small><img class="prev" id="pv" hidden alt="Preview"></div><input type="file" id="pin" accept="image/*" hidden></div>
-    <div class="f"><label>Product name</label><input id="pn" placeholder="e.g. 90s Levi's denim jacket"></div>
-    <div class="two"><div class="f"><label>Price (US$)</label><input id="pp" type="number" min="0" step="0.01"></div><div class="f"><label>Size</label><input id="ps" placeholder="M, 32, UK 8"></div></div>
-    <div class="two"><div class="f"><label>Condition</label><select id="pc"><option>Like new</option><option>Good</option><option>Fair, well loved</option><option>Needs repair</option></select></div><div class="f"><label>Category</label><select id="pk"><option>Accessories</option><option>Clothing</option><option>Rare Finds</option></select></div></div>
-    <button class="btn dark full" id="addP">Add to the mall</button>
-    <h3 style="font-size:1.1rem;margin:20px 0 6px">Your products (${mine.length})</h3>
-    ${mine.map(p=>`<div class="mine"><i style="background-image:url(${p.img})"></i><span>${esc(p.name)}<br>${usd(p.price)}</span><button class="link" data-del="${p.id}">Delete</button></div>`).join('')||'<p class="by">Nothing listed yet.</p>'}
-    <button class="btn full" style="margin-top:18px" id="out">Log out</button>`;return;
+    b.innerHTML='<h2>'+esc(u.shop||'Your shop')+'</h2><p class=\'by\' style=\'margin-bottom:14px\'>Seller dashboard &middot; '+esc(u.name||'')+', '+esc(u.loc||'')+'</p>'+
+    '<h3 style=\'font-size:1.1rem;margin:16px 0 8px\'>Shop settings</h3><div class=\'f\'><label for=\'profileName\'>Your name</label><input id=\'profileName\' autocomplete=\'name\' value=\''+esc(u.name||'')+'\'></div>'+
+    '<div class=\'f\'><label for=\'profileShop\'>Shop name</label><input id=\'profileShop\' value=\''+esc(u.shop||'')+'\' required></div>'+
+    '<div class=\'two\'><div class=\'f\'><label for=\'profileLocation\'>Location</label><input id=\'profileLocation\' value=\''+esc(u.loc||'')+'\' placeholder=\'e.g. Harare, Avondale\' required></div><div class=\'f\'><label for=\'profileWa\'>Public WhatsApp number</label><input id=\'profileWa\' type=\'tel\' value=\''+esc(u.wa||'')+'\' placeholder=\'+263 77 000 0000\' required></div></div>'+
+    '<div class=\'sw\'><div class=\'lg\' id=\'lgPrev\' aria-label=\'Shop profile picture\'></div><div><b>Shop picture or logo</b><br><button class=\'link\' id=\'lgBtn\'>Upload or change picture</button><input type=\'file\' id=\'lgIn\' accept=\'image/jpeg,image/png,image/webp\' hidden></div></div>'+
+    '<button class=\'btn dark full\' id=\'saveProfile\'>Save shop settings</button><p class=\'by\' style=\'margin:8px 0 18px\'>Your login phone or email is separate from the public WhatsApp number buyers use to contact your shop.</p>'+
+    '<h3 style=\'font-size:1.1rem;margin:10px 0\'>Add a product</h3><div class=\'f\'><div class=\'drop\' id=\'drop\'><b>Drag a photo here or tap to upload</b><br><small>From your phone or computer</small><img class=\'prev\' id=\'pv\' hidden alt=\'Preview\'></div><input type=\'file\' id=\'pin\' accept=\'image/*\' hidden></div>'+
+    '<div class=\'f\'><label for=\'pn\'>Product name</label><input id=\'pn\' placeholder=\'e.g. 90s denim jacket\'></div><div class=\'two\'><div class=\'f\'><label for=\'pp\'>Price (US$)</label><input id=\'pp\' type=\'number\' min=\'0\' step=\'0.01\'></div><div class=\'f\'><label for=\'ps\'>Size</label><input id=\'ps\' placeholder=\'M, 32, UK 8\'></div></div>'+
+    '<div class=\'two\'><div class=\'f\'><label for=\'pc\'>Condition</label><select id=\'pc\'><option>Like new</option><option>Good</option><option>Fair, well loved</option><option>Needs repair</option></select></div><div class=\'f\'><label for=\'pk\'>Category</label><select id=\'pk\'><option>Accessories</option><option>Clothing</option><option>Rare Finds</option></select></div></div><button class=\'btn dark full\' id=\'addP\'>Add to the mall</button>'+
+    '<h3 style=\'font-size:1.1rem;margin:20px 0 6px\'>Your products ('+mine.length+')</h3>'+
+    (mine.map(p=>'<div class=\'mine\'><i style=\'background-image:url('+safeImageURL(p.img)+')\'></i><span>'+esc(p.name)+'<br>'+usd(p.price)+'</span><button class=\'link\' data-del=\''+p.id+'\'>Delete</button></div>').join('')||'<p class=\'by\'>Nothing listed yet.</p>')+
+    '<button class=\'btn full\' style=\'margin-top:18px\' id=\'changePassword\'>Change password</button><button class=\'btn full\' style=\'margin-top:10px\' id=\'out\'>Log out</button>';
+    const logo=$('#lgPrev'),safeLogo=safeImageURL(u.logo);if(logo&&safeLogo)logo.style.backgroundImage='url('+safeLogo+')';return;
   }
   if(u){
-    {const fl=u.follows||[],sel=users.filter(x=>x.type==='seller');
-    b.innerHTML=`<h2>Hi ${esc(u.name.split(' ')[0])}</h2><p class="by">Tell us what you love and we will line up new finds for you.</p>
-    <h3 style="font-size:1.1rem;margin:16px 0 8px">Follow categories</h3><div class="seg" style="grid-template-columns:repeat(3,1fr)">${['Accessories','Clothing','Rare Finds'].map(c=>`<button data-fol="cat:${c}" class="${fl.includes('cat:'+c)?'on':''}">${c}</button>`).join('')}</div>
-    <h3 style="font-size:1.1rem;margin:16px 0 8px">Follow shops</h3><div style="display:flex;gap:8px;flex-wrap:wrap">${sel.length?sel.map(x=>`<button class="mini${fl.includes('shop:'+x.id)?' in':''}" data-fol="shop:${x.id}">${fl.includes('shop:'+x.id)?'Following ':'Follow '}${esc(x.shop)}</button>`).join(''):'<span class="by">No shops yet.</span>'}</div>
-    <label style="display:flex;gap:10px;margin:18px 0;align-items:flex-start"><input type="checkbox" id="opt"${u.opt?' checked':''} style="margin-top:6px"><span>Email me new arrivals and events at ${esc(u.email||'my account email')}</span></label>
-    <button class="btn full" id="out">Log out</button>`;return}
+    const fl=u.follows||[],sel=users.filter(x=>x.type==='seller');
+    b.innerHTML='<h2>Hi '+esc((u.name||'there').split(' ')[0])+'</h2><p class=\'by\'>Tell us what you love and we will line up new finds for you.</p>'+
+    '<h3 style=\'font-size:1.1rem;margin:16px 0 8px\'>Account settings</h3><div class=\'f\'><label for=\'profileName\'>Your name</label><input id=\'profileName\' autocomplete=\'name\' value=\''+esc(u.name||'')+'\'></div><button class=\'btn dark full\' id=\'saveProfile\'>Save account details</button>'+
+    '<h3 style=\'font-size:1.1rem;margin:20px 0 8px\'>Follow categories</h3><div class=\'seg\' style=\'grid-template-columns:repeat(3,1fr)\'>'+['Accessories','Clothing','Rare Finds'].map(c=>'<button data-fol=\'cat:'+c+'\' class=\''+(fl.includes('cat:'+c)?'on':'')+'\'>'+c+'</button>').join('')+'</div>'+
+    '<h3 style=\'font-size:1.1rem;margin:16px 0 8px\'>Follow shops</h3><div style=\'display:flex;gap:8px;flex-wrap:wrap\'>'+(sel.length?sel.map(x=>'<button class=\'mini'+(fl.includes('shop:'+x.id)?' in':'')+'\' data-fol=\'shop:'+x.id+'\'>'+(fl.includes('shop:'+x.id)?'Following ':'Follow ')+esc(x.shop)+'</button>').join(''):'<span class=\'by\'>No shops yet.</span>')+'</div>'+
+    '<label style=\'display:flex;gap:10px;margin:18px 0;align-items:flex-start\'><input type=\'checkbox\' id=\'opt\''+(u.opt?' checked':'')+' style=\'margin-top:6px\'><span>Email me new arrivals and events at '+esc(u.email||u.phone||'my account contact')+'</span></label>'+
+    '<button class=\'btn full\' id=\'changePassword\'>Change password</button><button class=\'btn full\' style=\'margin-top:10px\' id=\'out\'>Log out</button>';return;
   }
-  b.innerHTML=`<h2>${mode==='login'?'Log in':'Create account'}</h2>
-  ${mode==='signup'?`<div class="seg"><button data-t="buyer" class="${acct==='buyer'?'on':''}">I'm a buyer</button><button data-t="seller" class="${acct==='seller'?'on':''}">I'm a seller</button></div>`:''}
-  ${mode==='signup'&&acct==='seller'?`<div class="f"><label>Shop name</label><input id="sh"></div>`:''}
-  ${mode==='signup'?`<div class="f"><label>Full name</label><input id="fn" autocomplete="name"></div>`:''}
-  ${mode==='signup'&&acct==='seller'?`<div class="two"><div class="f"><label>Location</label><input id="lo" placeholder="e.g. Harare, Avondale"></div><div class="f"><label>WhatsApp number</label><input id="wa" type="tel" placeholder="+263 000 000 000"></div></div>`:''}
-  <div class="f"><label>Email</label><input id="em" type="email" autocomplete="email"></div>
-  <div class="f"><label>Password</label><input id="pw" type="password" autocomplete="${mode==='login'?'current-password':'new-password'}"></div>
-  <button class="btn dark full" id="go">${mode==='login'?'Log in':'Create account'}</button>${mode==='signup'?'<p class="by" style="margin-top:10px">By creating an account you agree to our <button class="link" data-doc="terms">Terms</button> and <button class="link" data-doc="privacy">Privacy Policy</button>.</p>':''}
-  <p style="text-align:center;margin-top:14px">${mode==='login'?`No account? <button class="link" id="sw">Create a new account</button>`:`Have an account? <button class="link" id="sw">Log in</button>`}</p>
-  ${mode==='login'?'<p class="by" style="text-align:center;margin-top:8px">Buying? You don\'t need an account. An account only gives you tailored news and updates.</p>':''}`;
+  b.innerHTML='<h2>'+(mode==='login'?'Log in':'Create account')+'</h2>'+
+    '<div class=\'seg\'><button data-auth-method=\'email\' class=\''+(authMethod==='email'?'on':'')+'\'>Email</button><button data-auth-method=\'phone\' class=\''+(authMethod==='phone'?'on':'')+'\'>Phone</button></div>'+
+    (mode==='signup'?'<div class=\'seg\'><button data-t=\'buyer\' class=\''+(acct==='buyer'?'on':'')+'\'>I am a buyer</button><button data-t=\'seller\' class=\''+(acct==='seller'?'on':'')+'\'>I am a seller</button></div>':'')+
+    (mode==='signup'&&acct==='seller'?'<div class=\'f\'><label for=\'sh\'>Shop name</label><input id=\'sh\' autocomplete=\'organization\'></div>':'')+
+    (mode==='signup'?'<div class=\'f\'><label for=\'fn\'>Full name</label><input id=\'fn\' autocomplete=\'name\' required></div>':'')+
+    (mode==='signup'&&acct==='seller'?'<div class=\'two\'><div class=\'f\'><label for=\'lo\'>Shop location</label><input id=\'lo\' placeholder=\'e.g. Harare, Avondale\' required></div><div class=\'f\'><label for=\'wa\'>Public WhatsApp number</label><input id=\'wa\' type=\'tel\' placeholder=\'+263 77 000 0000\' required></div></div>':'')+
+    (authMethod==='email'?'<div class=\'f\'><label for=\'em\'>Email address</label><input id=\'em\' type=\'email\' autocomplete=\'email\' placeholder=\'you@example.com\' required></div>':'<div class=\'f\'><label for=\'ph\'>Phone number with country code</label><input id=\'ph\' type=\'tel\' autocomplete=\'tel\' placeholder=\'+263 77 000 0000\' required><small class=\'by\'>Use an international number such as +263...</small></div>')+
+    (authMethod==='phone'?'<div class=\'f\'><label>Code delivery</label><div class=\'seg\'><button data-auth-channel=\'sms\' class=\''+(authChannel==='sms'?'on':'')+'\'>SMS</button><button data-auth-channel=\'whatsapp\' class=\''+(authChannel==='whatsapp'?'on':'')+'\'>WhatsApp</button></div><small class=\'by\'>WhatsApp codes require your Supabase phone provider to be configured for WhatsApp.</small></div>':'')+
+    ((mode==='signup'||loginMethod==='password')?'<div class=\'f\'><label for=\'pw\'>Password</label><input id=\'pw\' type=\'password\' autocomplete=\''+(mode==='login'?'current-password':'new-password')+'\' minlength=\''+(mode==='signup'?'8':'1')+'\' required></div>':'')+
+    '<button class=\'btn dark full\' id=\'go\'>'+(mode==='signup'?'Create account and send verification code':(loginMethod==='otp'?'Send one-time code':'Log in'))+'</button>'+
+    (mode==='signup'?'<p class=\'by\' style=\'margin-top:10px\'>By creating an account you agree to our <button class=\'link\' data-doc=\'terms\'>Terms</button> and <button class=\'link\' data-doc=\'privacy\'>Privacy Policy</button>.</p>':'<div style=\'display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:12px\'><button class=\'link\' id=\'forgotPassword\'>Forgot password?</button><button class=\'link\' id=\'toggleLoginMethod\'>'+(loginMethod==='password'?'Use a one-time code instead':'Use password instead')+'</button></div>')+
+    '<p style=\'text-align:center;margin-top:14px\'>'+(mode==='login'?'No account? <button class=\'link\' id=\'sw\'>Create a new account</button>':'Have an account? <button class=\'link\' id=\'sw\'>Log in</button>')+'</p>'+
+    (mode==='login'?'<p class=\'by\' style=\'text-align:center;margin-top:8px\'>Buying? You do not need an account. An account lets you follow shops and manage preferences.</p>':'<p class=\'by\' style=\'margin-top:8px\'>You must verify the email address or phone number before using your new account.</p>');
 }
-function openAcc(m){if(m)mode=m;if(m==='signup')acct='seller';accView();$('#accM').classList.add('show')}
+function normalizeAuthPhone(value){const digits=waNum(value);if(digits.length<8||digits.length>15)throw new Error('Enter a valid phone number with country code, for example +263 77 000 0000.');return '+'+digits}
+function openAcc(m){if(m){mode=m;authFlow=null;authPending=null}if(m==='signup')acct='seller';accView();$('#accM').classList.add('show')}
+
 function setPhoto(file,after){shrink(file).then(after).catch(()=>toast('Please choose an image file.'))}
 
 const SB_URL='https://vkirepgarlrkfmnzvktj.supabase.co',SB_KEY='sb_publishable_yO_DVXdzCroTjrY5KD4ctQ_DTu4_dmy';
-try{sb=window.supabase.createClient(SB_URL,SB_KEY)}catch(err){console.error(err)}
+try{sb=window.supabase.createClient(SB_URL,SB_KEY);sb.auth.onAuthStateChange((event)=>{if(event==='PASSWORD_RECOVERY'){authFlow='reset-password-email';authPending=null;mode='login';$('#accM').classList.add('show');accView()}})}catch(err){console.error(err)}
 const fromP=r=>({id:r.id,type:r.type,name:r.name,shop:r.shop,loc:r.loc,wa:r.wa,logo:r.logo_url,follows:r.follows||[],opt:!!r.updates_opt_in});
 const fromPr=r=>({id:r.id,sid:r.seller_id,name:r.name,price:r.price,size:r.size,cond:r.cond,cat:r.cat,img:r.img_url});
 async function loadAll(){
   if(!sb){toast('Could not connect. Check your internet and refresh.');return}
-  const [a,b]=await Promise.all([sb.from('profiles').select('*'),sb.from('products').select('*').order('created_at')]);
+  const {data:sessionResult}=await sb.auth.getSession(),ss=sessionResult&&sessionResult.session;
+  const [a,b]=await Promise.all([
+    sb.from('profiles').select('id,type,name,shop,loc,wa,logo_url,contact_verified,created_at'),
+    sb.from('products').select('id,seller_id,name,price,size,cond,cat,img_url,created_at').order('created_at')
+  ]);
   if(a.error||b.error){console.error(a.error||b.error);toast('Could not load the shops. Please refresh.')}
   users=(a.data||[]).map(fromP);prods=(b.data||[]).map(fromPr);
-  const {data}=await sb.auth.getSession(),ss=data&&data.session;
-  meId=ss?ss.user.id:null;const m=me();if(m&&ss)m.email=ss.user.email;
+  meId=ss?ss.user.id:null;const m=me();
+  if(m&&ss){m.email=ss.user.email||'';m.phone=ss.user.phone||'';const pref=await sb.from('profile_preferences').select('follows,updates_opt_in').eq('id',ss.user.id).maybeSingle();if(!pref.error&&pref.data){m.follows=pref.data.follows||[];m.opt=!!pref.data.updates_opt_in}else if(pref.error)console.warn('Profile preferences need the ThriftMall auth/profile migration applied.')}
   window.__ld=1;render();
 }
 async function up(dataUrl,tag){
@@ -322,30 +345,59 @@ document.addEventListener('click',async e=>{
   if(t.id==='out'){await sb.auth.signOut();await loadAll();accView();return}
   if(t.id==='lgBtn')return $('#lgIn').click();
   if(t.id==='drop'||t.closest('#drop'))return $('#pin').click();
-  if(t.dataset.fol){const m=me();if(!m)return;const k=t.dataset.fol,f=m.follows||[],nf=f.includes(k)?f.filter(x=>x!==k):[...f,k];const {error}=await sb.from('profiles').update({follows:nf}).eq('id',m.id);if(error)return toast('Could not save. Try again.');m.follows=nf;accView();render();return}
+  if(t.dataset.fol){const m=me();if(!m)return;const k=t.dataset.fol,f=m.follows||[],nf=f.includes(k)?f.filter(x=>x!==k):[...f,k];const {error}=await sb.from('profile_preferences').update({follows:nf}).eq('id',m.id);if(error)return toast('Could not save. Try again.');m.follows=nf;accView();render();return}
   if(t.dataset.del){const {error}=await sb.from('products').delete().eq('id',t.dataset.del);if(error)return toast('Could not delete. Try again.');await loadAll();return accView()}
+  const authMethodButton=t.closest('[data-auth-method]');if(authMethodButton){authMethod=authMethodButton.dataset.authMethod;accView();return}
+  const authChannelButton=t.closest('[data-auth-channel]');if(authChannelButton){authChannel=authChannelButton.dataset.authChannel;accView();return}
+  if(t.id==='toggleLoginMethod'){loginMethod=loginMethod==='password'?'otp':'password';accView();return}
+  if(t.id==='cancelAuthFlow'){authFlow=null;authPending=null;accView();return}
+  if(t.id==='changePassword'){authFlow='change-password';accView();return}
+  if(t.id==='forgotPassword'){
+    if(!sb)return toast('Not connected. Refresh and try again.');
+    try{
+      if(authMethod==='email'){const email=($('#em')?.value||'').trim().toLowerCase();if(!email||!/^\S+@\S+\.\S+$/.test(email))throw new Error('Enter your email address first.');const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:window.location.origin+window.location.pathname});if(error)throw error;toast('If an account matches that address, a recovery email will be sent. Check your inbox and spam folder.');}
+      else{const phone=normalizeAuthPhone($('#ph')?.value||'');const {error}=await sb.auth.signInWithOtp({phone,options:{channel:authChannel,shouldCreateUser:false}});if(error)throw error;authPending={kind:'phone-recovery',method:'phone',identifier:phone,channel:authChannel};authFlow='verify';accView();toast('Enter the code sent to your phone to continue password recovery.');}
+    }catch(err){toast(err.message||'Could not start account recovery. Try again.')}return;
+  }
+  if(t.id==='verifyOtp'){
+    if(!sb||!authPending)return toast('This verification request has expired. Start again.');
+    const token=($('#otpCode')?.value||'').trim();if(!/^\d{6}$/.test(token))return toast('Enter the 6-digit code.');
+    t.disabled=true;try{const p=authPending;let result;if(p.method==='email')result=await sb.auth.verifyOtp({email:p.identifier,token,type:'email'});else result=await sb.auth.verifyOtp({phone:p.identifier,token,type:'sms'});if(result.error)throw result.error;
+      if(p.kind==='phone-recovery'){authPending=null;authFlow='reset-password-phone';accView();toast('Phone verified. Choose your new password.');return}
+      authPending=null;authFlow=null;await loadAll();accView();toast(p.kind==='signup'?'Contact verified. Welcome to Thriftmall!':'You are now signed in.');
+    }catch(err){toast(err.message||'That code could not be verified. Request a new one and try again.');t.disabled=false}return;
+  }
+  if(t.id==='resendOtp'){
+    if(!sb||!authPending)return toast('This verification request has expired. Start again.');
+    t.disabled=true;try{const p=authPending;let result;if(p.kind==='signup'){result=p.method==='email'?await sb.auth.resend({type:'signup',email:p.identifier}):await sb.auth.resend({type:'sms',phone:p.identifier})}else{result=p.method==='email'?await sb.auth.signInWithOtp({email:p.identifier,options:{shouldCreateUser:false}}):await sb.auth.signInWithOtp({phone:p.identifier,options:{channel:p.channel||'sms',shouldCreateUser:false}})}if(result.error)throw result.error;toast('A new code was requested. If phone delivery was selected, this resend uses SMS.');}catch(err){toast(err.message||'Could not resend the code. Please wait and try again.')}finally{t.disabled=false}return;
+  }
+  if(t.id==='saveNewPassword'){
+    const pw=$('#newPw')?.value||'',confirm=$('#confirmPw')?.value||'';if(pw.length<8)return toast('Use a password with at least 8 characters.');if(pw!==confirm)return toast('The passwords do not match.');t.disabled=true;
+    try{const {error}=await sb.auth.updateUser({password:pw});if(error)throw error;authFlow=null;authPending=null;await loadAll();accView();toast('Your password has been updated.');}catch(err){toast(err.message||'Could not update the password. Try again.');t.disabled=false}return;
+  }
+  if(t.id==='saveProfile'){
+    const m=me();if(!sb||!m)return toast('Please log in again.');const name=$('#profileName')?.value.trim()||'';if(!name)return toast('Enter your name.');const patch={name};
+    if(m.type==='seller'){const shop=$('#profileShop')?.value.trim()||'',loc=$('#profileLocation')?.value.trim()||'',wa=$('#profileWa')?.value.trim()||'';if(!shop||!loc||waNum(wa).length<9)return toast('Enter your shop name, location and a valid WhatsApp number.');Object.assign(patch,{shop,loc,wa});}
+    t.disabled=true;try{const {error}=await sb.from('profiles').update(patch).eq('id',m.id);if(error)throw error;await loadAll();accView();toast(m.type==='seller'?'Your shop settings are saved.':'Your account details are saved.');}catch(err){toast(err.message||'Could not save your details. Check your connection and permissions.');t.disabled=false}return;
+  }
   if(t.id==='go'){
     if(!sb)return toast('Not connected. Refresh and try again.');
-    const em=$('#em').value.trim().toLowerCase(),pw=$('#pw').value;
-    if(!em||!pw)return toast('Enter your email and password.');
-    t.disabled=true;
-    try{
-      if(mode==='login'){
-        const {error}=await sb.auth.signInWithPassword({email:em,password:pw});
-        if(error){const m=(error.message||'').toLowerCase();throw new Error(m.includes('confirm')?'Please confirm your email first. Check your inbox and spam folder.':m.includes('invalid')?'Email or password is wrong. Check them or create an account.':'Could not log in: '+error.message)}
-      }else{
-        const fn=$('#fn').value.trim();if(!fn)throw new Error('Enter your full name.');
-        if(pw.length<6)throw new Error('Use a password of at least 6 characters.');
-        const meta={type:acct,name:fn};
-        if(acct==='seller'){const shop=$('#sh').value.trim(),loc=$('#lo').value.trim(),wa=$('#wa').value.trim();if(!shop||!loc||waNum(wa).length<9)throw new Error('Enter your shop name, location and a valid WhatsApp number.');Object.assign(meta,{shop,loc,wa})}
-        const {data,error}=await sb.auth.signUp({email:em,password:pw,options:{data:meta}});
-        if(error)throw error;
-        if(!data.session){mode='login';accView();toast('Check your email to confirm your account, then log in.');return}
-      }
-      await loadAll();accView();toast('Welcome to Thriftmall!');
-    }catch(err){toast(err.message||'Something went wrong. Try again.');t.disabled=false}
-    return;
+    const email=($('#em')?.value||'').trim().toLowerCase();let phone='';const password=$('#pw')?.value||'';
+    try{if(authMethod==='email'){if(!email||!/^\S+@\S+\.\S+$/.test(email))throw new Error('Enter a valid email address.')}else{phone=normalizeAuthPhone($('#ph')?.value||'')}}catch(err){return toast(err.message)}
+    if(mode==='signup'){
+      const name=$('#fn')?.value.trim()||'';if(!name)return toast('Enter your full name.');if(password.length<8)return toast('Use a password with at least 8 characters.');
+      const metadata={type:acct,name};if(acct==='seller'){const shop=$('#sh')?.value.trim()||'',loc=$('#lo')?.value.trim()||'',wa=$('#wa')?.value.trim()||'';if(!shop||!loc||waNum(wa).length<9)return toast('Enter your shop name, location and a valid WhatsApp number.');Object.assign(metadata,{shop,loc,wa});}
+      t.disabled=true;try{const options={data:metadata};if(authMethod==='phone')options.channel=authChannel;else options.emailRedirectTo=window.location.origin+window.location.pathname;const credentials=authMethod==='email'?{email,password,options}:{phone,password,options};const {data,error}=await sb.auth.signUp(credentials);if(error)throw error;
+        if(data.session){await sb.auth.signOut();throw new Error('Contact verification appears to be disabled in Supabase. Enable email/phone confirmations and configure the OTP templates/provider before allowing registration.');}
+        authPending={kind:'signup',method:authMethod,identifier:authMethod==='email'?email:phone,channel:authMethod==='phone'?authChannel:null};authFlow='verify';accView();toast('Enter the verification code sent to your contact.');
+      }catch(err){toast(err.message||'Could not create the account. Check the settings and try again.');t.disabled=false}return;
+    }
+    if(loginMethod==='otp'){
+      t.disabled=true;try{const result=authMethod==='email'?await sb.auth.signInWithOtp({email,options:{shouldCreateUser:false}}):await sb.auth.signInWithOtp({phone,options:{channel:authChannel,shouldCreateUser:false}});if(result.error)throw result.error;authPending={kind:'login',method:authMethod,identifier:authMethod==='email'?email:phone,channel:authMethod==='phone'?authChannel:null};authFlow='verify';accView();toast('If the account can sign in this way, a one-time code has been sent.');}catch(err){toast(err.message||'Could not send a sign-in code. Try again.');t.disabled=false}return;
+    }
+    if(!password)return toast('Enter your password.');t.disabled=true;try{const credentials=authMethod==='email'?{email,password}:{phone,password};const {error}=await sb.auth.signInWithPassword(credentials);if(error){const m=(error.message||'').toLowerCase();throw new Error(m.includes('confirm')?'Please verify your email or phone first.':m.includes('invalid')?'Contact or password is incorrect. Check them or use account recovery.':'Could not log in: '+error.message)}authFlow=null;authPending=null;await loadAll();accView();toast('Welcome back to Thriftmall!');}catch(err){toast(err.message||'Could not log in. Try again.');t.disabled=false}return;
   }
+  
   if(t.id==='addP'){
     const u=me(),n=$('#pn').value.trim(),p=parseFloat($('#pp').value),s=$('#ps').value.trim();
     if(!photo)return toast('Add a product photo first.');
@@ -360,7 +412,7 @@ document.addEventListener('click',async e=>{
   }
 });
 document.addEventListener('change',e=>{
-  if(e.target.id==='opt'){const m=me(),on=e.target.checked;sb.from('profiles').update({updates_opt_in:on}).eq('id',m.id).then(({error})=>{if(error)toast('Could not save. Try again.');else{m.opt=on;toast(on?'Updates turned on.':'Updates turned off.')}});return}
+  if(e.target.id==='opt'){const m=me(),on=e.target.checked;sb.from('profile_preferences').update({updates_opt_in:on}).eq('id',m.id).then(({error})=>{if(error)toast('Could not save. Try again.');else{m.opt=on;toast(on?'Updates turned on.':'Updates turned off.')}});return}
   const f=e.target.files&&e.target.files[0];if(!f)return;
   if(e.target.id==='lgIn')setPhoto(f,async d=>{try{const url=await up(d,'logo');const {error}=await sb.from('profiles').update({logo_url:url}).eq('id',meId);if(error)throw error;await loadAll();accView()}catch(err){console.error(err);toast('Could not save the logo.')}});
   if(e.target.id==='pin')setPhoto(f,showPhoto);
