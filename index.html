@@ -281,6 +281,7 @@ function accView() {
       <button class="btn dark full" id="sendRecovery">Send recovery code</button>
       <p class="by" style="margin-top:12px">For phone recovery, your number must already be registered and phone OTP must be enabled.</p>
       <p style="text-align:center;margin-top:12px"><button class="link" id="backLogin">Back to log in</button></p>`;
+    syncPhoneChannelButtons(b);
     return;
   }
   if (mode === 'reset') {
@@ -350,6 +351,14 @@ function accView() {
     ${mode === 'signup' ? '<p class="by" style="margin-top:10px">A verification code will be sent to your contact method. By creating an account you agree to our <button class="link" data-doc="terms">Terms</button> and <button class="link" data-doc="privacy">Privacy Policy</button>.</p>' : `<p style="text-align:center;margin-top:12px"><button class="link" data-action="forgot">Forgot password?</button></p>`}
     <p style="text-align:center;margin-top:14px">${mode === 'login' ? `No account? <button class="link" id="sw">Create a new account</button>` : `Have an account? <button class="link" id="sw">Log in</button>`}</p>
     ${mode === 'login' ? '<p class="by" style="text-align:center;margin-top:8px">Buying? You can browse without an account. Email and phone verification is required when registering.</p>' : ''}`;
+  syncPhoneChannelButtons(b);
+}
+function syncPhoneChannelButtons(root) {
+  root.querySelectorAll('[data-phone-channel]').forEach(button => {
+    const selected = button.dataset.phoneChannel === phoneOtpChannel;
+    button.classList.toggle('on', selected);
+    button.setAttribute('aria-pressed', String(selected));
+  });
 }
 function openAcc(m) { if (m) mode = m; else if (!me()) mode = 'login'; if (m === 'signup') acct = 'seller'; accView(); $('#accM').classList.add('show'); }
 function safePhone(value) {
@@ -601,7 +610,7 @@ document.addEventListener('click',async e=>{
   if(t.dataset.method){authMethod=t.dataset.method;return accView()}
   if(t.dataset.phoneChannel){
     phoneOtpChannel=t.dataset.phoneChannel;
-    document.querySelectorAll('[data-phone-channel]').forEach(button=>button.classList.toggle('on',button.dataset.phoneChannel===phoneOtpChannel));
+    syncPhoneChannelButtons($('#accBody'));
     return;
   }
   if(t.dataset.action==='forgot'){mode='forgot';return accView()}
