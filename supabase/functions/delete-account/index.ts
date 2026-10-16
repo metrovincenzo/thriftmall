@@ -14,6 +14,18 @@ function reply(status: number, body: Record<string, unknown>) {
   });
 }
 
+function getAuthTime(authHeader: string): number | null {
+  const token = authHeader.slice("Bearer ".length).split(".")[1];
+  if (!token) return null;
+  try {
+    const base64 = token.replace(/-/g, "+").replace(/_/g, "/");
+    const payload = JSON.parse(atob(base64.padEnd(Math.ceil(base64.length / 4) * 4, "=")));
+    return typeof payload.auth_time === "number" ? payload.auth_time : null;
+  } catch {
+    return null;
+  }
+}
+
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   if (req.method !== "POST") return reply(405, { error: "Method not allowed." });
@@ -34,6 +46,14 @@ Deno.serve(async (req: Request) => {
   });
   const { data: { user }, error: userError } = await userClient.auth.getUser();
   if (userError || !user) return reply(401, { error: "Your session has expired. Sign in again." });
+
+  // Require a recently authenticated session as a server-side safeguard.
+  // The website also re-checks the password before invoking this function.
+  const authTime = getAuthTime(authHeader);
+  const now = Math.floor(Date.now() / 1000);
+  if (authTime === null || authTime > now + 30 || now - authTime > 300) {
+    return reply(401, { error: "For your security, re-enter your password and try again." });
+  }
 
   let body: { confirm?: string };
   try {
