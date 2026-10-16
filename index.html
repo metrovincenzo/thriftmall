@@ -122,6 +122,48 @@ footer a:not(.wm),footer .fl{text-decoration:none;display:block;padding:4px 0;fo
 @media(max-width:900px){.hero .wrap,.invite .wrap,footer .wrap{grid-template-columns:1fr}.jn{grid-template-columns:1fr}.fresh,.g4{grid-template-columns:1fr 1fr}.how{grid-template-columns:1fr 1fr}.idx i{display:none}.idx a{grid-template-columns:40px 1fr}}
 @media(max-width:700px){.nav a.l{display:none}.two{grid-template-columns:1fr}.hero{padding-top:32px}.hero .btn+.tl{display:block;width:max-content;margin:20px 0 0}.sh{flex-direction:column;align-items:flex-start}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+
+/* Spacious seller workspace */
+.modal:has(.tm-sd){padding:12px;align-items:flex-start}
+.box:has(.tm-sd){width:min(1480px,calc(100vw - 24px));max-width:none;padding:clamp(18px,3vw,38px);margin:10px auto}
+.tm-sd{color:var(--ink)}
+.tm-sd *{min-width:0}
+.tm-sd-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;padding:0 46px 24px 0;border-bottom:1px solid var(--rule);margin-bottom:24px}
+.tm-sd-head h2{font-size:clamp(2rem,3vw,2.8rem);margin:6px 0 8px}
+.tm-sd-head p{color:var(--mute)}
+.tm-sd-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:28px}
+.tm-sd-kpi{background:#fffdf7;border:1px solid var(--rule);padding:18px 20px}
+.tm-sd-kpi span{display:block;color:var(--mute);font-size:.83rem;margin-bottom:8px}
+.tm-sd-kpi strong{font-family:Fraunces,Georgia,serif;font-size:1.8rem;font-weight:400;line-height:1.1}
+.tm-sd-layout{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(300px,.8fr);gap:24px;align-items:start}
+.tm-sd-panel{border:1px solid var(--rule);background:rgba(250,247,239,.72);padding:clamp(16px,2vw,26px);margin-bottom:22px}
+.tm-sd-panel-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:18px}
+.tm-sd-panel h3{font-size:1.45rem;margin-bottom:5px}
+.tm-sd-panel-head p{color:var(--mute);font-size:.9rem}
+.tm-sd-tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.tm-sd-tools input,.tm-sd-tools select{min-width:150px;flex:1;padding:11px 12px;border:1px solid var(--rule);background:#fffdf7}
+.tm-sd-list{display:grid;gap:0}
+.tm-sd-product{display:grid;grid-template-columns:76px minmax(140px,1.8fr) minmax(90px,.8fr) minmax(80px,.7fr) minmax(85px,.7fr) auto;align-items:center;gap:14px;padding:14px 0;border-top:1px solid var(--rule)}
+.tm-sd-product:first-child{border-top:1px solid var(--ink)}
+.tm-sd-thumb{width:76px;height:86px;background:var(--tile) center/cover;border:1px solid var(--rule)}
+.tm-sd-product-name{font-weight:700;overflow-wrap:anywhere}
+.tm-sd-product-meta{font-size:.83rem;color:var(--mute);margin-top:4px}
+.tm-sd-cell-label{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--mute);display:block;margin-bottom:4px}
+.tm-sd-status{display:inline-block;background:#e5e8d9;color:#3f4a2d;padding:4px 8px;font-size:.75rem;white-space:nowrap}
+.tm-sd-price{font-family:Fraunces,Georgia,serif;font-size:1.15rem;white-space:nowrap}
+.tm-sd-delete{color:var(--ox);text-decoration:underline;text-underline-offset:3px;font-size:.86rem;padding:10px}
+.tm-sd-empty{padding:36px 18px;text-align:center;border-top:1px solid var(--rule);color:var(--mute)}
+.tm-sd-form .f{margin-bottom:15px}
+.tm-sd-form .drop{background:#fffdf7;min-height:145px;display:grid;align-content:center}
+.tm-sd-form .btn{letter-spacing:.08em}
+.tm-sd-settings{border-top:1px solid var(--rule);padding-top:22px;margin-top:24px}
+.tm-sd-settings h3{margin-bottom:14px}
+.tm-sd-settings .two{gap:14px}
+.tm-sd-footer{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-top:18px;margin-top:18px;border-top:1px solid var(--rule)}
+.tm-sd-footer p{font-size:.85rem;color:var(--mute)}
+.tm-sd .x{position:fixed;top:22px;right:28px;z-index:5;background:var(--paper);border:1px solid var(--rule)}
+@media(max-width:1100px){.tm-sd-layout{grid-template-columns:minmax(0,1.25fr) minmax(280px,.8fr)}.tm-sd-product{grid-template-columns:64px minmax(120px,1.5fr) minmax(75px,.8fr) minmax(75px,.7fr) auto}.tm-sd-product .tm-sd-condition{display:none}.tm-sd-thumb{width:64px;height:74px}}
+@media(max-width:780px){.modal:has(.tm-sd){padding:0}.box:has(.tm-sd){width:100%;min-height:100dvh;margin:0;padding:22px 16px 32px;border:0}.tm-sd-head{padding-right:42px;flex-direction:column}.tm-sd-kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.tm-sd-kpi{padding:14px}.tm-sd-layout{grid-template-columns:1fr}.tm-sd-product{grid-template-columns:60px minmax(0,1fr) auto;gap:12px;padding:13px 0}.tm-sd-thumb{width:60px;height:72px;grid-row:span 2}.tm-sd-product .tm-sd-category,.tm-sd-product .tm-sd-condition{display:none}.tm-sd-product-main{grid-column:2;grid-row:1}.tm-sd-product-price{grid-column:2;grid-row:2}.tm-sd-product-actions{grid-column:3;grid-row:1/3}.tm-sd-panel-head{align-items:flex-start;flex-direction:column}.tm-sd-footer{align-items:flex-start;flex-direction:column}.tm-sd .x{position:absolute;top:12px;right:12px}}
 </style></head><body>
 <a class="skip" href="#rail">Skip to the shop</a>
 <div class="strip">Prices in US$ &middot; Pay the seller directly on WhatsApp</div>
@@ -292,32 +334,84 @@ function accView() {
       <button class="btn dark full" id="setPassword">Save new password</button>`;
     return;
   }
+
   if (u && u.type === 'seller') {
     const mine = prods.filter(p => p.sid === u.id);
+    const clothing = mine.filter(p => p.cat === 'Clothing').length;
+    const accessories = mine.filter(p => p.cat === 'Accessories').length;
+    const rare = mine.filter(p => p.cat === 'Rare Finds').length;
     photo = null;
-    b.innerHTML = `<h2>${esc(u.shop || 'Your shop')}</h2>
-      <p class="by" style="margin-bottom:14px">Seller dashboard &middot; ${esc(u.name)}, ${esc(u.loc || '')}</p>
-      <section style="border-top:1px solid var(--rule);padding-top:16px">
-        <h3 style="font-size:1.1rem;margin-bottom:10px">Shop settings</h3>
-        <div class="f"><label for="profileName">Your name</label><input id="profileName" value="${esc(u.name || '')}" autocomplete="name"></div>
-        <div class="f"><label for="profileShop">Shop name</label><input id="profileShop" value="${esc(u.shop || '')}" autocomplete="organization"></div>
-        <div class="two"><div class="f"><label for="profileLocation">Location</label><input id="profileLocation" value="${esc(u.loc || '')}" placeholder="Harare, Avondale"></div><div class="f"><label for="profileWhatsApp">Public WhatsApp</label><input id="profileWhatsApp" type="tel" value="${esc(u.wa || '')}" placeholder="+263 77 123 4567"></div></div>
-        <div class="sw"><div class="lg" id="lgPrev" style="${safeImageCss(u.logo)}"></div><div><b>Shop logo or photo</b><br><button class="link" id="lgBtn">Upload or change image</button><input type="file" id="lgIn" accept="image/jpeg,image/png,image/webp" hidden></div></div>
-        <p class="by" style="margin-bottom:12px">Your login phone number and your public WhatsApp contact are separate.</p>
-        <button class="btn dark full" id="saveProfile">Save shop settings</button>
-      </section>
-      <section style="border-top:1px solid var(--rule);margin-top:22px;padding-top:18px">
-        <h3 style="font-size:1.1rem;margin-bottom:8px">Add a product</h3>
-        <div class="f"><div class="drop" id="drop"><b>Drag a photo here or tap to upload</b><br><small>JPEG, PNG or WebP · From your phone or computer</small><img class="prev" id="pv" hidden alt="Product preview"></div><input type="file" id="pin" accept="image/jpeg,image/png,image/webp" hidden></div>
-        <div class="f"><label for="pn">Product name</label><input id="pn" maxlength="120" placeholder="e.g. 90s Levi's denim jacket"></div>
-        <div class="two"><div class="f"><label for="pp">Price (US$)</label><input id="pp" type="number" min="0" step="0.01"></div><div class="f"><label for="ps">Size</label><input id="ps" placeholder="M, 32, UK 8"></div></div>
-        <div class="two"><div class="f"><label for="pc">Condition</label><select id="pc"><option>Like new</option><option>Good</option><option>Fair, well loved</option><option>Needs repair</option></select></div><div class="f"><label for="pk">Category</label><select id="pk"><option>Accessories</option><option>Clothing</option><option>Rare Finds</option></select></div></div>
-        <button class="btn dark full" id="addP">Add to the mall</button>
-        <h3 style="font-size:1.1rem;margin:20px 0 6px">Your products (${mine.length})</h3>
-        ${mine.map(p => `<div class="mine"><i style="${safeImageCss(p.img)}"></i><span>${esc(p.name)}<br>${usd(p.price)}</span><button class="link" data-del="${p.id}">Delete</button></div>`).join('') || '<p class="by">Nothing listed yet.</p>'}
+    b.innerHTML = `<div class="tm-sd">
+      <header class="tm-sd-head">
+        <div><div class="eyebrow">Seller workspace</div><h2>${esc(u.shop || 'Your shop')}</h2><p>Manage your listings, keep your shop details current, and add new finds.</p><p class="by" style="margin-top:5px">${esc(u.name)}, ${esc(u.loc || '')}</p></div>
+        <button class="btn dark" id="sdAddJump" type="button">＋ Add product</button>
+      </header>
+      <div class="tm-sd-kpis" aria-label="Listing overview">
+        <div class="tm-sd-kpi"><span>Total listings</span><strong>${mine.length}</strong></div>
+        <div class="tm-sd-kpi"><span>Clothing</span><strong>${clothing}</strong></div>
+        <div class="tm-sd-kpi"><span>Accessories</span><strong>${accessories}</strong></div>
+        <div class="tm-sd-kpi"><span>Rare finds</span><strong>${rare}</strong></div>
+      </div>
+      <div class="tm-sd-layout">
+        <section class="tm-sd-panel" id="sdCatalog">
+          <div class="tm-sd-panel-head"><div><h3>Your products</h3><p>Every listing in one place. Search and filter to find an item quickly.</p></div><span class="tm-sd-status">${mine.length} listed</span></div>
+          <div class="tm-sd-tools"><input id="sellerSearch" type="search" placeholder="Search your products…" aria-label="Search your products"><select id="sellerCategory" aria-label="Filter by category"><option value="">All categories</option><option>Clothing</option><option>Accessories</option><option>Rare Finds</option></select><select id="sellerSort" aria-label="Sort products"><option value="newest">Newest first</option><option value="name">Name A–Z</option><option value="price-low">Price: low to high</option><option value="price-high">Price: high to low</option></select></div>
+          <div class="tm-sd-list" id="sellerListings">
+            ${mine.length ? mine.slice().reverse().map(p => `<article class="tm-sd-product" data-seller-row data-name="${esc(p.name).toLowerCase()}" data-category="${esc(p.cat)}" data-price="${Number(p.price)||0}" data-created="${p.id}">
+              <div class="tm-sd-thumb" style="${safeImageCss(p.img)}" role="img" aria-label="${esc(p.name)}"></div>
+              <div class="tm-sd-product-main"><div class="tm-sd-product-name">${esc(p.name)}</div><div class="tm-sd-product-meta">Size ${esc(p.size)} · ${esc(p.cond)}</div></div>
+              <div class="tm-sd-category"><span class="tm-sd-cell-label">Category</span>${esc(p.cat)}</div>
+              <div class="tm-sd-condition"><span class="tm-sd-cell-label">Condition</span>${esc(p.cond)}</div>
+              <div class="tm-sd-product-price"><span class="tm-sd-cell-label">Price</span><span class="tm-sd-price">${usd(p.price)}</span></div>
+              <div class="tm-sd-product-actions"><span class="tm-sd-status">Listed</span><button class="tm-sd-delete" data-del="${p.id}" aria-label="Delete ${esc(p.name)}">Delete</button></div>
+            </article>`).join('') : '<div class="tm-sd-empty"><h3>No products yet</h3><p>Add your first thrift find using the form beside this list. Your listings will appear here.</p></div>'}
+          </div>
+          <p class="by" id="sellerNoResults" hidden style="padding:20px 0">No products match those filters. Try a different search.</p>
+        </section>
+        <aside>
+          <section class="tm-sd-panel tm-sd-form" id="sdAddForm">
+            <div class="tm-sd-panel-head"><div><h3>Add a product</h3><p>Clear details help buyers decide faster.</p></div></div>
+            <div class="f"><div class="drop" id="drop"><b>Drag a photo here or tap to upload</b><br><small>JPEG, PNG or WebP · From your phone or computer</small><img class="prev" id="pv" hidden alt="Product preview"></div><input type="file" id="pin" accept="image/jpeg,image/png,image/webp" hidden></div>
+            <div class="f"><label for="pn">Product name</label><input id="pn" maxlength="120" placeholder="e.g. 90s Levi's denim jacket"></div>
+            <div class="two"><div class="f"><label for="pp">Price (US$)</label><input id="pp" type="number" min="0" step="0.01" placeholder="0.00"></div><div class="f"><label for="ps">Size</label><input id="ps" placeholder="M, 32, UK 8"></div></div>
+            <div class="two"><div class="f"><label for="pc">Condition</label><select id="pc"><option>Like new</option><option>Good</option><option>Fair, well loved</option><option>Needs repair</option></select></div><div class="f"><label for="pk">Category</label><select id="pk"><option>Accessories</option><option>Clothing</option><option>Rare Finds</option></select></div></div>
+            <button class="btn dark full" id="addP">Add to ThriftMall</button>
+            <p class="by" style="margin-top:10px">Use a real photo and describe the item's condition accurately.</p>
+          </section>
+        </aside>
+      </div>
+      <section class="tm-sd-panel tm-sd-settings">
+        <h3>Shop settings</h3><p class="by" style="margin-bottom:18px">These details appear to buyers on ThriftMall.</p>
+        <div class="tm-sd-layout">
+          <div>
+            <div class="f"><label for="profileName">Your name</label><input id="profileName" value="${esc(u.name || '')}" autocomplete="name"></div>
+            <div class="f"><label for="profileShop">Shop name</label><input id="profileShop" value="${esc(u.shop || '')}" autocomplete="organization"></div>
+            <div class="two"><div class="f"><label for="profileLocation">Location</label><input id="profileLocation" value="${esc(u.loc || '')}" placeholder="Harare, Avondale"></div><div class="f"><label for="profileWhatsApp">Public WhatsApp</label><input id="profileWhatsApp" type="tel" value="${esc(u.wa || '')}" placeholder="+263 77 123 4567"></div></div>
+            <p class="by" style="margin-bottom:12px">Your login phone number and public WhatsApp contact are separate.</p><button class="btn dark" id="saveProfile">Save shop settings</button>
+          </div>
+          <div><div class="sw"><div class="lg" id="lgPrev" style="${safeImageCss(u.logo)}"></div><div><b>Shop logo or photo</b><br><button class="link" id="lgBtn">Upload or change image</button><input type="file" id="lgIn" accept="image/jpeg,image/png,image/webp" hidden></div></div><p class="by">A clear shop image helps buyers recognise your store.</p></div>
+        </div>
       </section>
       ${security}
-      <button class="btn full" style="margin-top:18px" id="out">Log out</button>`;
+      <div class="tm-sd-footer"><p>Product management and shop settings are saved to your ThriftMall account.</p><button class="btn" id="out">Log out</button></div>
+    </div>`;
+    const sdAddJump = $('#sdAddJump');
+    if (sdAddJump) sdAddJump.addEventListener('click', () => $('#sdAddForm')?.scrollIntoView({behavior:'smooth',block:'start'}));
+    const applySellerFilters = () => {
+      const q = ($('#sellerSearch')?.value || '').trim().toLowerCase();
+      const cat = $('#sellerCategory')?.value || '';
+      const sort = $('#sellerSort')?.value || 'newest';
+      const list = $('#sellerListings');
+      if (!list) return;
+      const rows = [...list.querySelectorAll('[data-seller-row]')];
+      rows.sort((a,b) => sort === 'name' ? a.dataset.name.localeCompare(b.dataset.name) : sort === 'price-low' ? Number(a.dataset.price)-Number(b.dataset.price) : sort === 'price-high' ? Number(b.dataset.price)-Number(a.dataset.price) : Number(b.dataset.created)-Number(a.dataset.created));
+      rows.forEach(row => { list.appendChild(row); row.hidden = !(row.dataset.name.includes(q) && (!cat || row.dataset.category === cat)); });
+      const visible = rows.filter(row => !row.hidden).length;
+      const empty = $('#sellerNoResults'); if (empty) empty.hidden = visible > 0 || rows.length === 0;
+    };
+    $('#sellerSearch')?.addEventListener('input', applySellerFilters);
+    $('#sellerCategory')?.addEventListener('change', applySellerFilters);
+    $('#sellerSort')?.addEventListener('change', applySellerFilters);
     return;
   }
   if (u) {
