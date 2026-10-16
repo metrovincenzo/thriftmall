@@ -363,7 +363,7 @@ function accView() {
               <div class="tm-sd-category"><span class="tm-sd-cell-label">Category</span>${esc(p.cat)}</div>
               <div class="tm-sd-condition"><span class="tm-sd-cell-label">Condition</span>${esc(p.cond)}</div>
               <div class="tm-sd-product-price"><span class="tm-sd-cell-label">Price</span><span class="tm-sd-price">${usd(p.price)}</span></div>
-              <div class="tm-sd-product-actions"><span class="tm-sd-status">Listed</span><button class="tm-sd-delete" data-del="${p.id}" aria-label="Delete ${esc(p.name)}">Delete</button></div>
+              <div class="tm-sd-product-actions"><span class="tm-sd-status">Listed</span><button class="tm-sd-delete" data-edit="${p.id}" aria-label="Edit ${esc(p.name)}">Edit</button><button class="tm-sd-delete" data-del="${p.id}" aria-label="Delete ${esc(p.name)}">Delete</button></div>
             </article>`).join('') : '<div class="tm-sd-empty"><h3>No products yet</h3><p>Add your first thrift find using the form beside this list. Your listings will appear here.</p></div>'}
           </div>
           <p class="by" id="sellerNoResults" hidden style="padding:20px 0">No products match those filters. Try a different search.</p>
@@ -700,6 +700,27 @@ document.addEventListener('click',async e=>{
   if(t.id==='lgBtn')return $('#lgIn').click();
   if(t.id==='drop'||t.closest('#drop'))return $('#pin').click();
   if(t.dataset.fol){const m=me();if(!m)return;const k=t.dataset.fol,f=m.follows||[],nf=f.includes(k)?f.filter(x=>x!==k):[...f,k];const {error}=await sb.from('profile_preferences').upsert({user_id:m.id,follows:nf,updates_opt_in:!!m.opt},{onConflict:'user_id'});if(error)return toast('Could not save your preferences. Try again.');m.follows=nf;accView();render();return}
+  if(t.dataset.edit){
+    const id=t.dataset.edit, product=prods.find(p=>String(p.id)===String(id)), seller=me();
+    if(!product||!seller||String(product.sid)!==String(seller.id))return toast('Could not find that product. Refresh and try again.');
+    const name=prompt('Product name:',product.name);if(name===null)return;
+    const cleanName=name.trim();if(!cleanName)return toast('Product name cannot be empty.');
+    const priceText=prompt('Price in US$:',String(product.price));if(priceText===null)return;
+    const price=Number(priceText);if(priceText.trim()===''||!Number.isFinite(price)||price<0)return toast('Enter a valid price of US$0 or more.');
+    const size=prompt('Size:',product.size);if(size===null)return;
+    if(!size.trim())return toast('Size cannot be empty.');
+    const condition=prompt('Condition (Like new, Good, Fair, well loved, or Needs repair):',product.cond);if(condition===null)return;
+    const allowedConditions=['Like new','Good','Fair, well loved','Needs repair'];
+    if(!allowedConditions.includes(condition.trim()))return toast('Choose one of the listed condition options.');
+    const category=prompt('Category (Clothing, Accessories, or Rare Finds):',product.cat);if(category===null)return;
+    const allowedCategories=['Clothing','Accessories','Rare Finds'];
+    if(!allowedCategories.includes(category.trim()))return toast('Choose Clothing, Accessories, or Rare Finds.');
+    const patch={name:cleanName,price,size:size.trim(),cond:condition.trim(),cat:category.trim()};
+    const {error}=await sb.from('products').update(patch).eq('id',id).eq('seller_id',seller.id);
+    if(error){console.error(error);return toast('Could not save your changes. Please try again.')}
+    await loadAll();accView();toast('Product updated.');
+    return;
+  }
   if(t.dataset.del){const {error}=await sb.from('products').delete().eq('id',t.dataset.del);if(error)return toast('Could not delete. Try again.');await loadAll();return accView()}
   if(t.dataset.method){authMethod=t.dataset.method;return accView()}
   if(t.dataset.phoneChannel){
