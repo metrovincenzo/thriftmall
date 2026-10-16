@@ -363,7 +363,7 @@ function accView() {
               <div class="tm-sd-category"><span class="tm-sd-cell-label">Category</span>${esc(p.cat)}</div>
               <div class="tm-sd-condition"><span class="tm-sd-cell-label">Condition</span>${esc(p.cond)}</div>
               <div class="tm-sd-product-price"><span class="tm-sd-cell-label">Price</span><span class="tm-sd-price">${usd(p.price)}</span></div>
-              <div class="tm-sd-product-actions"><span class="tm-sd-status">Listed</span><button class="tm-sd-delete" data-edit="${p.id}" aria-label="Edit ${esc(p.name)}">Edit</button><button class="tm-sd-delete" data-del="${p.id}" aria-label="Delete ${esc(p.name)}">Delete</button></div>
+              <div class="tm-sd-product-actions"><span class="tm-sd-status">Listed</span><button class="tm-sd-delete" data-edit="${p.id}" aria-label="Edit details for ${esc(p.name)}">Edit details</button><button class="tm-sd-delete" data-edit-photo="${p.id}" aria-label="Change photo for ${esc(p.name)}">Change photo</button><button class="tm-sd-delete" data-del="${p.id}" aria-label="Delete ${esc(p.name)}">Delete</button></div>
             </article>`).join('') : '<div class="tm-sd-empty"><h3>No products yet</h3><p>Add your first thrift find using the form beside this list. Your listings will appear here.</p></div>'}
           </div>
           <p class="by" id="sellerNoResults" hidden style="padding:20px 0">No products match those filters. Try a different search.</p>
@@ -700,6 +700,24 @@ document.addEventListener('click',async e=>{
   if(t.id==='lgBtn')return $('#lgIn').click();
   if(t.id==='drop'||t.closest('#drop'))return $('#pin').click();
   if(t.dataset.fol){const m=me();if(!m)return;const k=t.dataset.fol,f=m.follows||[],nf=f.includes(k)?f.filter(x=>x!==k):[...f,k];const {error}=await sb.from('profile_preferences').upsert({user_id:m.id,follows:nf,updates_opt_in:!!m.opt},{onConflict:'user_id'});if(error)return toast('Could not save your preferences. Try again.');m.follows=nf;accView();render();return}
+  if(t.dataset.editPhoto){
+    const id=t.dataset.editPhoto, product=prods.find(p=>String(p.id)===String(id)), seller=me();
+    if(!product||!seller||String(product.sid)!==String(seller.id))return toast('Could not find that product. Refresh and try again.');
+    const picker=document.createElement('input');picker.type='file';picker.accept='image/jpeg,image/png,image/webp';
+    picker.onchange=async()=>{
+      const file=picker.files&&picker.files[0];if(!file)return;
+      if(!['image/jpeg','image/png','image/webp'].includes(file.type))return toast('Choose a JPEG, PNG, or WebP image.');
+      if(file.size>8*1024*1024)return toast('Choose an image smaller than 8 MB.');
+      try{
+        const dataUrl=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=reject;reader.readAsDataURL(file)});
+        const img=await up(dataUrl,'p');
+        const {error}=await sb.from('products').update({img_url:img}).eq('id',id).eq('seller_id',seller.id);
+        if(error)throw error;
+        await loadAll();accView();toast('Product photo updated.');
+      }catch(err){console.error(err);toast('Could not update the photo. Please try again.')}
+    };
+    picker.click();return;
+  }
   if(t.dataset.edit){
     const id=t.dataset.edit, product=prods.find(p=>String(p.id)===String(id)), seller=me();
     if(!product||!seller||String(product.sid)!==String(seller.id))return toast('Could not find that product. Refresh and try again.');
