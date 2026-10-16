@@ -669,7 +669,7 @@ async function deleteMyAccount(t) {
     if (reauthError || reauthData.user?.id !== authUser.id) {
       throw new Error('Password could not be verified. Your account has not been deleted.');
     }
-    const { error: deleteError } = await sb.functions.invoke('delete-account', { body: { confirm: 'DELETE' } });
+    const { data: deleteData, error: deleteError } = await sb.functions.invoke('delete-account', { body: { confirm: 'DELETE' } });
     if (deleteError) {
       console.error(deleteError);
       throw new Error('Account deletion could not be completed. Your sign-in remains available; contact support if this repeats.');
@@ -681,7 +681,7 @@ async function deleteMyAccount(t) {
     $('#accM')?.classList.remove('show');
     await loadAll();
     render();
-    toast('Your ThriftMall account and associated data have been deleted.');
+    toast(deleteData?.warning || 'Your ThriftMall account and associated data have been deleted.');
   } catch (error) {
     console.error(error);
     toast(error?.message || 'Could not delete your account. Please try again.');
