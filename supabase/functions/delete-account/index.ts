@@ -77,11 +77,9 @@ Deno.serve(async (req: Request) => {
     paths.push(...(data || []).filter((item) => !!item.id).map((item) => uid + "/" + item.name));
     if (!data || data.length < 100) break;
   }
-  for (let i = 0; i < paths.length; i += 100) {
-    const { error } = await bucket.remove(paths.slice(i, i + 100));
-    if (error) return reply(500, { error: "Could not delete all account photos. Your sign-in remains active; contact support before retrying." });
-  }
-
+  // Keep photos until the account records and Auth user are removed. If a
+  // later database/Auth step fails, the user is less likely to lose photos
+  // while their account is still active.
   const { error: productsError } = await admin.from("products").delete().eq("seller_id", uid);
   if (productsError) return reply(500, { error: "Could not remove your listings. Your sign-in remains active." });
 
@@ -93,6 +91,18 @@ Deno.serve(async (req: Request) => {
 
   const { error: authDeleteError } = await admin.auth.admin.deleteUser(uid);
   if (authDeleteError) return reply(500, { error: "Your profile data was removed, but the sign-in account could not be deleted. Contact support before retrying." });
+
+  // Storage and Postgres cannot be deleted in one transaction. Clean photos
+  // last so a storage failure does not destroy photos before account deletion.
+  for (let i = 0; i < paths.length; i += 100) {
+    const { error } = await bucket.remove(paths.slice(i, i + 100));
+    if (error) {
+      return reply(200, {
+        success: true,
+        warning: "Your account was deleted, but some uploaded photos could not be removed. Contact support for cleanup.",
+      });
+    }
+  }
 
   return reply(200, { success: true });
 });
