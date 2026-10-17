@@ -319,7 +319,7 @@ function accView() {
   if (mode === 'forgot') {
     b.innerHTML = `<h2>Recover your account</h2>
       <p class="by" style="margin-bottom:16px">We'll send a one-time code to a contact method linked to your account.</p>
-      ${mode === 'signup' ? '<div class="seg"><button data-method="email" class="on">Email</button></div>' : '<div class="seg"><button data-method="email" class="${authMethod === \'email\' ? \'on\' : \'\'}">Email</button><button data-method="phone" class="${authMethod === \'phone\' ? \'on\' : \'\'}">Phone</button></div>'}
+      ${mode === 'signup' ? '<div class="seg"><button data-method="email" class="on">Email</button></div>' : `<div class="seg"><button data-method="email" class="${authMethod === 'email' ? 'on' : ''}">Email</button><button data-method="phone" class="${authMethod === 'phone' ? 'on' : ''}">Phone</button></div>`}
     ${authMethod === 'phone' && mode !== 'login' ? '<p class="by" style="margin:-6px 0 8px">Send verification code by</p><div class="seg"><button data-phone-channel="sms">SMS</button><button data-phone-channel="whatsapp">WhatsApp</button></div>' : ''}
       <div class="f"><label for="identifier">${authMethod === 'email' ? 'Email address' : 'Phone number with country code'}</label><input id="identifier" type="${authMethod === 'email' ? 'email' : 'tel'}" autocomplete="${authMethod === 'email' ? 'email' : 'tel'}" placeholder="${authMethod === 'email' ? 'you@example.com' : '+263 77 123 4567'}"></div>
       <button class="btn dark full" id="sendRecovery">Send recovery code</button>
