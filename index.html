@@ -338,7 +338,7 @@ document.addEventListener('click',async e=>{
         if(pw.length<6)throw new Error('Use a password of at least 6 characters.');
         const meta={type:acct,name:fn};
         if(acct==='seller'){const shop=$('#sh').value.trim(),loc=$('#lo').value.trim(),wa=$('#wa').value.trim();if(!shop||!loc||waNum(wa).length<9)throw new Error('Enter your shop name, location and a valid WhatsApp number.');Object.assign(meta,{shop,loc,wa})}
-        const {data,error}=await sb.auth.signUp({email:em,password:pw,options:{data:meta}});
+        const {data,error}=await sb.auth.signUp({email:em,password:pw,options:{data:meta,emailRedirectTo:'https://metrovincenzo.github.io/thriftmall/'}});
         if(error)throw error;
         if(!data.session){mode='login';accView();toast('Check your email to confirm your account, then log in.');return}
       }
