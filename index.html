@@ -583,15 +583,22 @@ async function handleAuth(t) {
       throw error;
     }
     if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
-      mode = 'login'; accView(); toast('If this contact can be registered, a code will arrive shortly. Otherwise, log in or recover your account.'); return;
+      mode = 'login'; accView(); toast(authMethod === 'email' ? 'If this email can be registered, a confirmation link will arrive shortly. Check your inbox, then click the link to verify your account.' : 'If this phone can be registered, a verification code will arrive shortly. Otherwise, log in or recover your account.'); return;
     }
     if (data.session) {
       await sb.auth.signOut(); mode = 'login'; accView();
       toast('Supabase is allowing sign-up without a verification step. Enable email or phone confirmation in Supabase Auth before using registration.');
       return;
     }
+    if (authMethod === 'email') {
+      pendingAuth = null;
+      mode = 'login';
+      accView();
+      toast('Account created. Check your email and click the confirmation link to verify your account. No code is needed.');
+      return;
+    }
     pendingAuth = { method: authMethod, identifier, intent: 'signup', channel: phoneOtpChannel };
-    mode = 'verify'; accView(); toast('A verification code has been requested.');
+    mode = 'verify'; accView(); toast('A verification code has been requested for your phone.');
   } catch (error) {
     toast(authErrorText(error));
   } finally { if (button) button.disabled = false; }
