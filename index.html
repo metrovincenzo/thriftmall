@@ -481,12 +481,22 @@ function safeImageCss(value) {
 function setPhoto(file,after){shrink(file).then(after).catch(()=>toast('Please choose an image file.'))}
 
 const SB_URL='https://vkirepgarlrkfmnzvktj.supabase.co',SB_KEY='sb_publishable_yO_DVXdzCroTjrY5KD4ctQ_DTu4_dmy';
+const emailConfirmationRedirect = /[?&]code=/.test(window.location.search) || /access_token=/.test(window.location.hash);
 try {
   sb = window.supabase.createClient(SB_URL, SB_KEY);
-  sb.auth.onAuthStateChange((event) => {
+  sb.auth.onAuthStateChange((event, session) => {
     if (event === 'PASSWORD_RECOVERY') {
       mode = 'reset';
       setTimeout(() => { accView(); $('#accM').classList.add('show'); }, 0);
+    }
+    if (event === 'SIGNED_IN' && emailConfirmationRedirect && session?.user?.email_confirmed_at) {
+      setTimeout(async () => {
+        await loadAll();
+        mode = 'login';
+        accView();
+        $('#accM').classList.add('show');
+        toast('Email confirmed. Welcome to ThriftMall.');
+      }, 0);
     }
   });
 } catch (err) { console.error(err); }
