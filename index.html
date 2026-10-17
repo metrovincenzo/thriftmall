@@ -564,7 +564,7 @@ async function handleAuth(t) {
       if (!shop || !location || waNum(whatsapp).length < 9) throw new Error('Enter your shop name, location and a valid WhatsApp number.');
       Object.assign(metadata, { shop, loc: location, wa: whatsapp });
     }
-    const options = { data: metadata, emailRedirectTo: window.location.origin + window.location.pathname };
+    const options = { data: metadata, emailRedirectTo: 'https://metrovincenzo.github.io/thriftmall/' };
     const args = authMethod === 'email' ? { email: identifier, password, options } : { phone: identifier, password, options: { data: metadata, channel: phoneOtpChannel } };
     const { data, error } = await sb.auth.signUp(args);
     if (error) {
