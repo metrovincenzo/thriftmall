@@ -24,16 +24,22 @@ an email-provider API key in the page.
 
 For a new Supabase project, open the SQL editor and run
 [`supabase/setup.sql`](./supabase/setup.sql). It creates the tables, signup
-profile trigger, row-level security policies, and image bucket policies
-expected by the app. The app exposes seller shop details and listings
-publicly; buyer profiles and follow/update preferences are only available to
-their signed-in owner. For an existing project, review the SQL and reconcile
-its schema and policies before applying it; do not replace existing tables
-without a backup.
+profile trigger, row-level security policies, image bucket policies, and
+private profile-preference table expected by the app. The app exposes seller
+shop details and listings publicly; buyer profiles and follow/update
+preferences are only available to their signed-in owner.
 
-In Supabase Auth settings, configure the site's local and deployed URLs as
-allowed redirect/site URLs. Use HTTPS in production. Test buyer signup, seller
-signup, email confirmation, product/logo uploads, follows, and seller-owned
+`supabase/setup.sql` is a bootstrap script for a NEW project, not an upgrade
+script. For an existing deployment, review and apply the ordered, versioned
+migrations in [`supabase/migrations/`](./supabase/migrations/) instead. Back
+up and inspect existing schema/policies before applying any SQL.
+
+Follow [Auth configuration](./supabase/AUTH_CONFIGURATION.md) to enable email
+confirmation, configure code-based email templates, and enable phone OTP
+through SMS or (with a supported provider) WhatsApp. Configure the site's
+local and deployed URLs as allowed redirect/site URLs. Use HTTPS in production.
+Test buyer/seller signup, OTP verification, duplicate registration, password
+recovery, profile/shop editing, image uploads, preferences, and seller-owned
 product deletion against the configured project.
 
 ## Deployment
