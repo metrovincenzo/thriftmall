@@ -359,42 +359,52 @@ function buildInvoiceCanvas({s,ps,buyerName,orderRef,date,subtotal}){
   text('ORDER REQUEST • NOT PROOF OF PAYMENT',w-30,y+54,13,'#e8d8b7','Arial','bold','right');
   return canvas;
 }
-async function pay(sid){
+function pay(sid){
   const s=users.find(u=>u.id==sid),ps=cart.map(id=>prods.find(p=>p.id===id)).filter(p=>p&&p.sid==sid);
   if(!s||!ps.length)return toast('Your seller or cart items could not be found. Refresh and try again.');
   const number=waNum(s.wa);
   if(!number||number.length<8||number.length>15)return toast('This seller has no valid WhatsApp number saved. Please contact the seller or ask them to update Shop Settings.');
   const buyerAccount=me()&&me().type==='buyer'?me():null;
-  const buyerLine=buyerAccount?'\nCustomer: '+buyerAccount.name:'';
+  const buyerLine=buyerAccount?'\\nCustomer: '+buyerAccount.name:'';
   const now=new Date();
   const date=now.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
   const orderRef='TM-'+now.getFullYear()+String(now.getMonth()+1).padStart(2,'0')+String(now.getDate()).padStart(2,'0')+'-'+Math.random().toString(36).slice(2,7).toUpperCase();
   const subtotal=ps.reduce((a,p)=>a+Number(p.price||0),0);
-  const lines=ps.map((p,i)=>(String(i+1).padStart(2,'0')+'. '+p.name+'\n    Size: '+(p.size||'Not specified')+' | Qty: 1\n    Unit price: '+usd(p.price)+' | Line total: '+usd(p.price))).join('\n\n');
-  const msg='THRIFTMALL | ORDER SUMMARY\n'+'PRE-LOVED. UNIQUE. SUSTAINABLE.\n'+'--------------------------------\n'+'Order reference: '+orderRef+'\n'+'Date: '+date+'\n'+'Seller: '+s.shop+buyerLine+'\n'+'--------------------------------\n'+'ITEMS ORDERED\n'+lines+'\n'+'--------------------------------\n'+'Subtotal: '+usd(subtotal)+'\n'+'Delivery: To be confirmed with seller\n'+'TOTAL: '+usd(subtotal)+'\n'+'--------------------------------\n'+'PAYMENT & DELIVERY\n'+'Please confirm item availability, delivery cost and payment method before payment. This is an order request, not proof of payment. The seller will confirm the order and next steps here.\n\n'+'Thank you for shopping with ThriftMall and supporting pre-loved fashion.';
+  const lines=ps.map((p,i)=>(String(i+1).padStart(2,'0')+'. '+p.name+'\\n    Size: '+(p.size||'Not specified')+' | Qty: 1\\n    Unit price: '+usd(p.price)+' | Line total: '+usd(p.price))).join('\\n\\n');
+  const msg='THRIFTMALL | ORDER SUMMARY\\n'+'PRE-LOVED. UNIQUE. SUSTAINABLE.\\n'+'--------------------------------\\n'+'Order reference: '+orderRef+'\\n'+'Date: '+date+'\\n'+'Seller: '+s.shop+buyerLine+'\\n'+'--------------------------------\\n'+'ITEMS ORDERED\\n'+lines+'\\n'+'--------------------------------\\n'+'Subtotal: '+usd(subtotal)+'\\n'+'Delivery: To be confirmed with seller\\n'+'TOTAL: '+usd(subtotal)+'\\n'+'--------------------------------\\n'+'PAYMENT & DELIVERY\\n'+'Please confirm item availability, delivery cost and payment method before payment. This is an order request, not proof of payment. The seller will confirm the order and next steps here.\\n\\n'+'Thank you for shopping with ThriftMall and supporting pre-loved fashion.';
   const url='https://wa.me/'+number+'?text='+encodeURIComponent(msg);
   const canvas=buildInvoiceCanvas({s,ps,buyerName:buyerAccount&&buyerAccount.name,orderRef,date,subtotal});
-  try{
-    const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));
-    if(blob&&navigator.share&&navigator.canShare){
-      const file=new File([blob],'ThriftMall-'+orderRef+'.png',{type:'image/png'});
-      if(navigator.canShare({files:[file]})){
-        await navigator.share({files:[file],title:'ThriftMall Order '+orderRef,text:'Please confirm this ThriftMall order and advise payment and delivery.'});
-        toast('Invoice image ready to share. Choose WhatsApp and then select the seller.');
-        return;
-      }
-    }
-  }catch(error){
-    if(error&&error.name==='AbortError')return;
-    console.warn('Invoice image sharing unavailable; opening text checkout instead.',error);
-  }
+  // Open the seller's chat directly from the checkout tap. The image is downloaded separately
+  // because WhatsApp's wa.me links cannot attach a generated image to a specific chat.
+  let chatOpened=false;
   try{
     const popup=window.open(url,'_blank');
-    if(!popup)window.location.assign(url);
-    toast('WhatsApp order opened. To send the designed invoice image, use your browser’s Share or Download option if available.');
+    if(popup)chatOpened=true;
+    else window.location.assign(url);
   }catch(error){
     console.error('Could not open WhatsApp checkout:',error);
     window.location.assign(url);
+  }
+  try{
+    canvas.toBlob(blob=>{
+      if(!blob){
+        toast('Seller chat opened. The invoice image could not be prepared; the order details are in the message.');
+        return;
+      }
+      const imageUrl=URL.createObjectURL(blob);
+      const link=document.createElement('a');
+      link.href=imageUrl;
+      link.download='ThriftMall-'+orderRef+'.png';
+      link.style.display='none';
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(()=>URL.revokeObjectURL(imageUrl),60000);
+      toast('Seller chat opened. Your invoice image is downloading; attach it in the chat before sending if you want to include the picture.');
+    },'image/png');
+  }catch(error){
+    console.warn('Invoice image download unavailable:',error);
+    toast('Seller chat opened with the order details prefilled.');
   }
 }
 
