@@ -185,6 +185,20 @@
     if (S === mine) { S.busy = false; panel(); }
   };
 
+  // Release the temporary PNG URL when the buyer closes the panel.
+  function clearInvoice() {
+    if (S && S.url) {
+      try { URL.revokeObjectURL(S.url); } catch (e) { /* browser cleanup is best-effort */ }
+    }
+    S = null;
+  }
+  document.addEventListener('click', function (e) {
+    if (e.target === modal || (e.target.closest && e.target.closest('#invM [data-close]'))) clearInvoice();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && modal.classList.contains('show')) clearInvoice();
+  });
+
   // ---------- actions (each one is a direct tap, so browsers never block them) ----------
   document.addEventListener('click', async function (e) {
     var t = e.target.closest('#invDl,#invChat,[data-inv]');
