@@ -139,7 +139,20 @@
         '<p class="inv-note">' + (o.canShare ? 'If you use Share, pick WhatsApp and then choose <b>' + esc(o.shop) + '</b> (' + esc(num) + ') yourself. Your phone, not Thriftmall, decides which chat the image goes to. ' : '') +
         'On an iPhone you can also press and hold the picture and choose Add to Photos.</p></div></div>';
     } else {
-      html += '<p class="inv-note" style="margin:14px 0">We could not create the invoice image on this device. You can still message the seller with your order below.</p>';
+      html += '<section class="inv-text" style="margin:16px 0;padding:18px;border:1px solid rgba(27,24,21,.2);background:#f4efe3;color:#1b1815;border-radius:4px">' +
+        '<div style="font-family:Fraunces,Georgia,serif;font-size:1.25rem;color:#6e1f26;font-weight:600">THRIFTMALL <span style="font-family:system-ui,sans-serif;font-size:.75rem;letter-spacing:.12em">ORDER INVOICE</span></div>' +
+        '<div style="margin:8px 0 14px;font-size:.88rem;color:#5b5348">' + esc(o.ref) + ' &middot; ' + esc(o.date) + '</div>' +
+        '<div><b>Seller</b>: ' + esc(o.shop) + (o.loc ? ' &middot; ' + esc(o.loc) : '') + '</div>' +
+        '<div><b>Buyer</b>: ' + esc(o.buyer) + '</div>' +
+        '<hr style="border:0;border-top:1px solid #d7cbb1;margin:14px 0">' +
+        '<div style="display:grid;gap:9px">' + o.items.map(function (it) {
+          return '<div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start"><span>' + esc(it.name) +
+            '<small style="display:block;color:#5b5348">Size: ' + esc(it.size) + ' &middot; Qty: ' + esc(it.qty) + '</small></span><b style="white-space:nowrap">' + esc(usd(it.price)) + '</b></div>';
+        }).join('') + '</div><hr style="border:0;border-top:1px solid #d7cbb1;margin:14px 0">' +
+        '<div style="display:flex;justify-content:space-between;gap:12px;font-size:1.1rem"><b>TOTAL (US$)</b><b style="color:#6e1f26">' + esc(usd(o.total)) + '</b></div>' +
+        '<p style="font-size:.85rem;color:#5b5348;margin:14px 0 0">Please confirm the items, total, payment method and delivery with the seller before paying. Pay the seller directly; Thriftmall does not handle payments.</p>' +
+        '</section><div class="inv-act"><button class="btn" data-inv="copy-text">Copy text invoice</button></div>' +
+        '<p class="inv-note">The image could not be created on this device. This clean text invoice is your fallback—copy it and paste it into the seller chat.</p>';
     }
     html += '<div class="inv-step"><i>' + n + '</i><div><b>Open the chat with ' + esc(o.shop) + '</b> (' + esc(num) + ')' +
       '<div class="inv-act"><a class="btn dark" id="invChat" href="' + esc(o.chat) + '" target="_blank" rel="noopener">Open WhatsApp chat</a></div>' +
@@ -163,7 +176,15 @@
     if (ps.length > 4) lines.push('+ ' + (ps.length - 4) + ' more');
     var text = 'Hi ' + s.shop + ', I would like to order on Thriftmall.\nRef: ' + ref + '\n' + lines.join('\n') + '\nTotal: ' + usd(total) +
       (buyer !== 'Guest buyer' ? '\nName: ' + buyer : '') + '\nI will send the invoice image next.';
-    S = { shop: s.shop, wa: s.wa, ref: ref, total: total, busy: true, url: '', blob: null, name: 'Thriftmall-Invoice-' + ref + '.png',
+    var date = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+    var invoiceItems = ps.map(function (p) { return { name: p.name, size: p.size || 'Size not specified', qty: 1, price: Number(p.price) }; });
+    var textInvoice = 'THRIFTMALL — ORDER INVOICE\\n' + ref + ' | ' + date + '\\nSeller: ' + s.shop +
+      (s.loc ? ' | ' + s.loc : '') + '\\nBuyer: ' + buyer + '\\n\\n' +
+      invoiceItems.map(function (it) { return it.name + ' | Size: ' + it.size + ' | Qty: ' + it.qty + ' | ' + usd(it.price); }).join('\\n') +
+      '\\n\\nTOTAL (US$): ' + usd(total) +
+      '\\n\\nPlease confirm items, total, payment method and delivery with the seller before paying. Pay the seller directly; Thriftmall does not handle payments.';
+    S = { shop: s.shop, wa: s.wa, ref: ref, total: total, buyer: buyer, date: date, loc: s.loc || '', items: invoiceItems, textInvoice: textInvoice,
+      busy: true, url: '', blob: null, name: 'Thriftmall-Invoice-' + ref + '.png',
       chat: 'https://wa.me/' + waNum(s.wa) + '?text=' + encodeURIComponent(text), canShare: false, canCopy: false };
     document.getElementById('cartM').classList.remove('show');
     document.getElementById('invM').classList.add('show');
@@ -172,8 +193,8 @@
     try {
       var cv = await tmInvoiceCanvas({
         ref: ref, shop: s.shop, loc: s.loc || '', buyer: buyer, fmt: usd,
-        date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
-        items: ps.map(function (p) { return { name: p.name, size: p.size, qty: 1, price: p.price }; }), total: total
+        date: date,
+        items: invoiceItems, total: total
       });
       var blob = await new Promise(function (res, rej) { cv.toBlob(function (b) { b ? res(b) : rej(new Error('toBlob returned null')); }, 'image/png'); });
       if (S !== mine) return; // the buyer closed it or started another checkout
@@ -219,6 +240,14 @@
         await navigator.clipboard.write([new ClipboardItem({ 'image/png': S.blob })]);
         say('Image copied. In WhatsApp Web or Desktop, open the chat with ' + S.shop + ', click the message box and press Ctrl+V.');
       } catch (err) { say('Copying was blocked by this browser. Use Save image instead.'); }
+    }
+    if (t.dataset.inv === 'copy-text') {
+      try {
+        await navigator.clipboard.writeText(S.textInvoice);
+        say('Text invoice copied. Open the chat with ' + S.shop + ' and paste it into the message box.');
+      } catch (err) {
+        say('Copying was blocked by this browser. Select and copy the invoice text above, then paste it into the seller chat.');
+      }
     }
   });
 })();
