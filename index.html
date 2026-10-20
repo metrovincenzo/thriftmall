@@ -285,10 +285,20 @@ function openCart(){
   $('#cartM').classList.add('show');
 }
 function pay(sid){
-  const s=users.find(u=>u.id==sid),ps=cart.map(id=>prods.find(p=>p.id===id)).filter(p=>p&&p.sid==sid);if(!s||!ps.length)return;
-  const buyer=me()&&me().type==='buyer'?` My name is ${me().name}.`:'';
-  const msg=`Hi ${s.shop}, I found these on Thriftmall:\n${ps.map(p=>`- ${p.name} (size ${p.size}) ${usd(p.price)}`).join('\n')}\nTotal: ${usd(ps.reduce((a,p)=>a+Number(p.price),0))}.${buyer} Is it still available? How can I pay?`;
-  window.open('https://wa.me/'+waNum(s.wa)+'?text='+encodeURIComponent(msg),'_blank','noopener');
+  const s=users.find(u=>u.id==sid),ps=cart.map(id=>prods.find(p=>p.id===id)).filter(p=>p&&p.sid==sid);
+  if(!s||!ps.length)return toast('Your seller or cart items could not be found. Refresh and try again.');
+  const number=waNum(s.wa);
+  if(!number||number.length<8||number.length>15)return toast('This seller has no valid WhatsApp number saved. Please contact the seller or ask them to update Shop Settings.');
+  const buyer=me()&&me().type==='buyer'?' My name is '+me().name+'.':'';
+  const msg='Hi '+s.shop+', I found these on Thriftmall:\n'+ps.map(p=>'- '+p.name+' (size '+p.size+') '+usd(p.price)).join('\n')+'\nTotal: '+usd(ps.reduce((a,p)=>a+Number(p.price),0))+'.'+buyer+' Is it still available? How can I pay?';
+  const url='https://wa.me/'+number+'?text='+encodeURIComponent(msg);
+  try {
+    const popup=window.open(url,'_blank');
+    if(!popup)window.location.assign(url);
+  } catch(error) {
+    console.error('Could not open WhatsApp checkout:',error);
+    window.location.assign(url);
+  }
 }
 
 /* ---- Account ---- */
