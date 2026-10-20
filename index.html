@@ -284,7 +284,82 @@ function openCart(){
   }
   $('#cartM').classList.add('show');
 }
-function pay(sid){
+function buildInvoiceCanvas({s,ps,buyerName,orderRef,date,subtotal}){
+  const scale=2,w=900,pad=46,headerH=190,detailsH=174,itemsHeadH=64,rowH=112,totalsH=160,paymentH=132,footerH=100;
+  const h=headerH+detailsH+itemsHeadH+ps.length*rowH+totalsH+paymentH+footerH+pad*2;
+  const canvas=document.createElement('canvas');canvas.width=w*scale;canvas.height=h*scale;
+  const ctx=canvas.getContext('2d');ctx.scale(scale,scale);
+  const green='#073f35',green2='#0b5144',gold='#c49b52',paper='#f7f1e4',ink='#12332e',muted='#59655c',line='#d7cebb';
+  const round=(x,y,rw,rh,rad,fill)=>{ctx.fillStyle=fill;ctx.beginPath();ctx.roundRect(x,y,rw,rh,rad);ctx.fill()};
+  const text=(t,x,y,size=18,color=ink,font='Arial',weight='normal',align='left')=>{ctx.fillStyle=color;ctx.font=weight+' '+size+'px '+font;ctx.textAlign=align;ctx.fillText(String(t),x,y)};
+  const fit=(t,max,size=18)=>{let v=String(t||'');ctx.font='bold '+size+'px Arial';while(ctx.measureText(v).width>max&&v.length>3)v=v.slice(0,-2)+'…';return v};
+  ctx.fillStyle=paper;ctx.fillRect(0,0,w,h);
+  round(0,0,w,headerH,0,green);
+  ctx.fillStyle='#124e41';ctx.fillRect(0,headerH-12,w,12);
+  ctx.strokeStyle=gold;ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(58,86);ctx.quadraticCurveTo(100,34,142,86);ctx.lineTo(160,112);ctx.quadraticCurveTo(100,142,40,112);ctx.closePath();ctx.stroke();
+  text('ThriftMall',190,86,50,'#fff7e8','Georgia','bold');
+  text('PRE-LOVED  •  UNIQUE  •  SUSTAINABLE',194,119,16,'#e7d8b8','Arial','bold');
+  text('Good style doesn’t',w-42,66,22,'#e9bd6a','Georgia','normal','right');
+  text('go to waste.',w-42,96,22,'#e9bd6a','Georgia','normal','right');
+  let y=headerH+24;
+  round(28,y,w-56,detailsH-18,16,'#fffdf6');
+  round(48,y+18,300,42,10,green);
+  text('ORDER SUMMARY',68,y+47,22,'#fffdf6','Arial','bold');
+  text('Order reference',54,y+91,16,muted);
+  text(orderRef,54,y+120,23,ink,'Arial','bold');
+  text('Order date',54,y+148,16,muted);
+  text(date,166,y+148,17,ink,'Arial','bold');
+  ctx.strokeStyle=line;ctx.beginPath();ctx.moveTo(425,y+22);ctx.lineTo(425,y+detailsH-38);ctx.stroke();
+  text('SOLD BY',454,y+46,15,muted,'Arial','bold');
+  text(fit(s.shop||s.name||'ThriftMall',360,28),454,y+78,28,ink,'Georgia','bold');
+  text('Order placed via ThriftMall marketplace',454,y+108,15,muted);
+  text('WhatsApp order • Confirm delivery with seller',454,y+137,14,ink);
+  y+=detailsH;
+  round(28,y,w-56,itemsHeadH+ps.length*rowH+14,14,'#fffdf7');
+  round(46,y+12,260,40,9,green2);
+  text('ITEMS ORDERED',64,y+39,20,'#fffdf7','Arial','bold');
+  const cols={no:64,item:112,size:530,qty:620,price:710,total:830};
+  y+=itemsHeadH;
+  round(46,y-1,w-92,32,6,'#ece7d9');
+  text('#',cols.no,y+21,14,ink,'Arial','bold');
+  text('ITEM',cols.item,y+21,14,ink,'Arial','bold');
+  text('SIZE',cols.size,y+21,14,ink,'Arial','bold');
+  text('QTY',cols.qty,y+21,14,ink,'Arial','bold','center');
+  text('UNIT PRICE',cols.price,y+21,14,ink,'Arial','bold','center');
+  text('TOTAL',cols.total,y+21,14,ink,'Arial','bold','right');
+  y+=40;
+  ps.forEach((p,i)=>{
+    ctx.strokeStyle=line;ctx.beginPath();ctx.moveTo(48,y+rowH-5);ctx.lineTo(w-48,y+rowH-5);ctx.stroke();
+    text(String(i+1),cols.no,y+42,18,ink);
+    text(fit(p.name,390,19),cols.item,y+32,19,ink,'Georgia','bold');
+    text('Pre-loved find',cols.item,y+57,14,muted);
+    text(p.size||'—',cols.size,y+42,17,ink);
+    text('1',cols.qty,y+42,17,ink,'Arial','normal','center');
+    text(usd(p.price),cols.price,y+42,17,ink,'Arial','normal','center');
+    text(usd(p.price),cols.total,y+42,17,ink,'Arial','bold','right');
+    y+=rowH;
+  });
+  y+=12;round(46,y,w-92,totalsH-10,12,'#eeeade');
+  text('Subtotal',w-360,y+34,17,ink);
+  text(usd(subtotal),w-68,y+34,18,ink,'Arial','bold','right');
+  text('Delivery',w-360,y+65,17,ink);
+  text('To be confirmed',w-68,y+65,16,muted,'Arial','normal','right');
+  round(w-430,y+82,362,48,9,green);
+  text('TOTAL',w-408,y+113,21,'#fffdf6','Arial','bold');
+  text(usd(subtotal),w-88,y+113,24,'#fffdf6','Arial','bold','right');
+  y+=totalsH;
+  round(46,y,w-92,paymentH-8,12,'#eeeade');
+  text('PAYMENT & DELIVERY',70,y+36,20,green,'Arial','bold');
+  text('Please confirm item availability, delivery cost and payment method',70,y+66,15,ink);
+  text('with the seller before making payment.',70,y+90,15,ink);
+  y+=paymentH;
+  round(0,y,w,footerH,0,green);
+  text('Thank you for shopping with ThriftMall!',34,y+40,20,'#f5d79b','Georgia','bold');
+  text('Supporting pre-loved fashion and independent sellers.',34,y+69,15,'#fffdf6');
+  text('ORDER REQUEST • NOT PROOF OF PAYMENT',w-30,y+54,13,'#e8d8b7','Arial','bold','right');
+  return canvas;
+}
+async function pay(sid){
   const s=users.find(u=>u.id==sid),ps=cart.map(id=>prods.find(p=>p.id===id)).filter(p=>p&&p.sid==sid);
   if(!s||!ps.length)return toast('Your seller or cart items could not be found. Refresh and try again.');
   const number=waNum(s.wa);
@@ -298,10 +373,26 @@ function pay(sid){
   const lines=ps.map((p,i)=>(String(i+1).padStart(2,'0')+'. '+p.name+'\n    Size: '+(p.size||'Not specified')+' | Qty: 1\n    Unit price: '+usd(p.price)+' | Line total: '+usd(p.price))).join('\n\n');
   const msg='THRIFTMALL | ORDER SUMMARY\n'+'PRE-LOVED. UNIQUE. SUSTAINABLE.\n'+'--------------------------------\n'+'Order reference: '+orderRef+'\n'+'Date: '+date+'\n'+'Seller: '+s.shop+buyerLine+'\n'+'--------------------------------\n'+'ITEMS ORDERED\n'+lines+'\n'+'--------------------------------\n'+'Subtotal: '+usd(subtotal)+'\n'+'Delivery: To be confirmed with seller\n'+'TOTAL: '+usd(subtotal)+'\n'+'--------------------------------\n'+'PAYMENT & DELIVERY\n'+'Please confirm item availability, delivery cost and payment method before payment. This is an order request, not proof of payment. The seller will confirm the order and next steps here.\n\n'+'Thank you for shopping with ThriftMall and supporting pre-loved fashion.';
   const url='https://wa.me/'+number+'?text='+encodeURIComponent(msg);
-  try {
+  const canvas=buildInvoiceCanvas({s,ps,buyerName:buyerAccount&&buyerAccount.name,orderRef,date,subtotal});
+  try{
+    const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));
+    if(blob&&navigator.share&&navigator.canShare){
+      const file=new File([blob],'ThriftMall-'+orderRef+'.png',{type:'image/png'});
+      if(navigator.canShare({files:[file]})){
+        await navigator.share({files:[file],title:'ThriftMall Order '+orderRef,text:'Please confirm this ThriftMall order and advise payment and delivery.'});
+        toast('Invoice image ready to share. Choose WhatsApp and then select the seller.');
+        return;
+      }
+    }
+  }catch(error){
+    if(error&&error.name==='AbortError')return;
+    console.warn('Invoice image sharing unavailable; opening text checkout instead.',error);
+  }
+  try{
     const popup=window.open(url,'_blank');
     if(!popup)window.location.assign(url);
-  } catch(error) {
+    toast('WhatsApp order opened. To send the designed invoice image, use your browser’s Share or Download option if available.');
+  }catch(error){
     console.error('Could not open WhatsApp checkout:',error);
     window.location.assign(url);
   }
