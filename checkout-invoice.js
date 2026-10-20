@@ -178,11 +178,11 @@
       (buyer !== 'Guest buyer' ? '\nName: ' + buyer : '') + '\nI will send the invoice image next.';
     var date = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
     var invoiceItems = ps.map(function (p) { return { name: p.name, size: p.size || 'Size not specified', qty: 1, price: Number(p.price) }; });
-    var textInvoice = 'THRIFTMALL — ORDER INVOICE\\n' + ref + ' | ' + date + '\\nSeller: ' + s.shop +
-      (s.loc ? ' | ' + s.loc : '') + '\\nBuyer: ' + buyer + '\\n\\n' +
-      invoiceItems.map(function (it) { return it.name + ' | Size: ' + it.size + ' | Qty: ' + it.qty + ' | ' + usd(it.price); }).join('\\n') +
-      '\\n\\nTOTAL (US$): ' + usd(total) +
-      '\\n\\nPlease confirm items, total, payment method and delivery with the seller before paying. Pay the seller directly; Thriftmall does not handle payments.';
+    var textInvoice = 'THRIFTMALL — ORDER INVOICE\n' + ref + ' | ' + date + '\nSeller: ' + s.shop +
+      (s.loc ? ' | ' + s.loc : '') + '\nBuyer: ' + buyer + '\n\n' +
+      invoiceItems.map(function (it) { return it.name + ' | Size: ' + it.size + ' | Qty: ' + it.qty + ' | ' + usd(it.price); }).join('\n') +
+      '\n\nTOTAL (US$): ' + usd(total) +
+      '\n\nPlease confirm items, total, payment method and delivery with the seller before paying. Pay the seller directly; Thriftmall does not handle payments.';
     S = { shop: s.shop, wa: s.wa, ref: ref, total: total, buyer: buyer, date: date, loc: s.loc || '', items: invoiceItems, textInvoice: textInvoice,
       busy: true, url: '', blob: null, name: 'Thriftmall-Invoice-' + ref + '.png',
       chat: 'https://wa.me/' + waNum(s.wa) + '?text=' + encodeURIComponent(text), canShare: false, canCopy: false };
