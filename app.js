@@ -46,7 +46,9 @@ let authMethod='email', pendingAuth=null, phoneOtpChannel='sms';
 const me=()=>users.find(u=>u.id===meId)||null;
 const usd=n=>'US$'+Number(n).toFixed(2);
 function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>t.style.display='none',2800)}
-function shrink(file,max=700){return new Promise((res,rej)=>{if(!file||!file.type.startsWith('image/'))return rej();const r=new FileReader();r.onload=()=>{const i=new Image();i.onload=()=>{const s=Math.min(1,max/Math.max(i.width,i.height)),c=document.createElement('canvas');c.width=i.width*s;c.height=i.height*s;c.getContext('2d').drawImage(i,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.78))};i.onerror=rej;i.src=r.result};r.onerror=rej;r.readAsDataURL(file)})}
+const MAX_UPLOAD_BYTES=8*1024*1024;
+const ALLOWED_UPLOAD_TYPES=new Set(['image/jpeg','image/png','image/webp']);
+function shrink(file,max=700){return new Promise((res,rej)=>{if(!file||!ALLOWED_UPLOAD_TYPES.has(file.type)||file.size>MAX_UPLOAD_BYTES)return rej(new Error('Choose a JPEG, PNG, or WebP image smaller than 8 MB.'));const r=new FileReader();r.onload=()=>{const i=new Image();i.onload=()=>{const s=Math.min(1,max/Math.max(i.width,i.height)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(i.width*s));c.height=Math.max(1,Math.round(i.height*s));const ctx=c.getContext('2d');if(!ctx)return rej(new Error('Image processing is unavailable.'));ctx.drawImage(i,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.78))};i.onerror=()=>rej(new Error('The selected image could not be decoded.'));i.src=r.result};r.onerror=()=>rej(new Error('The selected image could not be read.'));r.readAsDataURL(file)})}
 const waNum=n=>{const raw=String(n??'').trim();let d=raw.replace(/\D/g,'');if(raw.startsWith('00'))d=d.slice(2);if(d.startsWith('2630'))d='263'+d.slice(4);else if(!raw.startsWith('+')&&!raw.startsWith('00')&&d.startsWith('0'))d='263'+d.slice(1);return d};
 
 const cardHTML=p=>{const s=users.find(u=>u.id===p.sid);const inC=cart.includes(p.id);const photo=safeImageUrl(p.img);return `<article class="card"><div class="ph" role="img" aria-label="${esc(p.name)}">${photo?`<img class="product-photo" src="${esc(photo)}" alt="${esc(p.name)}" loading="lazy" decoding="async">`:''}</div><div class="b"><span class="no">No. ${String(p.id).padStart(3,'0')}</span><h3>${esc(p.name)}</h3><div class="meta"><span class="tag c">${esc(p.cat)}</span><span class="tag">Size ${esc(p.size)}</span><span class="tag">${esc(p.cond)}</span><span class="tag av">Available</span></div><div class="by">${s?esc(s.shop)+', '+esc(s.loc):''}</div><div class="row"><span class="price">${usd(p.price)}</span><button class="mini${inC?' in':''}" data-cart="${p.id}">${inC?'In cart':'Add to cart'}</button></div></div></article>`}
@@ -394,7 +396,7 @@ function safeImageCss(value) {
   const image = safeImageUrl(value);
   return image ? 'background-image:url("' + image + '")' : '';
 }
-function setPhoto(file,after){shrink(file).then(after).catch(()=>toast('Please choose an image file.'))}
+function setPhoto(file,after){shrink(file).then(after).catch(err=>toast(err?.message||'Please choose a supported image file.'))}
 
 const SB_URL='https://vkirepgarlrkfmnzvktj.supabase.co',SB_KEY='sb_publishable_yO_DVXdzCroTjrY5KD4ctQ_DTu4_dmy';
 const emailConfirmationRedirect = /[?&]code=/.test(window.location.search) || /access_token=/.test(window.location.hash);
