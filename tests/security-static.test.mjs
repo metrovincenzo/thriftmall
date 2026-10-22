@@ -18,6 +18,7 @@ test("image uploads have a size cap and explicit raster allowlist", async () => 
   assert.match(app, /image\/png/);
   assert.match(app, /image\/webp/);
   assert.match(app, /file\.size\s*>\s*MAX_UPLOAD_BYTES/);
+  assert.match(app, /const dataUrl=await shrink\(file\)/);
 });
 
 test("digest uses the actual preferences table and rejects non-POST requests", async () => {
