@@ -24,7 +24,7 @@
 1. Keep RLS on all exposed tables and policies ownership-aware. RLS alone is not enough; review grants and column permissions too.
 2. Inspected application tables profiles, products and profile_preferences have RLS enabled. Current policies restrict own profiles/preferences and seller-owned product mutations.
 3. The public images bucket is only for public listings/logos. Never upload private identity documents or confidential files there.
-4. Live bucket metadata currently reports a 2 MiB limit and JPEG/PNG/WebP allowed. The bootstrap setup.sql specifies a different 5 MiB/JPEG-only configuration; do not rerun it against production. Test invalid and oversized uploads against the live bucket.
+4. Live bucket metadata currently reports a 2 MiB limit and JPEG/PNG/WebP allowed. The bootstrap setup.sql is aligned on this branch to the live 2 MiB/JPEG/PNG/WebP settings and now includes seller-owned product updates plus own-folder storage deletes. This is a template-only change; no production SQL was applied. Test invalid and oversized uploads against the live bucket.
 5. Do not rerun supabase/setup.sql against production; it is for a new project. Live migration history includes a migration whose source was not found in the repository. Reconcile history/source before DDL.
 6. Run Supabase Security Advisor after schema/policy changes and test with separate identities.
 
