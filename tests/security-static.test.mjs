@@ -32,3 +32,12 @@ test("invoice code escapes data and does not claim payment verification", async 
   assert.match(invoice, /esc\s*\(/);
   assert.match(invoice, /NOT proof of payment|not proof of payment|NOT attached/i);
 });
+
+test("account deletion avoids removing relational data before Auth deletion", async () => {
+  const fn = await read("../supabase/functions/delete-account/index.ts");
+  const authDelete = fn.indexOf("admin.auth.admin.deleteUser(uid)");
+  const storageDelete = fn.indexOf("bucket.remove(paths.slice");
+  assert.ok(authDelete >= 0);
+  assert.ok(storageDelete > authDelete);
+  assert.doesNotMatch(fn, /admin\.from\("(products|profiles|profile_preferences)"\)\.delete\(\)/);
+});
