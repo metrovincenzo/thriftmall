@@ -38,7 +38,8 @@ Protected assets: account credentials and sessions, private buyer preferences, s
 | F-10 | Low/Medium | Public images bucket makes uploaded listing images/logos viewable by anyone with the URL. | **Expected only for public content**; do not store private documents there. |
 | F-11 | Low/Medium | Privacy notice says adults only, but no age gate was verified; controller identity, retention periods, processor terms, and international-transfer safeguards are incomplete/unverified. | **Requires owner/legal review.** |
 | F-12 | Low | The previous bootstrap SQL used different image limits and omitted the seller product-update grant/policy and own-folder storage-delete policy found in the live project. | **Fixed in branch bootstrap template only**; it now aligns the 2 MiB JPEG/PNG/WebP bucket and ownership policies. No production database change was made. |
-| F-13 | Low | Performance advisor reports unused products_seller_id_idx. | Informational; do not drop without workload evidence. |
+| F-13 | Medium | Deployed send-digest has JWT verification disabled and relies on the shared DIGEST_SECRET header. If that secret leaks, the endpoint could be abused to send email; its value and caller controls were not inspected. | **Partially addressed in branch source** with POST-only handling and constant-time secret comparison; independent rate limiting and secret strength/rotation remain owner checks. Not deployed. |
+| F-14 | Low | Performance advisor reports unused products_seller_id_idx. | Informational; do not drop without workload evidence. |
 
 No critical exploitable vulnerability was demonstrated. That does not prove none exists.
 
