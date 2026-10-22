@@ -16,7 +16,7 @@ Reviewed repository files available through GitHub tools, the security branch's 
 
 Not performed: local Windows working-tree inspection, browser automation, mobile tests, live authenticated cross-account API tests, production endpoint fuzzing, full historical Git/artifact secret scanning, or legal advice. No real user was deleted, no production email was sent, and no destructive SQL was run.
 
-The live send-digest function source is not present on main. A corrected source copy is proposed on this branch but is not deployed.
+The live send-digest function source is not present on main. A corrected source copy is proposed on this branch but is not deployed. The account-deletion source is also hardened on this branch to let Auth deletion trigger verified foreign-key cascades before removing public storage objects; it is not deployed.
 
 ## Threat model
 
@@ -37,7 +37,8 @@ Protected assets: account credentials and sessions, private buyer preferences, s
 | F-09 | Medium | WhatsApp checkout creates the invoice/order text in the browser, not a server-side order or price record. Browser cart/message can be changed. No payment is processed by the site; sellers must independently verify current listings and prices. | **Design limitation documented**, not a payment verification system. |
 | F-10 | Low/Medium | Public images bucket makes uploaded listing images/logos viewable by anyone with the URL. | **Expected only for public content**; do not store private documents there. |
 | F-11 | Low/Medium | Privacy notice says adults only, but no age gate was verified; controller identity, retention periods, processor terms, and international-transfer safeguards are incomplete/unverified. | **Requires owner/legal review.** |
-| F-12 | Low | Performance advisor reports unused products_seller_id_idx. | Informational; do not drop without workload evidence. |
+| F-12 | Low | Live image bucket settings differ from the bootstrap SQL: live limit is 2 MiB with JPEG/PNG/WebP allowed; setup.sql specifies 5 MiB and JPEG only. | **Documented configuration drift**; do not rerun setup.sql. Keep the live restriction unless a reviewed change is needed. |
+| F-13 | Low | Performance advisor reports unused products_seller_id_idx. | Informational; do not drop without workload evidence. |
 
 No critical exploitable vulnerability was demonstrated. That does not prove none exists.
 
