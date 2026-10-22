@@ -42,3 +42,12 @@ test("account deletion avoids removing relational data before Auth deletion", as
   assert.ok(storageDelete > authDelete);
   assert.doesNotMatch(fn, /admin\.from\("(products|profiles|profile_preferences)"\)\.delete\(\)/);
 });
+ 
+test("bootstrap SQL preserves seller ownership on product updates and storage deletes", async () => {
+  const sql = await read("../supabase/setup.sql");
+  assert.match(sql, /grant update \(name, price, size, cond, cat, img_url\) on table public\.products to authenticated/i);
+  assert.match(sql, /Sellers can update their own products/i);
+  assert.match(sql, /with check \([\s\S]*seller_id = \(select auth\.uid\(\)\)/i);
+  assert.match(sql, /Users can delete their own Thriftmall files/i);
+  assert.match(sql, /2097152, array\['image\/jpeg', 'image\/png', 'image\/webp'\]/i);
+});
