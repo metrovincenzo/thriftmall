@@ -56,6 +56,7 @@ grant update (name, shop, loc, wa, logo_url) on table public.profiles to authent
 revoke all privileges on table public.products from public, anon, authenticated;
 grant select on table public.products to anon, authenticated;
 grant insert (seller_id, name, price, size, cond, cat, img_url) on table public.products to authenticated;
+grant update (name, price, size, cond, cat, img_url) on table public.products to authenticated;
 grant delete on table public.products to authenticated;
 
 do $$
@@ -90,6 +91,24 @@ create policy "Public can read products"
 drop policy if exists "Sellers can add their own products" on public.products;
 create policy "Sellers can add their own products"
   on public.products for insert to authenticated
+  with check (
+    seller_id = (select auth.uid())
+    and exists (
+      select 1 from public.profiles
+      where id = (select auth.uid()) and type = 'seller'
+    )
+  );
+
+drop policy if exists "Sellers can update their own products" on public.products;
+create policy "Sellers can update their own products"
+  on public.products for update to authenticated
+  using (
+    seller_id = (select auth.uid())
+    and exists (
+      select 1 from public.profiles
+      where id = (select auth.uid()) and type = 'seller'
+    )
+  )
   with check (
     seller_id = (select auth.uid())
     and exists (
@@ -156,7 +175,7 @@ create trigger on_auth_user_created_thriftmall
   for each row execute function public.create_thriftmall_profile();
 
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
-values ('images', 'images', true, 5242880, array['image/jpeg'])
+values ('images', 'images', true, 2097152, array['image/jpeg', 'image/png', 'image/webp'])
 on conflict (id) do update
 set public = excluded.public,
     file_size_limit = excluded.file_size_limit,
@@ -166,6 +185,14 @@ drop policy if exists "Public can view Thriftmall images" on storage.objects;
 create policy "Public can view Thriftmall images"
   on storage.objects for select
   using (bucket_id = 'images');
+
+drop policy if exists "Users can delete their own Thriftmall files" on storage.objects;
+create policy "Users can delete their own Thriftmall files"
+  on storage.objects for delete to authenticated
+  using (
+    bucket_id = 'images'
+    and (storage.foldername(name))[1] = (select auth.uid())::text
+  );
 
 drop policy if exists "Users can upload to their own Thriftmall folder" on storage.objects;
 create policy "Users can upload to their own Thriftmall folder"

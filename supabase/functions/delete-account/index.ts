@@ -77,23 +77,17 @@ Deno.serve(async (req: Request) => {
     paths.push(...(data || []).filter((item) => !!item.id).map((item) => uid + "/" + item.name));
     if (!data || data.length < 100) break;
   }
-  // Keep photos until the account records and Auth user are removed. If a
-  // later database/Auth step fails, the user is less likely to lose photos
-  // while their account is still active.
-  const { error: productsError } = await admin.from("products").delete().eq("seller_id", uid);
-  if (productsError) return reply(500, { error: "Could not remove your listings. Your sign-in remains active." });
-
-  const { error: prefsError } = await admin.from("profile_preferences").delete().eq("user_id", uid);
-  if (prefsError) return reply(500, { error: "Could not remove your account preferences. Your sign-in remains active." });
-
-  const { error: profileError } = await admin.from("profiles").delete().eq("id", uid);
-  if (profileError) return reply(500, { error: "Could not remove your profile. Your sign-in remains active." });
-
+  // The live foreign keys cascade Auth-user deletion to profiles,
+  // products, and profile_preferences. Delete Auth first so a failed Auth
+  // deletion does not leave an active account with its profile already gone.
   const { error: authDeleteError } = await admin.auth.admin.deleteUser(uid);
-  if (authDeleteError) return reply(500, { error: "Your profile data was removed, but the sign-in account could not be deleted. Contact support before retrying." });
+  if (authDeleteError) {
+    return reply(500, { error: "Could not delete your account. No account records were removed." });
+  }
 
-  // Storage and Postgres cannot be deleted in one transaction. Clean photos
-  // last so a storage failure does not destroy photos before account deletion.
+  // Storage and Postgres cannot be deleted in one transaction. Relational
+  // records are removed by verified ON DELETE CASCADE constraints; clean
+  // public photos last and report any cleanup failure honestly.
   for (let i = 0; i < paths.length; i += 100) {
     const { error } = await bucket.remove(paths.slice(i, i + 100));
     if (error) {
