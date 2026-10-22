@@ -51,7 +51,7 @@ No critical exploitable vulnerability was demonstrated. That does not prove none
 | public.profile_preferences | Followed categories/shops and updates opt-in | Enabled | Authenticated user can read/write own preference row using auth.uid() checks. | Metadata inspected; cross-account tests not run. |
 | storage.objects / images | Public product/shop images | Storage policies present | Public read; authenticated upload/delete limited to caller UUID folder; bucket limits reported. | Policy metadata inspected; hostile upload tests not run. |
 
-The setup SQL explicitly targets a new project and must not be rerun against production. Live schema and setup SQL are not assumed identical.
+Additional checks: the Auth-user trigger calls a SECURITY DEFINER function with an empty search_path and explicit public-qualified table access; its execution ACL is restricted to privileged roles. The RLS auto-enable event trigger uses pg_catalog as its search_path and has privileged execution ACLs. Column-privilege checks confirmed authenticated users cannot update products.seller_id or profiles.type. The setup SQL explicitly targets a new project and must not be rerun against production. Live schema and setup SQL are not assumed identical.
 
 ## Secret review
 
