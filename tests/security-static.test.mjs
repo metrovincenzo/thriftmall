@@ -24,6 +24,8 @@ test("image uploads have a size cap and explicit raster allowlist", async () => 
 test("digest uses the actual preferences table and rejects non-POST requests", async () => {
   const fn = await read("../supabase/functions/send-digest/index.ts");
   assert.match(fn, /req\.method\s*!==\s*"POST"/);
+  assert.match(fn, /req\.headers\.get\("x-test-email"\)/);
+  assert.doesNotMatch(fn, /url\.searchParams\.get\("test"\)/);
   assert.match(fn, /from\("profile_preferences"\)\.select\("user_id,follows"\)\.eq\("updates_opt_in",\s*true\)/);
   assert.doesNotMatch(fn, /from\("profiles"\)\.select\("id,name,follows"\)/);
 });
