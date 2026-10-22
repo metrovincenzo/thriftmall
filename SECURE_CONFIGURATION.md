@@ -24,7 +24,7 @@
 1. Keep RLS on all exposed tables and policies ownership-aware. RLS alone is not enough; review grants and column permissions too.
 2. Inspected application tables profiles, products and profile_preferences have RLS enabled. Current policies restrict own profiles/preferences and seller-owned product mutations.
 3. The public images bucket is only for public listings/logos. Never upload private identity documents or confidential files there.
-4. Verify allowed MIME types and the 5 MiB bucket limit; test invalid and oversized uploads.
+4. Live bucket metadata currently reports a 2 MiB limit and JPEG/PNG/WebP allowed. The bootstrap setup.sql specifies a different 5 MiB/JPEG-only configuration; do not rerun it against production. Test invalid and oversized uploads against the live bucket.
 5. Do not rerun supabase/setup.sql against production; it is for a new project. Live migration history includes a migration whose source was not found in the repository. Reconcile history/source before DDL.
 6. Run Supabase Security Advisor after schema/policy changes and test with separate identities.
 
@@ -34,7 +34,7 @@
 2. Confirm digest scheduler/caller uses POST and x-digest-secret. Rotate secret if exposure is suspected.
 3. Live digest source appears to query nonexistent profile columns. Corrected source in this branch is not deployed; run dry mode and send only to a dedicated test mailbox before any production schedule.
 4. Confirm Resend sender/domain settings and delivery events; ensure opt-out changes stop future digest sends.
-5. Test account deletion in staging before changing the deployed deletion function.
+5. The security branch changes account deletion to remove the Auth user first (the live foreign keys cascade to profiles/products/preferences), then cleans public storage. Test this only in staging before deploying the function.
 
 ## GitHub Pages and HTTP headers
 
