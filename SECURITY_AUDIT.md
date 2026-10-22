@@ -37,7 +37,7 @@ Protected assets: account credentials and sessions, private buyer preferences, s
 | F-09 | Medium | WhatsApp checkout creates the invoice/order text in the browser, not a server-side order or price record. Browser cart/message can be changed. No payment is processed by the site; sellers must independently verify current listings and prices. | **Design limitation documented**, not a payment verification system. |
 | F-10 | Low/Medium | Public images bucket makes uploaded listing images/logos viewable by anyone with the URL. | **Expected only for public content**; do not store private documents there. |
 | F-11 | Low/Medium | Privacy notice says adults only, but no age gate was verified; controller identity, retention periods, processor terms, and international-transfer safeguards are incomplete/unverified. | **Requires owner/legal review.** |
-| F-12 | Low | Live image bucket settings differ from the bootstrap SQL: live limit is 2 MiB with JPEG/PNG/WebP allowed; setup.sql specifies 5 MiB and JPEG only. | **Documented configuration drift**; do not rerun setup.sql. Keep the live restriction unless a reviewed change is needed. |
+| F-12 | Low | The previous bootstrap SQL used different image limits and omitted the seller product-update grant/policy and own-folder storage-delete policy found in the live project. | **Fixed in branch bootstrap template only**; it now aligns the 2 MiB JPEG/PNG/WebP bucket and ownership policies. No production database change was made. |
 | F-13 | Low | Performance advisor reports unused products_seller_id_idx. | Informational; do not drop without workload evidence. |
 
 No critical exploitable vulnerability was demonstrated. That does not prove none exists.
