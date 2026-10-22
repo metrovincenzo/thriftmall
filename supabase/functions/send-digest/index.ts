@@ -34,7 +34,8 @@ Deno.serve(async (req: Request) => {
 
   const url = new URL(req.url);
   const dry = url.searchParams.get("dry") === "1";
-  const testAddress = url.searchParams.get("test");
+  // Keep test mailbox addresses out of query strings, which are more likely to be logged.
+  const testAddress = req.headers.get("x-test-email");
   if (testAddress && (testAddress.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(testAddress))) {
     return json(400, { error: "Invalid test email address." });
   }
