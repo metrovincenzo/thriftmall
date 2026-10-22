@@ -25,6 +25,7 @@ jobs:
         run: |
           node --check app.js
           node --check checkout-invoice.js
+          node --test tests/security-static.test.mjs
 
   codeql:
     name: CodeQL security analysis
