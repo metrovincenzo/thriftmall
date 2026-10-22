@@ -31,7 +31,7 @@
 ## Edge Functions and Resend
 
 1. In Edge Functions → Secrets, verify required secret names: SUPABASE_URL, SUPABASE_ANON_KEY where used, SUPABASE_SERVICE_ROLE_KEY, DIGEST_SECRET, RESEND_API_KEY and FROM_EMAIL as applicable. Never expose values.
-2. Confirm digest scheduler/caller uses POST and x-digest-secret. Rotate secret if exposure is suspected.
+2. Confirm digest scheduler/caller uses POST and x-digest-secret. The corrected branch source accepts an optional x-test-email header for a single test-mailbox run; it intentionally avoids placing email addresses in query strings. Update the trusted test caller when deploying this version. Rotate the digest secret if exposure is suspected.
 3. Live digest source appears to query nonexistent profile columns. Corrected source in this branch is not deployed; run dry mode and send only to a dedicated test mailbox before any production schedule.
 4. Confirm Resend sender/domain settings and delivery events; ensure opt-out changes stop future digest sends.
 5. The security branch changes account deletion to remove the Auth user first (the live foreign keys cascade to profiles/products/preferences), then cleans public storage. Test this only in staging before deploying the function.
