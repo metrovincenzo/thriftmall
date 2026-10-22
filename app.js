@@ -695,7 +695,9 @@ document.addEventListener('click',async e=>{
       if(!['image/jpeg','image/png','image/webp'].includes(file.type))return toast('Choose a JPEG, PNG, or WebP image.');
       if(file.size>8*1024*1024)return toast('Choose an image smaller than 8 MB.');
       try{
-        const dataUrl=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=reject;reader.readAsDataURL(file)});
+        // Reuse the validated, resized JPEG pipeline so the upload matches the
+        // storage bucket's 2 MiB limit and the image/jpeg content-type.
+        const dataUrl=await shrink(file);
         const img=await up(dataUrl,'p');
         const {error}=await sb.from('products').update({img_url:img}).eq('id',id).eq('seller_id',seller.id);
         if(error)throw error;
